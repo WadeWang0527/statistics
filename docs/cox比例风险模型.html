@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 13 COX比例风险模型 | Medical Statistics wtih R</title>
+  <meta name="description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 13 COX比例风险模型 | Medical Statistics wtih R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 13 COX比例风险模型 | Medical Statistics wtih R" />
+  
+  <meta name="twitter:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  
+
+<meta name="author" content="Wade Wang" />
+
+
+<meta name="date" content="2021-11-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="生存分析.html"/>
+<link rel="next" href="竞争风险模型.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Medical Statistics wtih R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html"><i class="fa fa-check"></i><b>1</b> <strong>统计描述与基础统计分析方法</strong></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#描述性统计分析"><i class="fa fa-check"></i><b>1.1</b> 描述性统计分析</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单组数据汇总统计量"><i class="fa fa-check"></i><b>1.1.1</b> 单组数据汇总统计量</a></li>
+<li class="chapter" data-level="1.1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#数据分布类型的图形描述"><i class="fa fa-check"></i><b>1.1.2</b> 数据分布类型的图形描述</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#线性相关与秩相关分析"><i class="fa fa-check"></i><b>1.2</b> <strong>线性相关与秩相关分析</strong></a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#三种相关系数"><i class="fa fa-check"></i><b>1.2.1</b> 三种相关系数</a></li>
+<li class="chapter" data-level="1.2.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#相关系数的显著性检验"><i class="fa fa-check"></i><b>1.2.2</b> 相关系数的显著性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异t检验"><i class="fa fa-check"></i><b>1.3</b> <strong>组间差异t检验</strong></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本t检验"><i class="fa fa-check"></i><b>1.3.1</b> 单样本t检验</a></li>
+<li class="chapter" data-level="1.3.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两样本t检验"><i class="fa fa-check"></i><b>1.3.2</b> 两样本t检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异秩和检验"><i class="fa fa-check"></i><b>1.4</b> 组间差异秩和检验</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.1</b> 单样本Wilcoxon符号秩检验</a></li>
+<li class="chapter" data-level="1.4.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两组的比较"><i class="fa fa-check"></i><b>1.4.2</b> 两组的比较</a></li>
+<li class="chapter" data-level="1.4.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#配对wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.3</b> 配对Wilcoxon符号秩检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html"><i class="fa fa-check"></i><b>2</b> <strong>方差分析与秩和Kruskal-Wallis检验</strong></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析概述"><i class="fa fa-check"></i><b>2.1</b> 方差分析概述</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析基本思想"><i class="fa fa-check"></i><b>2.1.1</b> 方差分析基本思想</a></li>
+<li class="chapter" data-level="2.1.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析用途"><i class="fa fa-check"></i><b>2.1.2</b> 方差分析用途</a></li>
+<li class="chapter" data-level="2.1.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分应用条件"><i class="fa fa-check"></i><b>2.1.3</b> 方差分应用条件</a></li>
+<li class="chapter" data-level="2.1.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析的r语言实现"><i class="fa fa-check"></i><b>2.1.4</b> 方差分析的R语言实现</a></li>
+<li class="chapter" data-level="2.1.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#表达式中各项的顺序"><i class="fa fa-check"></i><b>2.1.5</b> 表达式中各项的顺序</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#单因素方差分析"><i class="fa fa-check"></i><b>2.2</b> 单因素方差分析</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#多重比较"><i class="fa fa-check"></i><b>2.2.1</b> 多重比较</a></li>
+<li class="chapter" data-level="2.2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#评估方差分析的假设条件"><i class="fa fa-check"></i><b>2.2.2</b> 评估方差分析的假设条件</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#双因素方差分析"><i class="fa fa-check"></i><b>2.3</b> 双因素方差分析</a></li>
+<li class="chapter" data-level="2.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#重复测量的方差分析"><i class="fa fa-check"></i><b>2.4</b> 重复测量的方差分析</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#概述"><i class="fa fa-check"></i><b>2.4.1</b> 概述</a></li>
+<li class="chapter" data-level="2.4.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#原理"><i class="fa fa-check"></i><b>2.4.2</b> 原理</a></li>
+<li class="chapter" data-level="2.4.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#应用条件"><i class="fa fa-check"></i><b>2.4.3</b> 应用条件</a></li>
+<li class="chapter" data-level="2.4.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#案例1"><i class="fa fa-check"></i><b>2.4.4</b> 案例1</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#注意"><i class="fa fa-check"></i><b>2.5</b> 注意</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html"><i class="fa fa-check"></i><b>3</b> <strong>列联表资料的处理</strong></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#rc表分类"><i class="fa fa-check"></i><b>3.1</b> R×C表分类</a></li>
+<li class="chapter" data-level="3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#列变量为有序变量的行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2</b> 列变量为有序变量的行均分检验（Cochran-Mantel-Haenszel）</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2.1</b> 行均分检验Cochran-Mantel-Haenszel</a></li>
+<li class="chapter" data-level="3.2.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#ordinal-logistic回归模型"><i class="fa fa-check"></i><b>3.2.2</b> Ordinal logistic回归模型</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行列变量均为有序变量检验方法"><i class="fa fa-check"></i><b>3.3</b> 行列变量均为有序变量检验方法</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#sperman秩相关"><i class="fa fa-check"></i><b>3.3.1</b> sperman秩相关</a></li>
+<li class="chapter" data-level="3.3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#线性趋势检验"><i class="fa fa-check"></i><b>3.3.2</b> 线性趋势检验</a></li>
+<li class="chapter" data-level="3.3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#一致性检验"><i class="fa fa-check"></i><b>3.3.3</b> 一致性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#分层行列表分析-mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4</b> 分层行列表分析 Mantel-Haenszel 检验</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4.1</b> Mantel-Haenszel 检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html"><i class="fa fa-check"></i><b>4</b> <strong>秩和检验处理列联表资料</strong></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#等级分组资料的非参数检验"><i class="fa fa-check"></i><b>4.1</b> 等级分组资料的非参数检验</a></li>
+<li class="chapter" data-level="4.2" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#多个组的等级指标的非参数检验"><i class="fa fa-check"></i><b>4.2</b> 多个组的等级指标的非参数检验</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="简单线性回归.html"><a href="简单线性回归.html"><i class="fa fa-check"></i><b>5</b> <strong>简单线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析对资料的要求"><i class="fa fa-check"></i><b>5.1</b> 回归分析对资料的要求</a></li>
+<li class="chapter" data-level="5.2" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程"><i class="fa fa-check"></i><b>5.2</b> 直线回归方程</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程的建立"><i class="fa fa-check"></i><b>5.2.1</b> 直线回归方程的建立</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="简单线性回归.html"><a href="简单线性回归.html#回归系数b的统计学意义"><i class="fa fa-check"></i><b>5.3</b> 回归系数b的统计学意义</a></li>
+<li class="chapter" data-level="5.4" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析的步骤"><i class="fa fa-check"></i><b>5.4</b> 回归分析的步骤</a></li>
+<li class="chapter" data-level="5.5" data-path="简单线性回归.html"><a href="简单线性回归.html#y的离均差平方和的划分"><i class="fa fa-check"></i><b>5.5</b> Y的离均差平方和的划分</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的关系"><i class="fa fa-check"></i><b>5.5.1</b> 三种平方和的关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的意义"><i class="fa fa-check"></i><b>5.6</b> 三种平方和的意义</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的自由度及其关系"><i class="fa fa-check"></i><b>5.6.1</b> 三种平方和的自由度及其关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="简单线性回归.html"><a href="简单线性回归.html#应用回归分析应注意的问题"><i class="fa fa-check"></i><b>5.7</b> 应用回归分析应注意的问题</a></li>
+<li class="chapter" data-level="5.8" data-path="简单线性回归.html"><a href="简单线性回归.html#简单线性回归的r语言实现"><i class="fa fa-check"></i><b>5.8</b> 简单线性回归的R语言实现</a></li>
+<li class="chapter" data-level="5.9" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-1"><i class="fa fa-check"></i><b>5.9</b> 案例 1</a></li>
+<li class="chapter" data-level="5.10" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-2"><i class="fa fa-check"></i><b>5.10</b> 案例 2</a></li>
+<li class="chapter" data-level="5.11" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-3"><i class="fa fa-check"></i><b>5.11</b> 案例 3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="残差与回归值预测域与置信带.html"><a href="残差与回归值预测域与置信带.html"><i class="fa fa-check"></i><b>6</b> 残差与回归值&amp;预测域与置信带</a></li>
+<li class="chapter" data-level="7" data-path="多元线性回归.html"><a href="多元线性回归.html"><i class="fa fa-check"></i><b>7</b> <strong>多元线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="多元线性回归.html"><a href="多元线性回归.html#多元线性回归模型"><i class="fa fa-check"></i><b>7.1</b> 多元线性回归模型</a></li>
+<li class="chapter" data-level="7.2" data-path="多元线性回归.html"><a href="多元线性回归.html#回归模型的应用条件"><i class="fa fa-check"></i><b>7.2</b> 回归模型的应用条件</a></li>
+<li class="chapter" data-level="7.3" data-path="多元线性回归.html"><a href="多元线性回归.html#偏回归系数的估计"><i class="fa fa-check"></i><b>7.3</b> 偏回归系数的估计</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="多元线性回归.html"><a href="多元线性回归.html#回归方程的假设检验"><i class="fa fa-check"></i><b>7.3.1</b> 回归方程的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="多元线性回归.html"><a href="多元线性回归.html#案例一"><i class="fa fa-check"></i><b>7.4</b> 案例一</a></li>
+<li class="chapter" data-level="7.5" data-path="多元线性回归.html"><a href="多元线性回归.html#案例二"><i class="fa fa-check"></i><b>7.5</b> 案例二</a></li>
+<li class="chapter" data-level="7.6" data-path="多元线性回归.html"><a href="多元线性回归.html#用线性回归来做anova"><i class="fa fa-check"></i><b>7.6</b> 用线性回归来做ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html"><i class="fa fa-check"></i><b>8</b> <strong>诊断试验的ROC分析</strong></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验设计原理"><i class="fa fa-check"></i><b>8.1</b> 诊断试验设计原理</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#队列研究设计"><i class="fa fa-check"></i><b>8.1.1</b> 队列研究设计</a></li>
+<li class="chapter" data-level="8.1.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#横断面设计单门设计"><i class="fa fa-check"></i><b>8.1.2</b> 横断面设计/单门设计</a></li>
+<li class="chapter" data-level="8.1.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#病例对照设计双门设计"><i class="fa fa-check"></i><b>8.1.3</b> 病例对照设计/双门设计</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验的统计指标"><i class="fa fa-check"></i><b>8.2</b> 诊断试验的统计指标</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#基本概念"><i class="fa fa-check"></i><b>8.2.1</b> 基本概念</a></li>
+<li class="chapter" data-level="8.2.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#灵敏度和特异度之间的权衡"><i class="fa fa-check"></i><b>8.2.2</b> 灵敏度和特异度之间的权衡</a></li>
+<li class="chapter" data-level="8.2.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#受试者工作特征曲线-roc"><i class="fa fa-check"></i><b>8.2.3</b> 受试者工作特征曲线 (ROC)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#roc分析的r语言实现"><i class="fa fa-check"></i><b>8.3</b> ROC分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例1-1"><i class="fa fa-check"></i><b>8.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="8.3.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例2"><i class="fa fa-check"></i><b>8.3.2</b> 案例2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="logistic回归.html"><a href="logistic回归.html"><i class="fa fa-check"></i><b>9</b> <strong>Logistic回归</strong></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="logistic回归.html"><a href="logistic回归.html#模型概述"><i class="fa fa-check"></i><b>9.1</b> 模型概述</a></li>
+<li class="chapter" data-level="9.2" data-path="logistic回归.html"><a href="logistic回归.html#模型结构"><i class="fa fa-check"></i><b>9.2</b> 模型结构</a></li>
+<li class="chapter" data-level="9.3" data-path="logistic回归.html"><a href="logistic回归.html#比值比或优势比or"><i class="fa fa-check"></i><b>9.3</b> 比值比或优势比（OR）</a></li>
+<li class="chapter" data-level="9.4" data-path="logistic回归.html"><a href="logistic回归.html#案例1-2"><i class="fa fa-check"></i><b>9.4</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="logistic回归.html"><a href="logistic回归.html#评价预测变量对结果概率的影响"><i class="fa fa-check"></i><b>9.4.1</b> 评价预测变量对结果概率的影响</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="logistic回归.html"><a href="logistic回归.html#案例2-1"><i class="fa fa-check"></i><b>9.5</b> 案例2</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="logistic回归.html"><a href="logistic回归.html#因素间的交互作用"><i class="fa fa-check"></i><b>9.5.1</b> 因素间的交互作用</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="logistic回归.html"><a href="logistic回归.html#案例-3-1"><i class="fa fa-check"></i><b>9.6</b> 案例 3</a></li>
+<li class="chapter" data-level="9.7" data-path="logistic回归.html"><a href="logistic回归.html#案例4"><i class="fa fa-check"></i><b>9.7</b> 案例4</a></li>
+<li class="chapter" data-level="9.8" data-path="logistic回归.html"><a href="logistic回归.html#扩展的logistic回归及其变种"><i class="fa fa-check"></i><b>9.8</b> 扩展的Logistic回归及其变种</a>
+<ul>
+<li class="chapter" data-level="9.8.1" data-path="logistic回归.html"><a href="logistic回归.html#稳健logistic回归"><i class="fa fa-check"></i><b>9.8.1</b> 稳健Logistic回归</a></li>
+<li class="chapter" data-level="9.8.2" data-path="logistic回归.html"><a href="logistic回归.html#多项分布回归"><i class="fa fa-check"></i><b>9.8.2</b> 多项分布回归</a></li>
+<li class="chapter" data-level="9.8.3" data-path="logistic回归.html"><a href="logistic回归.html#序数logistic回归"><i class="fa fa-check"></i><b>9.8.3</b> 序数Logistic回归</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="logistic回归模型.html"><a href="logistic回归模型.html"><i class="fa fa-check"></i><b>10</b> <strong>Logistic回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型的本质"><i class="fa fa-check"></i><b>10.1</b> 临床预测模型的本质</a></li>
+<li class="chapter" data-level="10.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型建立"><i class="fa fa-check"></i><b>10.2</b> 临床预测模型建立</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#验证步骤"><i class="fa fa-check"></i><b>10.2.1</b> 验证步骤</a></li>
+<li class="chapter" data-level="10.2.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#研究思路"><i class="fa fa-check"></i><b>10.2.2</b> 研究思路</a></li>
+<li class="chapter" data-level="10.2.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#预测类案例研究思路总结"><i class="fa fa-check"></i><b>10.2.3</b> 预测类案例研究思路总结</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#案例1-3"><i class="fa fa-check"></i><b>10.3</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#变量筛选"><i class="fa fa-check"></i><b>10.3.1</b> 变量筛选</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="logistic回归模型.html"><a href="logistic回归模型.html#列线图及校正曲线的绘制"><i class="fa fa-check"></i><b>10.4</b> 列线图及校正曲线的绘制</a></li>
+<li class="chapter" data-level="10.5" data-path="logistic回归模型.html"><a href="logistic回归模型.html#c-statistics-计算"><i class="fa fa-check"></i><b>10.5</b> C-Statistics 计算</a></li>
+<li class="chapter" data-level="10.6" data-path="logistic回归模型.html"><a href="logistic回归模型.html#亚组分析森林图的绘制"><i class="fa fa-check"></i><b>10.6</b> 亚组分析森林图的绘制</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#数据录入"><i class="fa fa-check"></i><b>10.6.1</b> 数据录入</a></li>
+<li class="chapter" data-level="10.6.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#绘制图形"><i class="fa fa-check"></i><b>10.6.2</b> 绘制图形</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="泊松回归模型.html"><a href="泊松回归模型.html"><i class="fa fa-check"></i><b>11</b> <strong>泊松回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="泊松回归模型.html"><a href="泊松回归模型.html#拟合泊松回归"><i class="fa fa-check"></i><b>11.1</b> 拟合泊松回归</a></li>
+<li class="chapter" data-level="11.2" data-path="泊松回归模型.html"><a href="泊松回归模型.html#解释模型参数"><i class="fa fa-check"></i><b>11.2</b> 解释模型参数</a></li>
+<li class="chapter" data-level="11.3" data-path="泊松回归模型.html"><a href="泊松回归模型.html#过度离势"><i class="fa fa-check"></i><b>11.3</b> 过度离势</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="生存分析.html"><a href="生存分析.html"><i class="fa fa-check"></i><b>12</b> <strong>生存分析</strong></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="生存分析.html"><a href="生存分析.html#生存资料的描述"><i class="fa fa-check"></i><b>12.1</b> 生存资料的描述</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="生存分析.html"><a href="生存分析.html#生存分析方法的正确表达"><i class="fa fa-check"></i><b>12.1.1</b> 生存分析方法的正确表达</a></li>
+<li class="chapter" data-level="12.1.2" data-path="生存分析.html"><a href="生存分析.html#生存分析的基本概念"><i class="fa fa-check"></i><b>12.1.2</b> 生存分析的基本概念</a></li>
+<li class="chapter" data-level="12.1.3" data-path="生存分析.html"><a href="生存分析.html#生存分析的几个重要名词"><i class="fa fa-check"></i><b>12.1.3</b> 生存分析的几个重要名词</a></li>
+<li class="chapter" data-level="12.1.4" data-path="生存分析.html"><a href="生存分析.html#生存数据的两种类型"><i class="fa fa-check"></i><b>12.1.4</b> 生存数据的两种类型</a></li>
+<li class="chapter" data-level="12.1.5" data-path="生存分析.html"><a href="生存分析.html#生存分析的主要任务"><i class="fa fa-check"></i><b>12.1.5</b> 生存分析的主要任务</a></li>
+<li class="chapter" data-level="12.1.6" data-path="生存分析.html"><a href="生存分析.html#生存分析基本方法"><i class="fa fa-check"></i><b>12.1.6</b> 生存分析基本方法</a></li>
+<li class="chapter" data-level="12.1.7" data-path="生存分析.html"><a href="生存分析.html#随访研究的几个问题"><i class="fa fa-check"></i><b>12.1.7</b> 随访研究的几个问题</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="生存分析.html"><a href="生存分析.html#生存率的估计与生存曲线"><i class="fa fa-check"></i><b>12.2</b> 生存率的估计与生存曲线</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法"><i class="fa fa-check"></i><b>12.2.1</b> Kaplan-Meier法</a></li>
+<li class="chapter" data-level="12.2.2" data-path="生存分析.html"><a href="生存分析.html#寿命表法"><i class="fa fa-check"></i><b>12.2.2</b> 寿命表法</a></li>
+<li class="chapter" data-level="12.2.3" data-path="生存分析.html"><a href="生存分析.html#生存分析对生存资料的基本要求"><i class="fa fa-check"></i><b>12.2.3</b> 生存分析对生存资料的基本要求</a></li>
+<li class="chapter" data-level="12.2.4" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法估计案例"><i class="fa fa-check"></i><b>12.2.4</b> Kaplan-Meier法估计案例</a></li>
+<li class="chapter" data-level="12.2.5" data-path="生存分析.html"><a href="生存分析.html#lifetable寿命表法"><i class="fa fa-check"></i><b>12.2.5</b> LifeTable寿命表法</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="生存分析.html"><a href="生存分析.html#组间生存曲线的比较"><i class="fa fa-check"></i><b>12.3</b> 组间生存曲线的比较</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="生存分析.html"><a href="生存分析.html#log-rank检验"><i class="fa fa-check"></i><b>12.3.1</b> Log-rank检验</a></li>
+<li class="chapter" data-level="12.3.2" data-path="生存分析.html"><a href="生存分析.html#案例1-4"><i class="fa fa-check"></i><b>12.3.2</b> 案例1</a></li>
+<li class="chapter" data-level="12.3.3" data-path="生存分析.html"><a href="生存分析.html#案例2-2"><i class="fa fa-check"></i><b>12.3.3</b> 案例2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="生存分析.html"><a href="生存分析.html#画一幅高水准的生存曲线"><i class="fa fa-check"></i><b>12.4</b> 画一幅高水准的生存曲线</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html"><i class="fa fa-check"></i><b>13</b> <strong>COX比例风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#模型简介"><i class="fa fa-check"></i><b>13.1</b> <strong>模型简介</strong></a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox模型的基本结构"><i class="fa fa-check"></i><b>13.1.1</b> COX模型的基本结构</a></li>
+<li class="chapter" data-level="13.1.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的构建"><i class="fa fa-check"></i><b>13.1.2</b> COX回归模型的构建</a></li>
+<li class="chapter" data-level="13.1.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的主要用途"><i class="fa fa-check"></i><b>13.1.3</b> COX回归模型的主要用途</a></li>
+<li class="chapter" data-level="13.1.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的应用条件"><i class="fa fa-check"></i><b>13.1.4</b> COX回归模型的应用条件</a></li>
+<li class="chapter" data-level="13.1.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归分析的假设检验"><i class="fa fa-check"></i><b>13.1.5</b> COX回归分析的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox分析的一般步骤"><i class="fa fa-check"></i><b>13.2</b> COX分析的一般步骤</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#收集资料"><i class="fa fa-check"></i><b>13.2.1</b> 收集资料</a></li>
+<li class="chapter" data-level="13.2.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#因子初步筛选"><i class="fa fa-check"></i><b>13.2.2</b> 因子初步筛选</a></li>
+<li class="chapter" data-level="13.2.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#拟合多因素模型"><i class="fa fa-check"></i><b>13.2.3</b> 拟合多因素模型</a></li>
+<li class="chapter" data-level="13.2.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#结果解析与评价"><i class="fa fa-check"></i><b>13.2.4</b> 结果解析与评价</a></li>
+<li class="chapter" data-level="13.2.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#标准回归系数的计算方法"><i class="fa fa-check"></i><b>13.2.5</b> 标准回归系数的计算方法</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例"><i class="fa fa-check"></i><b>13.3</b> <strong>案例</strong></a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例1-5"><i class="fa fa-check"></i><b>13.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="13.3.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例2-3"><i class="fa fa-check"></i><b>13.3.2</b> 案例2</a></li>
+<li class="chapter" data-level="13.3.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例3"><i class="fa fa-check"></i><b>13.3.3</b> 案例3</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#列线图绘制"><i class="fa fa-check"></i><b>13.4</b> 列线图绘制</a></li>
+<li class="chapter" data-level="13.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#亚组分析森林图的绘制-1"><i class="fa fa-check"></i><b>13.5</b> 亚组分析森林图的绘制</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="竞争风险模型.html"><a href="竞争风险模型.html"><i class="fa fa-check"></i><b>14</b> <strong>竞争风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="竞争风险模型.html"><a href="竞争风险模型.html#竞争风险的概念"><i class="fa fa-check"></i><b>14.1</b> 竞争风险的概念</a></li>
+<li class="chapter" data-level="14.2" data-path="竞争风险模型.html"><a href="竞争风险模型.html#单因素竞争风险模型"><i class="fa fa-check"></i><b>14.2</b> 单因素竞争风险模型</a></li>
+<li class="chapter" data-level="14.3" data-path="竞争风险模型.html"><a href="竞争风险模型.html#多因素竞争风险模型"><i class="fa fa-check"></i><b>14.3</b> 多因素竞争风险模型</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="主成分分析.html"><a href="主成分分析.html"><i class="fa fa-check"></i><b>15</b> <strong>主成分分析</strong></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="主成分分析.html"><a href="主成分分析.html#概述-1"><i class="fa fa-check"></i><b>15.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="主成分分析.html"><a href="主成分分析.html#基本思想"><i class="fa fa-check"></i><b>15.1.1</b> 基本思想</a></li>
+<li class="chapter" data-level="15.1.2" data-path="主成分分析.html"><a href="主成分分析.html#模型示意图"><i class="fa fa-check"></i><b>15.1.2</b> 模型示意图</a></li>
+<li class="chapter" data-level="15.1.3" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析基本思想应用"><i class="fa fa-check"></i><b>15.1.3</b> 主成分分析基本思想应用</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析的数学模型"><i class="fa fa-check"></i><b>15.2</b> 主成分分析的数学模型</a></li>
+<li class="chapter" data-level="15.3" data-path="主成分分析.html"><a href="主成分分析.html#pca的r语言实现"><i class="fa fa-check"></i><b>15.3</b> PCA的R语言实现</a>
+<ul>
+<li class="chapter" data-level="15.3.1" data-path="主成分分析.html"><a href="主成分分析.html#psych包中的函数"><i class="fa fa-check"></i><b>15.3.1</b> psych包中的函数</a></li>
+<li class="chapter" data-level="15.3.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分与因子分析的一般步骤"><i class="fa fa-check"></i><b>15.3.2</b> 主成分与因子分析的一般步骤</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="主成分分析.html"><a href="主成分分析.html#案例-4"><i class="fa fa-check"></i><b>15.4</b> 案例</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="主成分分析.html"><a href="主成分分析.html#案例1-6"><i class="fa fa-check"></i><b>15.4.1</b> 案例1</a></li>
+<li class="chapter" data-level="15.4.2" data-path="主成分分析.html"><a href="主成分分析.html#案例-2-1"><i class="fa fa-check"></i><b>15.4.2</b> 案例 2</a></li>
+<li class="chapter" data-level="15.4.3" data-path="主成分分析.html"><a href="主成分分析.html#案例3在线性回归中的应用"><i class="fa fa-check"></i><b>15.4.3</b> 案例3——在线性回归中的应用</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="探索性因子分析.html"><a href="探索性因子分析.html"><i class="fa fa-check"></i><b>16</b> <strong>探索性因子分析</strong></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析"><i class="fa fa-check"></i><b>16.1</b> 因子分析</a></li>
+<li class="chapter" data-level="16.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析模型形式"><i class="fa fa-check"></i><b>16.2</b> 因子分析模型形式</a></li>
+<li class="chapter" data-level="16.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析的r语言实现"><i class="fa fa-check"></i><b>16.3</b> 因子分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#判断需提取的公共因子数"><i class="fa fa-check"></i><b>16.3.1</b> 判断需提取的公共因子数</a></li>
+<li class="chapter" data-level="16.3.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#提取公共因子"><i class="fa fa-check"></i><b>16.3.2</b> 提取公共因子</a></li>
+<li class="chapter" data-level="16.3.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子旋转"><i class="fa fa-check"></i><b>16.3.3</b> 因子旋转</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析应用案例"><i class="fa fa-check"></i><b>16.4</b> 因子分析应用案例</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="聚类分析.html"><a href="聚类分析.html"><i class="fa fa-check"></i><b>17</b> <strong>聚类分析</strong></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="聚类分析.html"><a href="聚类分析.html#概述-2"><i class="fa fa-check"></i><b>17.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="17.1.1" data-path="聚类分析.html"><a href="聚类分析.html#聚类的定义"><i class="fa fa-check"></i><b>17.1.1</b> 聚类的定义</a></li>
+<li class="chapter" data-level="17.1.2" data-path="聚类分析.html"><a href="聚类分析.html#两种聚类分析"><i class="fa fa-check"></i><b>17.1.2</b> 两种聚类分析</a></li>
+<li class="chapter" data-level="17.1.3" data-path="聚类分析.html"><a href="聚类分析.html#聚类分析的一般步骤"><i class="fa fa-check"></i><b>17.1.3</b> 聚类分析的一般步骤</a></li>
+<li class="chapter" data-level="17.1.4" data-path="聚类分析.html"><a href="聚类分析.html#计算距离"><i class="fa fa-check"></i><b>17.1.4</b> 计算距离</a></li>
+<li class="chapter" data-level="17.1.5" data-path="聚类分析.html"><a href="聚类分析.html#层次聚类分析"><i class="fa fa-check"></i><b>17.1.5</b> 层次聚类分析</a></li>
+<li class="chapter" data-level="17.1.6" data-path="聚类分析.html"><a href="聚类分析.html#选择聚类的个数"><i class="fa fa-check"></i><b>17.1.6</b> 选择聚类的个数</a></li>
+<li class="chapter" data-level="17.1.7" data-path="聚类分析.html"><a href="聚类分析.html#获取最终的聚类方案"><i class="fa fa-check"></i><b>17.1.7</b> 获取最终的聚类方案</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="聚类分析.html"><a href="聚类分析.html#k均值算法"><i class="fa fa-check"></i><b>17.2</b> K均值算法</a></li>
+<li class="chapter" data-level="17.3" data-path="聚类分析.html"><a href="聚类分析.html#围绕中心点的划分"><i class="fa fa-check"></i><b>17.3</b> 围绕中心点的划分</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="聚类分析.html"><a href="聚类分析.html#pam算法步骤"><i class="fa fa-check"></i><b>17.3.1</b> PAM算法步骤</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Medical Statistics wtih R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cox比例风险模型" class="section level1" number="13">
+<h1><span class="header-section-number">Chapter 13</span> <strong>COX比例风险模型</strong></h1>
+<div id="模型简介" class="section level2" number="13.1">
+<h2><span class="header-section-number">13.1</span> <strong>模型简介</strong></h2>
+<p>➢ 1972年，英国统计学家 D. R. Cox 博士提出了一种比例风险回归模型（Cox Proportional Hazard Model），简称Cox模型。它可以分析多种因素对生存时间的影响，而且允许有“截尾”存在。是生存分析中最重要的模型之一。</p>
+<p>➢ Cox回归模型主要用于肿瘤和其它慢性病的预后因素分析，也可以用于一般的临床疗效评价和队列的病因探索。</p>
+<div id="cox模型的基本结构" class="section level3" number="13.1.1">
+<h3><span class="header-section-number">13.1.1</span> COX模型的基本结构</h3>
+<p>➢ COX模型不直接考察生存时间与各自变量的关系，而是用风险率作为因变量。</p>
+<p>COX模型的基本结构为：</p>
+<p><span class="math display">\[
+h(t,X)=h_0(t)\exp(\beta_1X_1+\beta_2X_2+\cdots+\beta_mX_m) \quad \quad (1)
+\]</span></p>
+<p>➢ <span class="math inline">\(h(t,X)\)</span>：t时点上m个危险因素起作用时的风险率，即在时间t上的死亡率；</p>
+<p>➢ <span class="math inline">\(h0(t)\)</span>：某时间t上当m个危险因素为0时的基准风险率；</p>
+<p>➢ <span class="math inline">\(X(X_1, X_2,…, X_m)\)</span>：与生存时间可能有关的自变量；</p>
+<p>➢ <span class="math inline">\(β＝(β_1, β_2,…, β_m)\)</span>：COX模型的回归系数。</p>
+<p>➢ <span class="math inline">\(β_j\)</span>与<span class="math inline">\(h(t,X)\)</span>之间有如下关系：</p>
+<p>（1）<span class="math inline">\(β_j&gt;0\)</span>，则<span class="math inline">\(X_j\)</span>取值越大，<span class="math inline">\(h(t,X)\)</span>的值越大，表示病人死亡的风险率越大；</p>
+<p>（2）<span class="math inline">\(β_j＝0\)</span>，则<span class="math inline">\(X_j\)</span>取值对<span class="math inline">\(h(t,X)\)</span>无影响；</p>
+<p>（3）<span class="math inline">\(β_j&lt;0\)</span>，则<span class="math inline">\(X_j\)</span>取值越大，<span class="math inline">\(h(t,X)\)</span>的值越小，表示病人死亡的风险率越小。</p>
+<p>➢ <span class="math inline">\(h(t)\)</span>和<span class="math inline">\(h_0(t)\)</span>成比例，比例系数是：</p>
+<p><span class="math display">\[
+h(t,X) / h_0(t) = \exp(\beta_1X_1+\beta_2X_2+\cdots+\beta_mX_m)
+\]</span></p>
+<p>➢ 故COX模型又称比例风险模型，将上式两边取自然对数，得：</p>
+<p><span class="math display">\[
+\ln[h(t,X) / h_0(t)]=\beta_1X_1+\beta_2X_2+\cdots+\beta_mX_m
+\]</span>
+➢ 此式与多元线性回归模型非常类似，故有人称COX模型为COX回归。</p>
+<p>➢ 由此式可见<span class="math inline">\(β_j\)</span>的含义是：在其他自变量不变前提下，自变量<span class="math inline">\(X_j\)</span>改变一个单位，引
+起的死亡风险改变的自然对数值。</p>
+<p>式(1)可改写为：</p>
+<p><span class="math display">\[
+h(t,X)=h_0(t)\exp(\beta_1X_1)\exp(\beta_2X_2) \cdots \exp(\beta_mX_m)
+\]</span>
+故相对危险度(RR)即：</p>
+<p><span class="math display">\[
+\text{RR} = \exp\beta_j(X_{j2}-X_{j1}) 
+\]</span></p>
+<p>如Xj为 0~1 数据，则：<span class="math inline">\(\text{RR} = \exp\beta_j\)</span></p>
+<p>➢ RR含义：在其他自变量保持不变前提下，自变量<span class="math inline">\(X_j\)</span>改变一个单位，死亡风险比原水平改变<span class="math inline">\(\exp(\beta_j)\)</span>倍。<strong>RR是一个与时间无关的变量</strong> 。</p>
+<p>h0(t)分布类型未作任何限定；但h(t)随变量X的变化假定为指数函数exp(bX)。故COX模型为半参数模型。而且h0(t)分布类型未作任何限定，因而应用COX模型不必考虑资料的属于那一种具体的分布。故适用范围广泛，类似于非参数方法，但其检验效率高于非参数模型，接近于参数模型。</p>
+</div>
+<div id="cox回归模型的构建" class="section level3" number="13.1.2">
+<h3><span class="header-section-number">13.1.2</span> COX回归模型的构建</h3>
+<p>➢ 构造偏似然函数，然后用最大似然法求出各参数估计值bj, 须借助计算机完成。</p>
+</div>
+<div id="cox回归模型的主要用途" class="section level3" number="13.1.3">
+<h3><span class="header-section-number">13.1.3</span> COX回归模型的主要用途</h3>
+<p>（1）建立以多个危险因素估计生存或死亡的 风险模型，并由模型估计对多个
+危险因素导致死亡的相对危险度（RR)</p>
+<p>（2）用已建立的模型，估计患病后随时间变化的生存率</p>
+<p>（3）用已建立的模型，估计患病后的危险指数, 或预后指数（PI）</p>
+</div>
+<div id="cox回归模型的应用条件" class="section level3" number="13.1.4">
+<h3><span class="header-section-number">13.1.4</span> COX回归模型的应用条件</h3>
+<p>（1）已知观察对象的生存时间；</p>
+<p>（2）已知观察对象在事先确定的观察时间内，其是否发生某事件的结果；</p>
+<p>（3）自变量可以是计量资料、计数资料、分类资料或等级资料。</p>
+<p>（4）等比例风险（PH）。指在协变量不同状态的病人的风险在不同的时间保
+持不变。如在研究的10年中，糖尿病人心脏病发作的可能性是非糖尿病人的3
+倍，无论在第1年，第2年…….等都如此。</p>
+<p><strong><em>等比例风险的验证</em></strong></p>
+<p>（1）按协变量分组的Kaplan-Meier生存曲线，如生存曲线明显交叉，则不满足PH假定。</p>
+<p><img src="fig/89.png" width="628" /></p>
+<p>（2）将协变量与时间作为交互项引入模型，如果交互项没有统计学意义，则等比例风险成立，若有统计学意义，则不成立。与时间有关的风险称为非比例风险，采用非比例风险模型分析。</p>
+</div>
+<div id="cox回归分析的假设检验" class="section level3" number="13.1.5">
+<h3><span class="header-section-number">13.1.5</span> COX回归分析的假设检验</h3>
+<p>（1）Cox回归方程的检验方法：</p>
+<p>➢ 最大似然比检验（maximumLike-lihood Ratio)</p>
+<p>➢常用Wald检验、得分检验（Score)</p>
+</div>
+</div>
+<div id="cox分析的一般步骤" class="section level2" number="13.2">
+<h2><span class="header-section-number">13.2</span> COX分析的一般步骤</h2>
+<div id="收集资料" class="section level3" number="13.2.1">
+<h3><span class="header-section-number">13.2.1</span> 收集资料</h3>
+<p>首先确定观察指标并将其数量化，表1（数量化表），然后收集资料，表2（随访表）。收集到资料后，建立数据文件。（用SPSS或Excel)</p>
+<p><img src="fig/8a.png" width="641" /></p>
+</div>
+<div id="因子初步筛选" class="section level3" number="13.2.2">
+<h3><span class="header-section-number">13.2.2</span> 因子初步筛选</h3>
+<ol style="list-style-type: decimal">
+<li><p>剔除数据缺失较多的因子</p></li>
+<li><p>剔除变异几乎为0的因子</p></li>
+<li><p>对所有因子逐个做单因素Cox模型分析，选择有统计学意义的变量做多因素Cox模型分析,此时的α值可以取稍大一些，如α=0.1.</p></li>
+</ol>
+</div>
+<div id="拟合多因素模型" class="section level3" number="13.2.3">
+<h3><span class="header-section-number">13.2.3</span> 拟合多因素模型</h3>
+<p>规定检验水准α，初步探索性研究，可取α=0.10或α=0.15,；严谨的、证实性研究，取α=0.05或0.01</p>
+<p>筛选因子方法：前进法、后退法、逐步法</p>
+</div>
+<div id="结果解析与评价" class="section level3" number="13.2.4">
+<h3><span class="header-section-number">13.2.4</span> 结果解析与评价</h3>
+<ol style="list-style-type: decimal">
+<li><p>模型在一定的检验水准α下，入选哪些因素？</p></li>
+<li><p>入选因素哪些是保护因素，哪些是危险因素？</p></li>
+<li><p>入选因素哪个对因变量影响（贡献）最大？</p></li>
+</ol>
+</div>
+<div id="标准回归系数的计算方法" class="section level3" number="13.2.5">
+<h3><span class="header-section-number">13.2.5</span> 标准回归系数的计算方法</h3>
+<p>对原始变量的观察值做标准正态化变换后，在拟合回归方程得到的回归系数，即为标准化回归系数</p>
+<p>可直接用以下公式计算：</p>
+<p><span class="math display">\[
+\beta&#39;=SD   · \beta
+\; \; \; \; \; \; \;
+SE(\beta&#39;)=SD ×SE(\beta)
+\]</span>
+式中，SD为X的标准差,SE(β)为β的标准误</p>
+</div>
+</div>
+<div id="案例" class="section level2" number="13.3">
+<h2><span class="header-section-number">13.3</span> <strong>案例</strong></h2>
+<div id="案例1-5" class="section level3" number="13.3.1">
+<h3><span class="header-section-number">13.3.1</span> 案例1</h3>
+<p>以下数据是一项关于胰脏癌手术中接受放射治疗是否会延长病人生存时间的研究数据。该研究的主要终点为死亡，接受手术被定义为计算生存时间的起点。由于该研究是一项未经随机化的观察性研究，要正确估计术中接受放射治疗提高患者生存时间的效果，还需要考虑对其他因子的效果进行调整。数据的详细说明见下表。</p>
+<p><img src="fig/8b.png" width="566" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">caseno</th>
+<th align="right">time</th>
+<th align="left">censor</th>
+<th align="right">age</th>
+<th align="left">sex</th>
+<th align="left">trt</th>
+<th align="left">bui</th>
+<th align="left">ch</th>
+<th align="left">p</th>
+<th align="left">stage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2.4</td>
+<td align="left">死亡</td>
+<td align="right">66</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">CH3</td>
+<td align="left">有</td>
+<td align="left">IV期</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.7</td>
+<td align="left">死亡</td>
+<td align="right">69</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">CH3</td>
+<td align="left">有</td>
+<td align="left">IV期</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.1</td>
+<td align="left">死亡</td>
+<td align="right">48</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">CH0</td>
+<td align="left">无</td>
+<td align="left">III期</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1.0</td>
+<td align="left">死亡</td>
+<td align="right">73</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">CH3</td>
+<td align="left">无</td>
+<td align="left">III期</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">4.8</td>
+<td align="left">死亡</td>
+<td align="right">65</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">CH3</td>
+<td align="left">无</td>
+<td align="left">IV期</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">6.4</td>
+<td align="left">死亡</td>
+<td align="right">38</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">胰脏头部</td>
+<td align="left">CH3</td>
+<td align="left">无</td>
+<td align="left">III期</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码清单</strong></p>
+<ol style="list-style-type: decimal">
+<li>导入数据</li>
+</ol>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="cox比例风险模型.html#cb449-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
+<span id="cb449-2"><a href="cox比例风险模型.html#cb449-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb449-3"><a href="cox比例风险模型.html#cb449-3" aria-hidden="true" tabindex="-1"></a>pancer <span class="ot">&lt;-</span> <span class="fu">read.spss</span>(<span class="st">&#39;data/pancer.sav&#39;</span>)</span>
+<span id="cb449-4"><a href="cox比例风险模型.html#cb449-4" aria-hidden="true" tabindex="-1"></a>pancer <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pancer)</span>
+<span id="cb449-5"><a href="cox比例风险模型.html#cb449-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pancer)</span></code></pre></div>
+<p>2.定义变量名</p>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="cox比例风险模型.html#cb450-1" aria-hidden="true" tabindex="-1"></a>pancer<span class="sc">$</span>censor <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pancer<span class="sc">$</span>censor<span class="sc">==</span><span class="st">&#39;死亡&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb450-2"><a href="cox比例风险模型.html#cb450-2" aria-hidden="true" tabindex="-1"></a>pancer<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(pancer<span class="sc">$</span>sex<span class="sc">==</span><span class="st">&#39;男&#39;</span>,<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>))</span>
+<span id="cb450-3"><a href="cox比例风险模型.html#cb450-3" aria-hidden="true" tabindex="-1"></a>pancer<span class="sc">$</span>ch <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(pancer<span class="sc">$</span>ch<span class="sc">==</span><span class="st">&#39;CH3&#39;</span>, <span class="st">&quot;ch&quot;</span>,<span class="st">&quot;nonch&quot;</span>))</span></code></pre></div>
+<p>在这行代码
+<code>ifelse(pancer$ch=='CH3', "ch","nonch")</code>中，我们将ch3，作为有胆管浸润，将0、1、2实际上定义为了无胆管浸润，现在可以看看数据发生了什么改变：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">caseno</th>
+<th align="right">time</th>
+<th align="right">censor</th>
+<th align="right">age</th>
+<th align="left">sex</th>
+<th align="left">trt</th>
+<th align="left">bui</th>
+<th align="left">ch</th>
+<th align="left">p</th>
+<th align="left">stage</th>
+<th align="left">Gender</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2.4</td>
+<td align="right">1</td>
+<td align="right">66</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">ch</td>
+<td align="left">有</td>
+<td align="left">IV期</td>
+<td align="left">Male</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.7</td>
+<td align="right">1</td>
+<td align="right">69</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">ch</td>
+<td align="left">有</td>
+<td align="left">IV期</td>
+<td align="left">Male</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.1</td>
+<td align="right">1</td>
+<td align="right">48</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">nonch</td>
+<td align="left">无</td>
+<td align="left">III期</td>
+<td align="left">Male</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1.0</td>
+<td align="right">1</td>
+<td align="right">73</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">ch</td>
+<td align="left">无</td>
+<td align="left">III期</td>
+<td align="left">Male</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">4.8</td>
+<td align="right">1</td>
+<td align="right">65</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">头部以外</td>
+<td align="left">ch</td>
+<td align="left">无</td>
+<td align="left">IV期</td>
+<td align="left">Male</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">6.4</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="left">男</td>
+<td align="left">无术中放疗</td>
+<td align="left">胰脏头部</td>
+<td align="left">ch</td>
+<td align="left">无</td>
+<td align="left">III期</td>
+<td align="left">Male</td>
+</tr>
+</tbody>
+</table>
+<ol start="3" style="list-style-type: decimal">
+<li>拟合模型</li>
+</ol>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="cox比例风险模型.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch &lt;- relevel(pancer$ch,ref=&quot;CH0&quot;) #设置因子的参照水平</span></span>
+<span id="cb451-2"><a href="cox比例风险模型.html#cb451-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch&lt;- factor(pancer$ch,order=TRUE) #设置为等级变量</span></span>
+<span id="cb451-3"><a href="cox比例风险模型.html#cb451-3" aria-hidden="true" tabindex="-1"></a><span class="co">#options(contrasts=c(&quot;contr.treatment&quot;, &quot;contr.treatment&quot;)) #指定等级变量的参照水平</span></span>
+<span id="cb451-4"><a href="cox比例风险模型.html#cb451-4" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$Gender &lt;- relevel(pancer$Gender,ref=&#39;Female&#39;)</span></span>
+<span id="cb451-5"><a href="cox比例风险模型.html#cb451-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb451-6"><a href="cox比例风险模型.html#cb451-6" aria-hidden="true" tabindex="-1"></a>f<span class="ot">&lt;-</span><span class="fu">coxph</span>(<span class="fu">Surv</span>(time,censor<span class="sc">==</span><span class="dv">1</span>)<span class="sc">~</span>age<span class="sc">+</span>Gender<span class="sc">+</span>trt<span class="sc">+</span>bui<span class="sc">+</span>ch<span class="sc">+</span>p<span class="sc">+</span>stage,<span class="at">data=</span>pancer)</span>
+<span id="cb451-7"><a href="cox比例风险模型.html#cb451-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(f)</span></code></pre></div>
+<pre><code>Call:
+coxph(formula = Surv(time, censor == 1) ~ age + Gender + trt + 
+    bui + ch + p + stage, data = pancer)
+
+  n= 83, number of events= 82 
+
+                  coef exp(coef) se(coef)      z Pr(&gt;|z|)   
+age            0.01575   1.01588  0.01322  1.191  0.23356   
+GenderMale     0.07528   1.07819  0.24358  0.309  0.75727   
+trt有术中放疗 -0.88487   0.41277  0.32113 -2.756  0.00586 **
+bui头部以外    0.45223   1.57181  0.29462  1.535  0.12480   
+chnonch        0.20457   1.22699  0.30375  0.673  0.50065   
+p有            0.29321   1.34072  0.27587  1.063  0.28784   
+stageIV期      0.23301   1.26240  0.25688  0.907  0.36437   
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+              exp(coef) exp(-coef) lower .95 upper .95
+age              1.0159     0.9844    0.9899    1.0426
+GenderMale       1.0782     0.9275    0.6689    1.7379
+trt有术中放疗    0.4128     2.4227    0.2200    0.7746
+bui头部以外      1.5718     0.6362    0.8823    2.8002
+chnonch          1.2270     0.8150    0.6765    2.2254
+p有              1.3407     0.7459    0.7808    2.3023
+stageIV期        1.2624     0.7921    0.7630    2.0886
+
+Concordance= 0.646  (se = 0.036 )
+Likelihood ratio test= 14.5  on 7 df,   p=0.04
+Wald test            = 14.84  on 7 df,   p=0.04
+Score (logrank) test = 15.2  on 7 df,   p=0.03</code></pre>
+<p><strong><em>结果解读1.1</em></strong></p>
+<ul>
+<li><p><code>exp(coef)</code>即回归模型的反对数，可以将其近似的看做RR值。</p></li>
+<li><p><code>Likelihood ratio test</code>; <code>Wald test</code>; <code>Score (logrank) test</code> 即回归模型的似然比检验、瓦尔德检验以及比分检验的结果、自由度和P值。</p></li>
+<li><p><code>Concordance= 0.646</code> 即C统计量</p></li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>计算C统计量的95%可信区间</li>
+</ol>
+<p>公式如下：</p>
+<p><span class="math display">\[
+\text{95%CI}= \text{C-index} \pm 1.96\text{SE(c)}
+\]</span></p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="cox比例风险模型.html#cb453-1" aria-hidden="true" tabindex="-1"></a>sum.surv<span class="ot">&lt;-</span><span class="fu">summary</span>(f)</span>
+<span id="cb453-2"><a href="cox比例风险模型.html#cb453-2" aria-hidden="true" tabindex="-1"></a>c_index<span class="ot">&lt;-</span>sum.surv<span class="sc">$</span>concordance</span>
+<span id="cb453-3"><a href="cox比例风险模型.html#cb453-3" aria-hidden="true" tabindex="-1"></a>c_index</span></code></pre></div>
+<pre><code>##          C      se(C) 
+## 0.64582715 0.03617383</code></pre>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="cox比例风险模型.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.64582715+1.96</span><span class="sc">*</span><span class="fl">0.03617383</span> <span class="co">#95%CI上限</span></span></code></pre></div>
+<pre><code>## [1] 0.7167279</code></pre>
+<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="cox比例风险模型.html#cb457-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.64582715-1.96</span><span class="sc">*</span><span class="fl">0.03617383</span> <span class="co">#95%CI下限</span></span></code></pre></div>
+<pre><code>## [1] 0.5749264</code></pre>
+<p><strong><em>结果解读 1.2</em></strong></p>
+<ul>
+<li>C统计量的95%CI为：0.03617383~0.03617383</li>
+</ul>
+</div>
+<div id="案例2-3" class="section level3" number="13.3.2">
+<h3><span class="header-section-number">13.3.2</span> 案例2</h3>
+<p>随访25例分别以A 、B 治疗方法治疗的癌症病人的生存情况，资料如表15-3 所示，+为截尾值。1 : 有肾功能损害， 0: 无肾功能损害</p>
+<p><img src="fig/8c.png" width="613" /></p>
+<p>查看原始数据</p>
+<pre><code>## The following object is masked from glioma (pos = 3):
+## 
+##     group</code></pre>
+<pre><code>## The following object is masked from glioma (pos = 6):
+## 
+##     group</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">group</th>
+<th align="right">renal</th>
+<th align="right">days</th>
+<th align="right">censor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">52</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">58</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">63</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">63</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">220</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码如下</strong></p>
+<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb461-1"><a href="cox比例风险模型.html#cb461-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb461-2"><a href="cox比例风险模型.html#cb461-2" aria-hidden="true" tabindex="-1"></a>example15_4  <span class="ot">&lt;-</span> <span class="fu">read.table</span> (<span class="st">&quot;data/example15_4.csv&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb461-3"><a href="cox比例风险模型.html#cb461-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(example15_4)</span>
+<span id="cb461-4"><a href="cox比例风险模型.html#cb461-4" aria-hidden="true" tabindex="-1"></a>coxmodel  <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(days, censor)<span class="sc">~</span>group)</span>
+<span id="cb461-5"><a href="cox比例风险模型.html#cb461-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(coxmodel)</span></code></pre></div>
+<pre><code>## Call:
+## coxph(formula = Surv(days, censor) ~ group)
+## 
+##   n= 25, number of events= 20 
+## 
+##         coef exp(coef) se(coef)     z Pr(&gt;|z|)
+## group 0.3652    1.4408   0.4592 0.795    0.426
+## 
+##       exp(coef) exp(-coef) lower .95 upper .95
+## group     1.441      0.694    0.5858     3.544
+## 
+## Concordance= 0.536  (se = 0.064 )
+## Likelihood ratio test= 0.64  on 1 df,   p=0.4
+## Wald test            = 0.63  on 1 df,   p=0.4
+## Score (logrank) test = 0.64  on 1 df,   p=0.4</code></pre>
+<div class="sourceCode" id="cb463"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb463-1"><a href="cox比例风险模型.html#cb463-1" aria-hidden="true" tabindex="-1"></a>coxmode2  <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(days, censor)<span class="sc">~</span>group<span class="sc">+</span>renal)</span>
+<span id="cb463-2"><a href="cox比例风险模型.html#cb463-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(coxmode2)</span></code></pre></div>
+<pre><code>## Call:
+## coxph(formula = Surv(days, censor) ~ group + renal)
+## 
+##   n= 25, number of events= 20 
+## 
+##          coef exp(coef) se(coef)     z Pr(&gt;|z|)    
+## group  0.9835    2.6738   0.5231 1.880 0.060068 .  
+## renal  4.2718   71.6515   1.1588 3.686 0.000228 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##       exp(coef) exp(-coef) lower .95 upper .95
+## group     2.674    0.37399    0.9592     7.454
+## renal    71.652    0.01396    7.3930   694.432
+## 
+## Concordance= 0.773  (se = 0.055 )
+## Likelihood ratio test= 23.82  on 2 df,   p=7e-06
+## Wald test            = 14.33  on 2 df,   p=8e-04
+## Score (logrank) test = 31.13  on 2 df,   p=2e-07</code></pre>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="cox比例风险模型.html#cb465-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(coxmodel,coxmode2)</span></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+##  Cox model: response is  Surv(days, censor)
+##  Model 1: ~ group
+##  Model 2: ~ group + renal
+##    loglik  Chisq Df P(&gt;|Chi|)    
+## 1 -52.715                        
+## 2 -41.122 23.186  1 1.471e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="cox比例风险模型.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(example15_4)</span></code></pre></div>
+</div>
+<div id="案例3" class="section level3" number="13.3.3">
+<h3><span class="header-section-number">13.3.3</span> 案例3</h3>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="cox比例风险模型.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TH.data)</span>
+<span id="cb468-2"><a href="cox比例风险模型.html#cb468-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&#39;GBSG2&#39;</span>,<span class="at">package =</span> <span class="st">&#39;TH.data&#39;</span>)</span>
+<span id="cb468-3"><a href="cox比例风险模型.html#cb468-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(GBSG2)</span>
+<span id="cb468-4"><a href="cox比例风险模型.html#cb468-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(GBSG2)</span></code></pre></div>
+<pre><code>##   horTh age menostat tsize tgrade pnodes progrec estrec time cens
+## 1    no  70     Post    21     II      3      48     66 1814    1
+## 2   yes  56     Post    12     II      7      61     77 2018    1
+## 3   yes  58     Post    35     II      9      52    271  712    1
+## 4   yes  59     Post    17     II      4      60     29 1807    1
+## 5    no  73     Post    35     II      1      26     65  772    1
+## 6    no  32      Pre    57    III     24       0     13  448    1</code></pre>
+<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb470-1"><a href="cox比例风险模型.html#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ff&lt;-survfit(Surv(time, cens)~horTh,data = GBSG2)</span></span>
+<span id="cb470-2"><a href="cox比例风险模型.html#cb470-2" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(ff)</span></span>
+<span id="cb470-3"><a href="cox比例风险模型.html#cb470-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">survfit</span>(<span class="fu">Surv</span>(time, cens)<span class="sc">~</span>horTh,<span class="at">data =</span> GBSG2),<span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="at">mark.time =</span> T)</span>
+<span id="cb470-4"><a href="cox比例风险模型.html#cb470-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&#39;bottomright&#39;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&#39;yes&#39;</span>,<span class="st">&#39;no&#39;</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+<p><strong><em>结果解读 2.1</em></strong></p>
+<ul>
+<li><p>我们可以通过<code>summary()</code>函数可以看到预后情况，寻找中位生存时间，确定不同组的生存情况</p></li>
+<li><p>也可以画一条生存曲线</p></li>
+</ul>
+<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb471-1"><a href="cox比例风险模型.html#cb471-1" aria-hidden="true" tabindex="-1"></a>coxreg <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time,cens)<span class="sc">~</span>.,<span class="at">data =</span> GBSG2) <span class="co">#~后加&quot;.&quot;指加入所有的变量</span></span>
+<span id="cb471-2"><a href="cox比例风险模型.html#cb471-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(coxreg)</span></code></pre></div>
+<pre><code>## Call:
+## coxph(formula = Surv(time, cens) ~ ., data = GBSG2)
+## 
+##   n= 686, number of events= 299 
+## 
+##                    coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    
+## horThyes     -0.3462784  0.7073155  0.1290747 -2.683 0.007301 ** 
+## age          -0.0094592  0.9905854  0.0093006 -1.017 0.309126    
+## menostatPost  0.2584448  1.2949147  0.1834765  1.409 0.158954    
+## tsize         0.0077961  1.0078266  0.0039390  1.979 0.047794 *  
+## tgrade.L      0.5512988  1.7355056  0.1898441  2.904 0.003685 ** 
+## tgrade.Q     -0.2010905  0.8178384  0.1219654 -1.649 0.099199 .  
+## pnodes        0.0487886  1.0499984  0.0074471  6.551  5.7e-11 ***
+## progrec      -0.0022172  0.9977852  0.0005735 -3.866 0.000111 ***
+## estrec        0.0001973  1.0001973  0.0004504  0.438 0.661307    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##              exp(coef) exp(-coef) lower .95 upper .95
+## horThyes        0.7073     1.4138    0.5492    0.9109
+## age             0.9906     1.0095    0.9727    1.0088
+## menostatPost    1.2949     0.7723    0.9038    1.8553
+## tsize           1.0078     0.9922    1.0001    1.0156
+## tgrade.L        1.7355     0.5762    1.1963    2.5178
+## tgrade.Q        0.8178     1.2227    0.6439    1.0387
+## pnodes          1.0500     0.9524    1.0348    1.0654
+## progrec         0.9978     1.0022    0.9967    0.9989
+## estrec          1.0002     0.9998    0.9993    1.0011
+## 
+## Concordance= 0.692  (se = 0.015 )
+## Likelihood ratio test= 104.8  on 9 df,   p=&lt;2e-16
+## Wald test            = 114.8  on 9 df,   p=&lt;2e-16
+## Score (logrank) test = 120.7  on 9 df,   p=&lt;2e-16</code></pre>
+</div>
+</div>
+<div id="列线图绘制" class="section level2" number="13.4">
+<h2><span class="header-section-number">13.4</span> 列线图绘制</h2>
+<p>载入数据</p>
+<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb473-1"><a href="cox比例风险模型.html#cb473-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
+<span id="cb473-2"><a href="cox比例风险模型.html#cb473-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb473-3"><a href="cox比例风险模型.html#cb473-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rms)</span>
+<span id="cb473-4"><a href="cox比例风险模型.html#cb473-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb473-5"><a href="cox比例风险模型.html#cb473-5" aria-hidden="true" tabindex="-1"></a>pancer <span class="ot">&lt;-</span> <span class="fu">read.spss</span>(<span class="st">&#39;data/pancer.sav&#39;</span>)</span>
+<span id="cb473-6"><a href="cox比例风险模型.html#cb473-6" aria-hidden="true" tabindex="-1"></a>pancer <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pancer)</span>
+<span id="cb473-7"><a href="cox比例风险模型.html#cb473-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pancer)</span></code></pre></div>
+<pre><code>##   caseno time censor age sex        trt      bui  ch  p stage
+## 1      1  2.4   死亡  66  男 无术中放疗 头部以外 CH3 有  IV期
+## 2      2  1.7   死亡  69  男 无术中放疗 头部以外 CH3 有  IV期
+## 3      3  0.1   死亡  48  男 无术中放疗 头部以外 CH0 无 III期
+## 4      4  1.0   死亡  73  男 无术中放疗 头部以外 CH3 无 III期
+## 5      5  4.8   死亡  65  男 无术中放疗 头部以外 CH3 无  IV期
+## 6      6  6.4   死亡  38  男 无术中放疗 胰脏头部 CH3 无 III期</code></pre>
+<p>重命名变量</p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="cox比例风险模型.html#cb475-1" aria-hidden="true" tabindex="-1"></a>pancer<span class="sc">$</span>censor <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pancer<span class="sc">$</span>censor<span class="sc">==</span><span class="st">&#39;死亡&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb475-2"><a href="cox比例风险模型.html#cb475-2" aria-hidden="true" tabindex="-1"></a>pancer<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(pancer<span class="sc">$</span>sex<span class="sc">==</span><span class="st">&#39;男&#39;</span>,<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>))</span>
+<span id="cb475-3"><a href="cox比例风险模型.html#cb475-3" aria-hidden="true" tabindex="-1"></a>pancer<span class="sc">$</span>ch <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(pancer<span class="sc">$</span>ch<span class="sc">==</span><span class="st">&#39;CH3&#39;</span>, <span class="st">&quot;ch&quot;</span>,<span class="st">&quot;nonch&quot;</span>))<span class="co">#将等级变量二值化</span></span></code></pre></div>
+<p>也可使用这种方式设置哑变量</p>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="cox比例风险模型.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch1 &lt;- as.factor(ifelse(pancer$ch==&#39;CH1&#39;,1,0))</span></span>
+<span id="cb476-2"><a href="cox比例风险模型.html#cb476-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch2 &lt;- as.factor(ifelse(pancer$ch==&#39;CH2&#39;,1,0))</span></span>
+<span id="cb476-3"><a href="cox比例风险模型.html#cb476-3" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch3 &lt;- as.factor(ifelse(pancer$ch==&#39;CH3&#39;,1,0))</span></span>
+<span id="cb476-4"><a href="cox比例风险模型.html#cb476-4" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch0 &lt;- as.factor(ifelse(pancer$ch==&#39;CH0&#39;,1,0))</span></span>
+<span id="cb476-5"><a href="cox比例风险模型.html#cb476-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb476-6"><a href="cox比例风险模型.html#cb476-6" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch &lt;- relevel(pancer$ch,ref=&quot;CH0&quot;) #设置因子的参照水平</span></span>
+<span id="cb476-7"><a href="cox比例风险模型.html#cb476-7" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$ch&lt;- factor(pancer$ch,order=TRUE) #设置为等级变量</span></span>
+<span id="cb476-8"><a href="cox比例风险模型.html#cb476-8" aria-hidden="true" tabindex="-1"></a><span class="co">#options(contrasts=c(&quot;contr.treatment&quot;, &quot;contr.treatment&quot;)) #指定等级变量的参照水平</span></span>
+<span id="cb476-9"><a href="cox比例风险模型.html#cb476-9" aria-hidden="true" tabindex="-1"></a><span class="co">#pancer$Gender &lt;- relevel(pancer$Gender,ref=&#39;Female&#39;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="cox比例风险模型.html#cb477-1" aria-hidden="true" tabindex="-1"></a><span class="co">#打包数据</span></span>
+<span id="cb477-2"><a href="cox比例风险模型.html#cb477-2" aria-hidden="true" tabindex="-1"></a>dd<span class="ot">&lt;-</span><span class="fu">datadist</span>(pancer)</span>
+<span id="cb477-3"><a href="cox比例风险模型.html#cb477-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">datadist=</span><span class="st">&#39;dd&#39;</span>)</span>
+<span id="cb477-4"><a href="cox比例风险模型.html#cb477-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb477-5"><a href="cox比例风险模型.html#cb477-5" aria-hidden="true" tabindex="-1"></a>coxm1 <span class="ot">&lt;-</span> <span class="fu">cph</span>(<span class="fu">Surv</span>(time,censor<span class="sc">==</span><span class="dv">1</span>)<span class="sc">~</span>age<span class="sc">+</span>Gender<span class="sc">+</span>trt<span class="sc">+</span>bui<span class="sc">+</span>ch<span class="sc">+</span>p<span class="sc">+</span>stage,</span>
+<span id="cb477-6"><a href="cox比例风险模型.html#cb477-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">x=</span>T,<span class="at">y=</span>T,</span>
+<span id="cb477-7"><a href="cox比例风险模型.html#cb477-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">data=</span>pancer,</span>
+<span id="cb477-8"><a href="cox比例风险模型.html#cb477-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">surv=</span>T)<span class="co">#rms包中的cox回归</span></span>
+<span id="cb477-9"><a href="cox比例风险模型.html#cb477-9" aria-hidden="true" tabindex="-1"></a>coxm1</span></code></pre></div>
+<pre><code>## Cox Proportional Hazards Model
+##  
+##  cph(formula = Surv(time, censor == 1) ~ age + Gender + trt + 
+##      bui + ch + p + stage, data = pancer, x = T, y = T, surv = T)
+##  
+##                         Model Tests    Discrimination    
+##                                               Indexes    
+##  Obs        83    LR chi2     14.50    R2       0.160    
+##  Events     82    d.f.            7    Dxy      0.292    
+##  Center 1.0416    Pr(&gt; chi2) 0.0429    g        0.543    
+##                   Score chi2  15.20    gr       1.721    
+##                   Pr(&gt; chi2) 0.0335                      
+##  
+##                 Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  age             0.0158 0.0132  1.19  0.2336  
+##  Gender=Male     0.0753 0.2436  0.31  0.7573  
+##  trt=有术中放疗 -0.8849 0.3211 -2.76  0.0059  
+##  bui=头部以外    0.4522 0.2946  1.53  0.1248  
+##  ch=nonch        0.2046 0.3038  0.67  0.5007  
+##  p=有            0.2932 0.2759  1.06  0.2878  
+##  stage=IV期      0.2330 0.2569  0.91  0.3644  
+## </code></pre>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="cox比例风险模型.html#cb479-1" aria-hidden="true" tabindex="-1"></a>surv <span class="ot">&lt;-</span> <span class="fu">Survival</span>(coxm1)</span>
+<span id="cb479-2"><a href="cox比例风险模型.html#cb479-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 定义时间分割的范围，以月为单位</span></span>
+<span id="cb479-3"><a href="cox比例风险模型.html#cb479-3" aria-hidden="true" tabindex="-1"></a>surv1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x)<span class="fu">surv</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">3</span>,<span class="at">lp=</span>x)</span>
+<span id="cb479-4"><a href="cox比例风险模型.html#cb479-4" aria-hidden="true" tabindex="-1"></a>surv2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x)<span class="fu">surv</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">6</span>,<span class="at">lp=</span>x)</span>
+<span id="cb479-5"><a href="cox比例风险模型.html#cb479-5" aria-hidden="true" tabindex="-1"></a>surv3 <span class="ot">&lt;-</span> <span class="cf">function</span>(x)<span class="fu">surv</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">12</span>,<span class="at">lp=</span>x)</span>
+<span id="cb479-6"><a href="cox比例风险模型.html#cb479-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb479-7"><a href="cox比例风险模型.html#cb479-7" aria-hidden="true" tabindex="-1"></a>nom1<span class="ot">&lt;-</span><span class="fu">nomogram</span>(coxm1,<span class="at">fun=</span><span class="fu">list</span>(surv1,surv2,surv3),</span>
+<span id="cb479-8"><a href="cox比例风险模型.html#cb479-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">lp=</span> F,</span>
+<span id="cb479-9"><a href="cox比例风险模型.html#cb479-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">funlabel=</span><span class="fu">c</span>(</span>
+<span id="cb479-10"><a href="cox比例风险模型.html#cb479-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&#39;3-Month Survival probability&#39;</span>,</span>
+<span id="cb479-11"><a href="cox比例风险模型.html#cb479-11" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&#39;6-Month survival probability&#39;</span>,</span>
+<span id="cb479-12"><a href="cox比例风险模型.html#cb479-12" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&#39;12-Month survival probability&#39;</span>),</span>
+<span id="cb479-13"><a href="cox比例风险模型.html#cb479-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">maxscale=</span><span class="dv">100</span>,</span>
+<span id="cb479-14"><a href="cox比例风险模型.html#cb479-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.at=</span><span class="fu">c</span>(<span class="st">&#39;0.9&#39;</span>,<span class="st">&#39;0.85&#39;</span>,<span class="st">&#39;0.80&#39;</span>,<span class="st">&#39;0.70&#39;</span>,</span>
+<span id="cb479-15"><a href="cox比例风险模型.html#cb479-15" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&#39;0.6&#39;</span>,<span class="st">&#39;0.5&#39;</span>,<span class="st">&#39;0.4&#39;</span>,<span class="st">&#39;0.3&#39;</span>,<span class="st">&#39;0.2&#39;</span>,<span class="st">&#39;0.1&#39;</span>)</span>
+<span id="cb479-16"><a href="cox比例风险模型.html#cb479-16" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb479-17"><a href="cox比例风险模型.html#cb479-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb479-18"><a href="cox比例风险模型.html#cb479-18" aria-hidden="true" tabindex="-1"></a><span class="co"># fun：将线性的预测转换为具体的分值</span></span>
+<span id="cb479-19"><a href="cox比例风险模型.html#cb479-19" aria-hidden="true" tabindex="-1"></a><span class="co"># lp= F：不显示线性预测值，只显示最后的分值</span></span>
+<span id="cb479-20"><a href="cox比例风险模型.html#cb479-20" aria-hidden="true" tabindex="-1"></a><span class="co"># funlabel：不同时间的标签</span></span>
+<span id="cb479-21"><a href="cox比例风险模型.html#cb479-21" aria-hidden="true" tabindex="-1"></a><span class="co"># maxscale=100 刻度为0~100</span></span>
+<span id="cb479-22"><a href="cox比例风险模型.html#cb479-22" aria-hidden="true" tabindex="-1"></a><span class="co"># fun.at设置最后结果的范围</span></span>
+<span id="cb479-23"><a href="cox比例风险模型.html#cb479-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb479-24"><a href="cox比例风险模型.html#cb479-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb479-25"><a href="cox比例风险模型.html#cb479-25" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nom1,<span class="at">xfrac=</span>.<span class="dv">60</span>)<span class="co">#xfrac为文字和图的距离</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-141-1.png" width="672" /></p>
+<p>从图中我们可以看到，Gender和ch两个变量对模型的意义不大，我们可以尝试删除这两个变量。</p>
+<p>拟合一个新的模型</p>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="cox比例风险模型.html#cb480-1" aria-hidden="true" tabindex="-1"></a>coxm2 <span class="ot">&lt;-</span> <span class="fu">cph</span>(<span class="fu">Surv</span>(time,censor<span class="sc">==</span><span class="dv">1</span>)<span class="sc">~</span>age<span class="sc">+</span>trt<span class="sc">+</span>bui<span class="sc">+</span>p<span class="sc">+</span>stage,</span>
+<span id="cb480-2"><a href="cox比例风险模型.html#cb480-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">x=</span>T,<span class="at">y=</span>T,<span class="at">data=</span>pancer,<span class="at">surv=</span>T)</span>
+<span id="cb480-3"><a href="cox比例风险模型.html#cb480-3" aria-hidden="true" tabindex="-1"></a>coxm2</span></code></pre></div>
+<pre><code>## Cox Proportional Hazards Model
+##  
+##  cph(formula = Surv(time, censor == 1) ~ age + trt + bui + p + 
+##      stage, data = pancer, x = T, y = T, surv = T)
+##  
+##                         Model Tests    Discrimination    
+##                                               Indexes    
+##  Obs        83    LR chi2     13.75    R2       0.153    
+##  Events     82    d.f.            5    Dxy      0.305    
+##  Center 0.9655    Pr(&gt; chi2) 0.0173    g        0.518    
+##                   Score chi2  14.53    gr       1.679    
+##                   Pr(&gt; chi2) 0.0125                      
+##  
+##                 Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  age             0.0161 0.0132  1.22  0.2225  
+##  trt=有术中放疗 -0.7672 0.2732 -2.81  0.0050  
+##  bui=头部以外    0.4224 0.2905  1.45  0.1460  
+##  p=有            0.2987 0.2615  1.14  0.2533  
+##  stage=IV期      0.2830 0.2436  1.16  0.2452  
+## </code></pre>
+<p>我们可以看到c统计量实际上是有轻微的上升的，故用这个(coxm2)模型来绘制列线图</p>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="cox比例风险模型.html#cb482-1" aria-hidden="true" tabindex="-1"></a>surv <span class="ot">&lt;-</span> <span class="fu">Survival</span>(coxm2)</span>
+<span id="cb482-2"><a href="cox比例风险模型.html#cb482-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 定义时间分割的范围，以月为单位</span></span>
+<span id="cb482-3"><a href="cox比例风险模型.html#cb482-3" aria-hidden="true" tabindex="-1"></a>surv1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x)<span class="fu">surv</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">3</span>,<span class="at">lp=</span>x)</span>
+<span id="cb482-4"><a href="cox比例风险模型.html#cb482-4" aria-hidden="true" tabindex="-1"></a>surv2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x)<span class="fu">surv</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">6</span>,<span class="at">lp=</span>x)</span>
+<span id="cb482-5"><a href="cox比例风险模型.html#cb482-5" aria-hidden="true" tabindex="-1"></a>surv3 <span class="ot">&lt;-</span> <span class="cf">function</span>(x)<span class="fu">surv</span>(<span class="dv">1</span><span class="sc">*</span><span class="dv">12</span>,<span class="at">lp=</span>x)</span>
+<span id="cb482-6"><a href="cox比例风险模型.html#cb482-6" aria-hidden="true" tabindex="-1"></a><span class="co">#绘制列线图</span></span>
+<span id="cb482-7"><a href="cox比例风险模型.html#cb482-7" aria-hidden="true" tabindex="-1"></a>nom2<span class="ot">&lt;-</span><span class="fu">nomogram</span>(coxm2,</span>
+<span id="cb482-8"><a href="cox比例风险模型.html#cb482-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun=</span><span class="fu">list</span>(surv1,surv2,surv3),</span>
+<span id="cb482-9"><a href="cox比例风险模型.html#cb482-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">lp=</span> F,</span>
+<span id="cb482-10"><a href="cox比例风险模型.html#cb482-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">funlabel=</span><span class="fu">c</span>(<span class="st">&#39;3-Month Survival probability&#39;</span>,</span>
+<span id="cb482-11"><a href="cox比例风险模型.html#cb482-11" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;6-Month survival probability&#39;</span>,</span>
+<span id="cb482-12"><a href="cox比例风险模型.html#cb482-12" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;12-Month survival probability&#39;</span>),</span>
+<span id="cb482-13"><a href="cox比例风险模型.html#cb482-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">maxscale=</span><span class="dv">100</span>,</span>
+<span id="cb482-14"><a href="cox比例风险模型.html#cb482-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.at=</span><span class="fu">c</span>(<span class="st">&#39;0.9&#39;</span>,<span class="st">&#39;0.85&#39;</span>,<span class="st">&#39;0.80&#39;</span>,<span class="st">&#39;0.70&#39;</span>,<span class="st">&#39;0.6&#39;</span>,</span>
+<span id="cb482-15"><a href="cox比例风险模型.html#cb482-15" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&#39;0.5&#39;</span>,<span class="st">&#39;0.4&#39;</span>,<span class="st">&#39;0.3&#39;</span>,<span class="st">&#39;0.2&#39;</span>,<span class="st">&#39;0.1&#39;</span>,<span class="st">&#39;0.01&#39;</span>))</span>
+<span id="cb482-16"><a href="cox比例风险模型.html#cb482-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nom2)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-143-1.png" width="672" /></p>
+<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="cox比例风险模型.html#cb483-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 绘制校正曲线</span></span>
+<span id="cb483-2"><a href="cox比例风险模型.html#cb483-2" aria-hidden="true" tabindex="-1"></a>cal2 <span class="ot">&lt;-</span> <span class="fu">calibrate</span>(coxm2, <span class="at">cmethod=</span><span class="st">&#39;KM&#39;</span>, <span class="at">method=</span><span class="st">&#39;boot&#39;</span>, <span class="at">u=</span><span class="dv">6</span>, <span class="at">m=</span><span class="dv">20</span>, <span class="at">B=</span><span class="dv">1000</span>)</span></code></pre></div>
+<pre><code>## Using Cox survival estimates at  2.5 Days</code></pre>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="cox比例风险模型.html#cb485-1" aria-hidden="true" tabindex="-1"></a><span class="co">#u=6:时间间隔</span></span>
+<span id="cb485-2"><a href="cox比例风险模型.html#cb485-2" aria-hidden="true" tabindex="-1"></a><span class="co">#m=20：总样本量为83，设为20，就有4个节点，一般设置3~4个节点</span></span>
+<span id="cb485-3"><a href="cox比例风险模型.html#cb485-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cal2,</span>
+<span id="cb485-4"><a href="cox比例风险模型.html#cb485-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd=</span><span class="dv">2</span>,<span class="at">lty=</span><span class="dv">1</span>,</span>
+<span id="cb485-5"><a href="cox比例风险模型.html#cb485-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">errbar.col=</span><span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">118</span>,<span class="dv">192</span>,<span class="at">maxColorValue=</span><span class="dv">255</span>)),</span>
+<span id="cb485-6"><a href="cox比例风险模型.html#cb485-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb485-7"><a href="cox比例风险模型.html#cb485-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Nomogram-Predicted Probabilityof 6 m OS&quot;</span>,</span>
+<span id="cb485-8"><a href="cox比例风险模型.html#cb485-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Actual 6 m OS (proportion)&quot;</span>,</span>
+<span id="cb485-9"><a href="cox比例风险模型.html#cb485-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">192</span>,<span class="dv">98</span>,<span class="dv">83</span>,<span class="at">maxColorValue=</span><span class="dv">255</span>)))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-143-2.png" width="672" /></p>
+</div>
+<div id="亚组分析森林图的绘制-1" class="section level2" number="13.5">
+<h2><span class="header-section-number">13.5</span> 亚组分析森林图的绘制</h2>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="cox比例风险模型.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forestplot)</span>
+<span id="cb486-2"><a href="cox比例风险模型.html#cb486-2" aria-hidden="true" tabindex="-1"></a>test_forest <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;data/forest_test2.csv&#39;</span>,<span class="at">header =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb486-3"><a href="cox比例风险模型.html#cb486-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(test_forest)</span>
+<span id="cb486-4"><a href="cox比例风险模型.html#cb486-4" aria-hidden="true" tabindex="-1"></a><span class="fu">forestplot</span>(<span class="at">labeltext =</span> <span class="fu">as.matrix</span>(test_forest[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]),</span>
+<span id="cb486-5"><a href="cox比例风险模型.html#cb486-5" aria-hidden="true" tabindex="-1"></a>           <span class="co">#设置用于文本展示的列，此处我们用数据的前六列作为文本，在图中展示</span></span>
+<span id="cb486-6"><a href="cox比例风险模型.html#cb486-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">mean =</span> test_forest<span class="sc">$</span>V7, <span class="co">#设置均值</span></span>
+<span id="cb486-7"><a href="cox比例风险模型.html#cb486-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">lower =</span> test_forest<span class="sc">$</span>V8, <span class="co">#设置均值的下限</span></span>
+<span id="cb486-8"><a href="cox比例风险模型.html#cb486-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">upper =</span> test_forest<span class="sc">$</span>V9, <span class="co">#设置均值的上限</span></span>
+<span id="cb486-9"><a href="cox比例风险模型.html#cb486-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">is.summary =</span> <span class="fu">c</span>(T,T,F,F,T,F,F,T,F,F,F,F,T,F,F,F,T,F,T,F,F,T),</span>
+<span id="cb486-10"><a href="cox比例风险模型.html#cb486-10" aria-hidden="true" tabindex="-1"></a>           <span class="co">#该参数接受一个逻辑向量，用于定义数据中的每一行是否是汇总值，若是，则在对应位置设置为TRUE，若否，则设置为FALSE；设置为TRUE的行则以粗体出现</span></span>
+<span id="cb486-11"><a href="cox比例风险模型.html#cb486-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero =</span> <span class="dv">1</span>, <span class="co">#设置参照值，此处我们展示的是HR值，故参照值是1，而不是0</span></span>
+<span id="cb486-12"><a href="cox比例风险模型.html#cb486-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">boxsize =</span> <span class="fl">0.2</span>, <span class="co">#设置点估计的方形大小</span></span>
+<span id="cb486-13"><a href="cox比例风险模型.html#cb486-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">lineheight =</span> <span class="fu">unit</span>(<span class="dv">10</span>,<span class="st">&#39;mm&#39;</span>),<span class="co">#设置图形中的行距</span></span>
+<span id="cb486-14"><a href="cox比例风险模型.html#cb486-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">colgap =</span> <span class="fu">unit</span>(<span class="dv">2</span>,<span class="st">&#39;mm&#39;</span>),<span class="co">#设置图形中的列间距</span></span>
+<span id="cb486-15"><a href="cox比例风险模型.html#cb486-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.zero =</span> <span class="dv">2</span>,<span class="co">#设置参考线的粗细</span></span>
+<span id="cb486-16"><a href="cox比例风险模型.html#cb486-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.ci =</span> <span class="dv">2</span>,<span class="co">#设置区间估计线的粗细</span></span>
+<span id="cb486-17"><a href="cox比例风险模型.html#cb486-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.xaxis=</span><span class="dv">2</span>,<span class="co">#设置X轴线的粗细</span></span>
+<span id="cb486-18"><a href="cox比例风险模型.html#cb486-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">xlog=</span><span class="cn">FALSE</span>,</span>
+<span id="cb486-19"><a href="cox比例风险模型.html#cb486-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">ci.vertices.height =</span> <span class="fl">0.1</span>,</span>
+<span id="cb486-20"><a href="cox比例风险模型.html#cb486-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">clip =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">1.3</span>), <span class="co"># 设置森林图展示的可信区间范围，超过的部分用箭头展示</span></span>
+<span id="cb486-21"><a href="cox比例风险模型.html#cb486-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">grid =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb486-22"><a href="cox比例风险模型.html#cb486-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">lty.ci =</span> <span class="dv">1</span>,</span>
+<span id="cb486-23"><a href="cox比例风险模型.html#cb486-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">col=</span><span class="fu">fpColors</span>(<span class="at">box=</span><span class="st">&#39;#458B00&#39;</span>,  <span class="at">summary=</span> <span class="st">&quot;#8B008B&quot;</span>,<span class="at">lines =</span> <span class="st">&#39;black&#39;</span>,<span class="at">zero =</span> <span class="st">&#39;#7AC5CD&#39;</span>),</span>
+<span id="cb486-24"><a href="cox比例风险模型.html#cb486-24" aria-hidden="true" tabindex="-1"></a>           <span class="co">#使用fpColors()函数定义图形元素的颜色，从左至右分别对应点估计方形，汇总值，区间估计线，参考线</span></span>
+<span id="cb486-25"><a href="cox比例风险模型.html#cb486-25" aria-hidden="true" tabindex="-1"></a>           <span class="at">xlab=</span><span class="st">&quot;Hzard Ratio(HR)&quot;</span>,<span class="co">#设置x轴标签</span></span>
+<span id="cb486-26"><a href="cox比例风险模型.html#cb486-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">graph.pos =</span> <span class="dv">5</span>)<span class="co">#设置森林图的位置，此处设置为5，则出现在第五列</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-144-1.png" width="672" /></p>
+<p>注意：数据过多时，一张图可能画不下，故可以将数据分割，分成几次绘制。</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="生存分析.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="竞争风险模型.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/011-cox.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

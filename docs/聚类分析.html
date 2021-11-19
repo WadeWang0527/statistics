@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 17 聚类分析 | Medical Statistics wtih R</title>
+  <meta name="description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 17 聚类分析 | Medical Statistics wtih R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 17 聚类分析 | Medical Statistics wtih R" />
+  
+  <meta name="twitter:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  
+
+<meta name="author" content="Wade Wang" />
+
+
+<meta name="date" content="2021-11-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="探索性因子分析.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Medical Statistics wtih R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html"><i class="fa fa-check"></i><b>1</b> <strong>统计描述与基础统计分析方法</strong></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#描述性统计分析"><i class="fa fa-check"></i><b>1.1</b> 描述性统计分析</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单组数据汇总统计量"><i class="fa fa-check"></i><b>1.1.1</b> 单组数据汇总统计量</a></li>
+<li class="chapter" data-level="1.1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#数据分布类型的图形描述"><i class="fa fa-check"></i><b>1.1.2</b> 数据分布类型的图形描述</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#线性相关与秩相关分析"><i class="fa fa-check"></i><b>1.2</b> <strong>线性相关与秩相关分析</strong></a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#三种相关系数"><i class="fa fa-check"></i><b>1.2.1</b> 三种相关系数</a></li>
+<li class="chapter" data-level="1.2.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#相关系数的显著性检验"><i class="fa fa-check"></i><b>1.2.2</b> 相关系数的显著性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异t检验"><i class="fa fa-check"></i><b>1.3</b> <strong>组间差异t检验</strong></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本t检验"><i class="fa fa-check"></i><b>1.3.1</b> 单样本t检验</a></li>
+<li class="chapter" data-level="1.3.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两样本t检验"><i class="fa fa-check"></i><b>1.3.2</b> 两样本t检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异秩和检验"><i class="fa fa-check"></i><b>1.4</b> 组间差异秩和检验</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.1</b> 单样本Wilcoxon符号秩检验</a></li>
+<li class="chapter" data-level="1.4.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两组的比较"><i class="fa fa-check"></i><b>1.4.2</b> 两组的比较</a></li>
+<li class="chapter" data-level="1.4.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#配对wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.3</b> 配对Wilcoxon符号秩检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html"><i class="fa fa-check"></i><b>2</b> <strong>方差分析与秩和Kruskal-Wallis检验</strong></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析概述"><i class="fa fa-check"></i><b>2.1</b> 方差分析概述</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析基本思想"><i class="fa fa-check"></i><b>2.1.1</b> 方差分析基本思想</a></li>
+<li class="chapter" data-level="2.1.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析用途"><i class="fa fa-check"></i><b>2.1.2</b> 方差分析用途</a></li>
+<li class="chapter" data-level="2.1.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分应用条件"><i class="fa fa-check"></i><b>2.1.3</b> 方差分应用条件</a></li>
+<li class="chapter" data-level="2.1.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析的r语言实现"><i class="fa fa-check"></i><b>2.1.4</b> 方差分析的R语言实现</a></li>
+<li class="chapter" data-level="2.1.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#表达式中各项的顺序"><i class="fa fa-check"></i><b>2.1.5</b> 表达式中各项的顺序</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#单因素方差分析"><i class="fa fa-check"></i><b>2.2</b> 单因素方差分析</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#多重比较"><i class="fa fa-check"></i><b>2.2.1</b> 多重比较</a></li>
+<li class="chapter" data-level="2.2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#评估方差分析的假设条件"><i class="fa fa-check"></i><b>2.2.2</b> 评估方差分析的假设条件</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#双因素方差分析"><i class="fa fa-check"></i><b>2.3</b> 双因素方差分析</a></li>
+<li class="chapter" data-level="2.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#重复测量的方差分析"><i class="fa fa-check"></i><b>2.4</b> 重复测量的方差分析</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#概述"><i class="fa fa-check"></i><b>2.4.1</b> 概述</a></li>
+<li class="chapter" data-level="2.4.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#原理"><i class="fa fa-check"></i><b>2.4.2</b> 原理</a></li>
+<li class="chapter" data-level="2.4.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#应用条件"><i class="fa fa-check"></i><b>2.4.3</b> 应用条件</a></li>
+<li class="chapter" data-level="2.4.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#案例1"><i class="fa fa-check"></i><b>2.4.4</b> 案例1</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#注意"><i class="fa fa-check"></i><b>2.5</b> 注意</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html"><i class="fa fa-check"></i><b>3</b> <strong>列联表资料的处理</strong></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#rc表分类"><i class="fa fa-check"></i><b>3.1</b> R×C表分类</a></li>
+<li class="chapter" data-level="3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#列变量为有序变量的行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2</b> 列变量为有序变量的行均分检验（Cochran-Mantel-Haenszel）</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2.1</b> 行均分检验Cochran-Mantel-Haenszel</a></li>
+<li class="chapter" data-level="3.2.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#ordinal-logistic回归模型"><i class="fa fa-check"></i><b>3.2.2</b> Ordinal logistic回归模型</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行列变量均为有序变量检验方法"><i class="fa fa-check"></i><b>3.3</b> 行列变量均为有序变量检验方法</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#sperman秩相关"><i class="fa fa-check"></i><b>3.3.1</b> sperman秩相关</a></li>
+<li class="chapter" data-level="3.3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#线性趋势检验"><i class="fa fa-check"></i><b>3.3.2</b> 线性趋势检验</a></li>
+<li class="chapter" data-level="3.3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#一致性检验"><i class="fa fa-check"></i><b>3.3.3</b> 一致性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#分层行列表分析-mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4</b> 分层行列表分析 Mantel-Haenszel 检验</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4.1</b> Mantel-Haenszel 检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html"><i class="fa fa-check"></i><b>4</b> <strong>秩和检验处理列联表资料</strong></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#等级分组资料的非参数检验"><i class="fa fa-check"></i><b>4.1</b> 等级分组资料的非参数检验</a></li>
+<li class="chapter" data-level="4.2" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#多个组的等级指标的非参数检验"><i class="fa fa-check"></i><b>4.2</b> 多个组的等级指标的非参数检验</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="简单线性回归.html"><a href="简单线性回归.html"><i class="fa fa-check"></i><b>5</b> <strong>简单线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析对资料的要求"><i class="fa fa-check"></i><b>5.1</b> 回归分析对资料的要求</a></li>
+<li class="chapter" data-level="5.2" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程"><i class="fa fa-check"></i><b>5.2</b> 直线回归方程</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程的建立"><i class="fa fa-check"></i><b>5.2.1</b> 直线回归方程的建立</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="简单线性回归.html"><a href="简单线性回归.html#回归系数b的统计学意义"><i class="fa fa-check"></i><b>5.3</b> 回归系数b的统计学意义</a></li>
+<li class="chapter" data-level="5.4" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析的步骤"><i class="fa fa-check"></i><b>5.4</b> 回归分析的步骤</a></li>
+<li class="chapter" data-level="5.5" data-path="简单线性回归.html"><a href="简单线性回归.html#y的离均差平方和的划分"><i class="fa fa-check"></i><b>5.5</b> Y的离均差平方和的划分</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的关系"><i class="fa fa-check"></i><b>5.5.1</b> 三种平方和的关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的意义"><i class="fa fa-check"></i><b>5.6</b> 三种平方和的意义</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的自由度及其关系"><i class="fa fa-check"></i><b>5.6.1</b> 三种平方和的自由度及其关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="简单线性回归.html"><a href="简单线性回归.html#应用回归分析应注意的问题"><i class="fa fa-check"></i><b>5.7</b> 应用回归分析应注意的问题</a></li>
+<li class="chapter" data-level="5.8" data-path="简单线性回归.html"><a href="简单线性回归.html#简单线性回归的r语言实现"><i class="fa fa-check"></i><b>5.8</b> 简单线性回归的R语言实现</a></li>
+<li class="chapter" data-level="5.9" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-1"><i class="fa fa-check"></i><b>5.9</b> 案例 1</a></li>
+<li class="chapter" data-level="5.10" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-2"><i class="fa fa-check"></i><b>5.10</b> 案例 2</a></li>
+<li class="chapter" data-level="5.11" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-3"><i class="fa fa-check"></i><b>5.11</b> 案例 3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="残差与回归值预测域与置信带.html"><a href="残差与回归值预测域与置信带.html"><i class="fa fa-check"></i><b>6</b> 残差与回归值&amp;预测域与置信带</a></li>
+<li class="chapter" data-level="7" data-path="多元线性回归.html"><a href="多元线性回归.html"><i class="fa fa-check"></i><b>7</b> <strong>多元线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="多元线性回归.html"><a href="多元线性回归.html#多元线性回归模型"><i class="fa fa-check"></i><b>7.1</b> 多元线性回归模型</a></li>
+<li class="chapter" data-level="7.2" data-path="多元线性回归.html"><a href="多元线性回归.html#回归模型的应用条件"><i class="fa fa-check"></i><b>7.2</b> 回归模型的应用条件</a></li>
+<li class="chapter" data-level="7.3" data-path="多元线性回归.html"><a href="多元线性回归.html#偏回归系数的估计"><i class="fa fa-check"></i><b>7.3</b> 偏回归系数的估计</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="多元线性回归.html"><a href="多元线性回归.html#回归方程的假设检验"><i class="fa fa-check"></i><b>7.3.1</b> 回归方程的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="多元线性回归.html"><a href="多元线性回归.html#案例一"><i class="fa fa-check"></i><b>7.4</b> 案例一</a></li>
+<li class="chapter" data-level="7.5" data-path="多元线性回归.html"><a href="多元线性回归.html#案例二"><i class="fa fa-check"></i><b>7.5</b> 案例二</a></li>
+<li class="chapter" data-level="7.6" data-path="多元线性回归.html"><a href="多元线性回归.html#用线性回归来做anova"><i class="fa fa-check"></i><b>7.6</b> 用线性回归来做ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html"><i class="fa fa-check"></i><b>8</b> <strong>诊断试验的ROC分析</strong></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验设计原理"><i class="fa fa-check"></i><b>8.1</b> 诊断试验设计原理</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#队列研究设计"><i class="fa fa-check"></i><b>8.1.1</b> 队列研究设计</a></li>
+<li class="chapter" data-level="8.1.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#横断面设计单门设计"><i class="fa fa-check"></i><b>8.1.2</b> 横断面设计/单门设计</a></li>
+<li class="chapter" data-level="8.1.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#病例对照设计双门设计"><i class="fa fa-check"></i><b>8.1.3</b> 病例对照设计/双门设计</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验的统计指标"><i class="fa fa-check"></i><b>8.2</b> 诊断试验的统计指标</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#基本概念"><i class="fa fa-check"></i><b>8.2.1</b> 基本概念</a></li>
+<li class="chapter" data-level="8.2.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#灵敏度和特异度之间的权衡"><i class="fa fa-check"></i><b>8.2.2</b> 灵敏度和特异度之间的权衡</a></li>
+<li class="chapter" data-level="8.2.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#受试者工作特征曲线-roc"><i class="fa fa-check"></i><b>8.2.3</b> 受试者工作特征曲线 (ROC)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#roc分析的r语言实现"><i class="fa fa-check"></i><b>8.3</b> ROC分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例1-1"><i class="fa fa-check"></i><b>8.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="8.3.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例2"><i class="fa fa-check"></i><b>8.3.2</b> 案例2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="logistic回归.html"><a href="logistic回归.html"><i class="fa fa-check"></i><b>9</b> <strong>Logistic回归</strong></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="logistic回归.html"><a href="logistic回归.html#模型概述"><i class="fa fa-check"></i><b>9.1</b> 模型概述</a></li>
+<li class="chapter" data-level="9.2" data-path="logistic回归.html"><a href="logistic回归.html#模型结构"><i class="fa fa-check"></i><b>9.2</b> 模型结构</a></li>
+<li class="chapter" data-level="9.3" data-path="logistic回归.html"><a href="logistic回归.html#比值比或优势比or"><i class="fa fa-check"></i><b>9.3</b> 比值比或优势比（OR）</a></li>
+<li class="chapter" data-level="9.4" data-path="logistic回归.html"><a href="logistic回归.html#案例1-2"><i class="fa fa-check"></i><b>9.4</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="logistic回归.html"><a href="logistic回归.html#评价预测变量对结果概率的影响"><i class="fa fa-check"></i><b>9.4.1</b> 评价预测变量对结果概率的影响</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="logistic回归.html"><a href="logistic回归.html#案例2-1"><i class="fa fa-check"></i><b>9.5</b> 案例2</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="logistic回归.html"><a href="logistic回归.html#因素间的交互作用"><i class="fa fa-check"></i><b>9.5.1</b> 因素间的交互作用</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="logistic回归.html"><a href="logistic回归.html#案例-3-1"><i class="fa fa-check"></i><b>9.6</b> 案例 3</a></li>
+<li class="chapter" data-level="9.7" data-path="logistic回归.html"><a href="logistic回归.html#案例4"><i class="fa fa-check"></i><b>9.7</b> 案例4</a></li>
+<li class="chapter" data-level="9.8" data-path="logistic回归.html"><a href="logistic回归.html#扩展的logistic回归及其变种"><i class="fa fa-check"></i><b>9.8</b> 扩展的Logistic回归及其变种</a>
+<ul>
+<li class="chapter" data-level="9.8.1" data-path="logistic回归.html"><a href="logistic回归.html#稳健logistic回归"><i class="fa fa-check"></i><b>9.8.1</b> 稳健Logistic回归</a></li>
+<li class="chapter" data-level="9.8.2" data-path="logistic回归.html"><a href="logistic回归.html#多项分布回归"><i class="fa fa-check"></i><b>9.8.2</b> 多项分布回归</a></li>
+<li class="chapter" data-level="9.8.3" data-path="logistic回归.html"><a href="logistic回归.html#序数logistic回归"><i class="fa fa-check"></i><b>9.8.3</b> 序数Logistic回归</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="logistic回归模型.html"><a href="logistic回归模型.html"><i class="fa fa-check"></i><b>10</b> <strong>Logistic回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型的本质"><i class="fa fa-check"></i><b>10.1</b> 临床预测模型的本质</a></li>
+<li class="chapter" data-level="10.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型建立"><i class="fa fa-check"></i><b>10.2</b> 临床预测模型建立</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#验证步骤"><i class="fa fa-check"></i><b>10.2.1</b> 验证步骤</a></li>
+<li class="chapter" data-level="10.2.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#研究思路"><i class="fa fa-check"></i><b>10.2.2</b> 研究思路</a></li>
+<li class="chapter" data-level="10.2.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#预测类案例研究思路总结"><i class="fa fa-check"></i><b>10.2.3</b> 预测类案例研究思路总结</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#案例1-3"><i class="fa fa-check"></i><b>10.3</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#变量筛选"><i class="fa fa-check"></i><b>10.3.1</b> 变量筛选</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="logistic回归模型.html"><a href="logistic回归模型.html#列线图及校正曲线的绘制"><i class="fa fa-check"></i><b>10.4</b> 列线图及校正曲线的绘制</a></li>
+<li class="chapter" data-level="10.5" data-path="logistic回归模型.html"><a href="logistic回归模型.html#c-statistics-计算"><i class="fa fa-check"></i><b>10.5</b> C-Statistics 计算</a></li>
+<li class="chapter" data-level="10.6" data-path="logistic回归模型.html"><a href="logistic回归模型.html#亚组分析森林图的绘制"><i class="fa fa-check"></i><b>10.6</b> 亚组分析森林图的绘制</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#数据录入"><i class="fa fa-check"></i><b>10.6.1</b> 数据录入</a></li>
+<li class="chapter" data-level="10.6.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#绘制图形"><i class="fa fa-check"></i><b>10.6.2</b> 绘制图形</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="泊松回归模型.html"><a href="泊松回归模型.html"><i class="fa fa-check"></i><b>11</b> <strong>泊松回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="泊松回归模型.html"><a href="泊松回归模型.html#拟合泊松回归"><i class="fa fa-check"></i><b>11.1</b> 拟合泊松回归</a></li>
+<li class="chapter" data-level="11.2" data-path="泊松回归模型.html"><a href="泊松回归模型.html#解释模型参数"><i class="fa fa-check"></i><b>11.2</b> 解释模型参数</a></li>
+<li class="chapter" data-level="11.3" data-path="泊松回归模型.html"><a href="泊松回归模型.html#过度离势"><i class="fa fa-check"></i><b>11.3</b> 过度离势</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="生存分析.html"><a href="生存分析.html"><i class="fa fa-check"></i><b>12</b> <strong>生存分析</strong></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="生存分析.html"><a href="生存分析.html#生存资料的描述"><i class="fa fa-check"></i><b>12.1</b> 生存资料的描述</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="生存分析.html"><a href="生存分析.html#生存分析方法的正确表达"><i class="fa fa-check"></i><b>12.1.1</b> 生存分析方法的正确表达</a></li>
+<li class="chapter" data-level="12.1.2" data-path="生存分析.html"><a href="生存分析.html#生存分析的基本概念"><i class="fa fa-check"></i><b>12.1.2</b> 生存分析的基本概念</a></li>
+<li class="chapter" data-level="12.1.3" data-path="生存分析.html"><a href="生存分析.html#生存分析的几个重要名词"><i class="fa fa-check"></i><b>12.1.3</b> 生存分析的几个重要名词</a></li>
+<li class="chapter" data-level="12.1.4" data-path="生存分析.html"><a href="生存分析.html#生存数据的两种类型"><i class="fa fa-check"></i><b>12.1.4</b> 生存数据的两种类型</a></li>
+<li class="chapter" data-level="12.1.5" data-path="生存分析.html"><a href="生存分析.html#生存分析的主要任务"><i class="fa fa-check"></i><b>12.1.5</b> 生存分析的主要任务</a></li>
+<li class="chapter" data-level="12.1.6" data-path="生存分析.html"><a href="生存分析.html#生存分析基本方法"><i class="fa fa-check"></i><b>12.1.6</b> 生存分析基本方法</a></li>
+<li class="chapter" data-level="12.1.7" data-path="生存分析.html"><a href="生存分析.html#随访研究的几个问题"><i class="fa fa-check"></i><b>12.1.7</b> 随访研究的几个问题</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="生存分析.html"><a href="生存分析.html#生存率的估计与生存曲线"><i class="fa fa-check"></i><b>12.2</b> 生存率的估计与生存曲线</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法"><i class="fa fa-check"></i><b>12.2.1</b> Kaplan-Meier法</a></li>
+<li class="chapter" data-level="12.2.2" data-path="生存分析.html"><a href="生存分析.html#寿命表法"><i class="fa fa-check"></i><b>12.2.2</b> 寿命表法</a></li>
+<li class="chapter" data-level="12.2.3" data-path="生存分析.html"><a href="生存分析.html#生存分析对生存资料的基本要求"><i class="fa fa-check"></i><b>12.2.3</b> 生存分析对生存资料的基本要求</a></li>
+<li class="chapter" data-level="12.2.4" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法估计案例"><i class="fa fa-check"></i><b>12.2.4</b> Kaplan-Meier法估计案例</a></li>
+<li class="chapter" data-level="12.2.5" data-path="生存分析.html"><a href="生存分析.html#lifetable寿命表法"><i class="fa fa-check"></i><b>12.2.5</b> LifeTable寿命表法</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="生存分析.html"><a href="生存分析.html#组间生存曲线的比较"><i class="fa fa-check"></i><b>12.3</b> 组间生存曲线的比较</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="生存分析.html"><a href="生存分析.html#log-rank检验"><i class="fa fa-check"></i><b>12.3.1</b> Log-rank检验</a></li>
+<li class="chapter" data-level="12.3.2" data-path="生存分析.html"><a href="生存分析.html#案例1-4"><i class="fa fa-check"></i><b>12.3.2</b> 案例1</a></li>
+<li class="chapter" data-level="12.3.3" data-path="生存分析.html"><a href="生存分析.html#案例2-2"><i class="fa fa-check"></i><b>12.3.3</b> 案例2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="生存分析.html"><a href="生存分析.html#画一幅高水准的生存曲线"><i class="fa fa-check"></i><b>12.4</b> 画一幅高水准的生存曲线</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html"><i class="fa fa-check"></i><b>13</b> <strong>COX比例风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#模型简介"><i class="fa fa-check"></i><b>13.1</b> <strong>模型简介</strong></a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox模型的基本结构"><i class="fa fa-check"></i><b>13.1.1</b> COX模型的基本结构</a></li>
+<li class="chapter" data-level="13.1.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的构建"><i class="fa fa-check"></i><b>13.1.2</b> COX回归模型的构建</a></li>
+<li class="chapter" data-level="13.1.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的主要用途"><i class="fa fa-check"></i><b>13.1.3</b> COX回归模型的主要用途</a></li>
+<li class="chapter" data-level="13.1.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的应用条件"><i class="fa fa-check"></i><b>13.1.4</b> COX回归模型的应用条件</a></li>
+<li class="chapter" data-level="13.1.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归分析的假设检验"><i class="fa fa-check"></i><b>13.1.5</b> COX回归分析的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox分析的一般步骤"><i class="fa fa-check"></i><b>13.2</b> COX分析的一般步骤</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#收集资料"><i class="fa fa-check"></i><b>13.2.1</b> 收集资料</a></li>
+<li class="chapter" data-level="13.2.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#因子初步筛选"><i class="fa fa-check"></i><b>13.2.2</b> 因子初步筛选</a></li>
+<li class="chapter" data-level="13.2.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#拟合多因素模型"><i class="fa fa-check"></i><b>13.2.3</b> 拟合多因素模型</a></li>
+<li class="chapter" data-level="13.2.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#结果解析与评价"><i class="fa fa-check"></i><b>13.2.4</b> 结果解析与评价</a></li>
+<li class="chapter" data-level="13.2.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#标准回归系数的计算方法"><i class="fa fa-check"></i><b>13.2.5</b> 标准回归系数的计算方法</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例"><i class="fa fa-check"></i><b>13.3</b> <strong>案例</strong></a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例1-5"><i class="fa fa-check"></i><b>13.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="13.3.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例2-3"><i class="fa fa-check"></i><b>13.3.2</b> 案例2</a></li>
+<li class="chapter" data-level="13.3.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例3"><i class="fa fa-check"></i><b>13.3.3</b> 案例3</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#列线图绘制"><i class="fa fa-check"></i><b>13.4</b> 列线图绘制</a></li>
+<li class="chapter" data-level="13.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#亚组分析森林图的绘制-1"><i class="fa fa-check"></i><b>13.5</b> 亚组分析森林图的绘制</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="竞争风险模型.html"><a href="竞争风险模型.html"><i class="fa fa-check"></i><b>14</b> <strong>竞争风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="竞争风险模型.html"><a href="竞争风险模型.html#竞争风险的概念"><i class="fa fa-check"></i><b>14.1</b> 竞争风险的概念</a></li>
+<li class="chapter" data-level="14.2" data-path="竞争风险模型.html"><a href="竞争风险模型.html#单因素竞争风险模型"><i class="fa fa-check"></i><b>14.2</b> 单因素竞争风险模型</a></li>
+<li class="chapter" data-level="14.3" data-path="竞争风险模型.html"><a href="竞争风险模型.html#多因素竞争风险模型"><i class="fa fa-check"></i><b>14.3</b> 多因素竞争风险模型</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="主成分分析.html"><a href="主成分分析.html"><i class="fa fa-check"></i><b>15</b> <strong>主成分分析</strong></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="主成分分析.html"><a href="主成分分析.html#概述-1"><i class="fa fa-check"></i><b>15.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="主成分分析.html"><a href="主成分分析.html#基本思想"><i class="fa fa-check"></i><b>15.1.1</b> 基本思想</a></li>
+<li class="chapter" data-level="15.1.2" data-path="主成分分析.html"><a href="主成分分析.html#模型示意图"><i class="fa fa-check"></i><b>15.1.2</b> 模型示意图</a></li>
+<li class="chapter" data-level="15.1.3" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析基本思想应用"><i class="fa fa-check"></i><b>15.1.3</b> 主成分分析基本思想应用</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析的数学模型"><i class="fa fa-check"></i><b>15.2</b> 主成分分析的数学模型</a></li>
+<li class="chapter" data-level="15.3" data-path="主成分分析.html"><a href="主成分分析.html#pca的r语言实现"><i class="fa fa-check"></i><b>15.3</b> PCA的R语言实现</a>
+<ul>
+<li class="chapter" data-level="15.3.1" data-path="主成分分析.html"><a href="主成分分析.html#psych包中的函数"><i class="fa fa-check"></i><b>15.3.1</b> psych包中的函数</a></li>
+<li class="chapter" data-level="15.3.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分与因子分析的一般步骤"><i class="fa fa-check"></i><b>15.3.2</b> 主成分与因子分析的一般步骤</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="主成分分析.html"><a href="主成分分析.html#案例-4"><i class="fa fa-check"></i><b>15.4</b> 案例</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="主成分分析.html"><a href="主成分分析.html#案例1-6"><i class="fa fa-check"></i><b>15.4.1</b> 案例1</a></li>
+<li class="chapter" data-level="15.4.2" data-path="主成分分析.html"><a href="主成分分析.html#案例-2-1"><i class="fa fa-check"></i><b>15.4.2</b> 案例 2</a></li>
+<li class="chapter" data-level="15.4.3" data-path="主成分分析.html"><a href="主成分分析.html#案例3在线性回归中的应用"><i class="fa fa-check"></i><b>15.4.3</b> 案例3——在线性回归中的应用</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="探索性因子分析.html"><a href="探索性因子分析.html"><i class="fa fa-check"></i><b>16</b> <strong>探索性因子分析</strong></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析"><i class="fa fa-check"></i><b>16.1</b> 因子分析</a></li>
+<li class="chapter" data-level="16.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析模型形式"><i class="fa fa-check"></i><b>16.2</b> 因子分析模型形式</a></li>
+<li class="chapter" data-level="16.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析的r语言实现"><i class="fa fa-check"></i><b>16.3</b> 因子分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#判断需提取的公共因子数"><i class="fa fa-check"></i><b>16.3.1</b> 判断需提取的公共因子数</a></li>
+<li class="chapter" data-level="16.3.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#提取公共因子"><i class="fa fa-check"></i><b>16.3.2</b> 提取公共因子</a></li>
+<li class="chapter" data-level="16.3.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子旋转"><i class="fa fa-check"></i><b>16.3.3</b> 因子旋转</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析应用案例"><i class="fa fa-check"></i><b>16.4</b> 因子分析应用案例</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="聚类分析.html"><a href="聚类分析.html"><i class="fa fa-check"></i><b>17</b> <strong>聚类分析</strong></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="聚类分析.html"><a href="聚类分析.html#概述-2"><i class="fa fa-check"></i><b>17.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="17.1.1" data-path="聚类分析.html"><a href="聚类分析.html#聚类的定义"><i class="fa fa-check"></i><b>17.1.1</b> 聚类的定义</a></li>
+<li class="chapter" data-level="17.1.2" data-path="聚类分析.html"><a href="聚类分析.html#两种聚类分析"><i class="fa fa-check"></i><b>17.1.2</b> 两种聚类分析</a></li>
+<li class="chapter" data-level="17.1.3" data-path="聚类分析.html"><a href="聚类分析.html#聚类分析的一般步骤"><i class="fa fa-check"></i><b>17.1.3</b> 聚类分析的一般步骤</a></li>
+<li class="chapter" data-level="17.1.4" data-path="聚类分析.html"><a href="聚类分析.html#计算距离"><i class="fa fa-check"></i><b>17.1.4</b> 计算距离</a></li>
+<li class="chapter" data-level="17.1.5" data-path="聚类分析.html"><a href="聚类分析.html#层次聚类分析"><i class="fa fa-check"></i><b>17.1.5</b> 层次聚类分析</a></li>
+<li class="chapter" data-level="17.1.6" data-path="聚类分析.html"><a href="聚类分析.html#选择聚类的个数"><i class="fa fa-check"></i><b>17.1.6</b> 选择聚类的个数</a></li>
+<li class="chapter" data-level="17.1.7" data-path="聚类分析.html"><a href="聚类分析.html#获取最终的聚类方案"><i class="fa fa-check"></i><b>17.1.7</b> 获取最终的聚类方案</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="聚类分析.html"><a href="聚类分析.html#k均值算法"><i class="fa fa-check"></i><b>17.2</b> K均值算法</a></li>
+<li class="chapter" data-level="17.3" data-path="聚类分析.html"><a href="聚类分析.html#围绕中心点的划分"><i class="fa fa-check"></i><b>17.3</b> 围绕中心点的划分</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="聚类分析.html"><a href="聚类分析.html#pam算法步骤"><i class="fa fa-check"></i><b>17.3.1</b> PAM算法步骤</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Medical Statistics wtih R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="聚类分析" class="section level1" number="17">
+<h1><span class="header-section-number">Chapter 17</span> <strong>聚类分析</strong></h1>
+<div id="概述-2" class="section level2" number="17.1">
+<h2><span class="header-section-number">17.1</span> 概述</h2>
+<div id="聚类的定义" class="section level3" number="17.1.1">
+<h3><span class="header-section-number">17.1.1</span> 聚类的定义</h3>
+<p>聚类分析是一种数据降维技术，旨在揭露一个数据集中观测值的子集。它可以把大量的观测值归约为若干个类。这里的类被定义为若干个观测值组成的群组，群组内观测值的相似度比群间相似度高。这不是一个精确的定义，从而导致了各种聚类方法的出现。</p>
+</div>
+<div id="两种聚类分析" class="section level3" number="17.1.2">
+<h3><span class="header-section-number">17.1.2</span> 两种聚类分析</h3>
+<p>最常用的两种聚类方法是层次聚类（hierarchical agglomerative clustering）和划分聚类（partitioning clustering）。在层次聚类中，每一个观测值自成一类，这些类每次两两合并，直到所有的类被聚成一类为止。在划分聚类中，首先指定类的个数K，然后观测值被随机分成K类，再重新形成聚合的类。</p>
+<p>对于层次聚类来说，最常用的算法是单联动（single linkage）、全联动（complete linkage ）、平均联动（average linkage）、质心（centroid）和Ward方法。
+对于划分聚类来说，最常用的算法是K均值（K-means）和围绕中心点的划分（PAM）。每个聚类方法都有它的优点和缺点，我们将在本章讨论。</p>
+</div>
+<div id="聚类分析的一般步骤" class="section level3" number="17.1.3">
+<h3><span class="header-section-number">17.1.3</span> 聚类分析的一般步骤</h3>
+<ol style="list-style-type: decimal">
+<li>选择合适的变量</li>
+</ol>
+<p>第一步是选择你感觉可能对识别和理解数据中不同观测值分组有重要影
+响的变量。例如，在一项抑郁症研究中，你可能会评估以下一个或多个方面：心理学症状，身体症状，发病年龄，发病次数、持续时间和发作时间，住院次数，自理能力，社会和工作经历，当前的年龄，性别，种族，社会经济地位，婚姻状况，家族病史以及对以前治疗的反应。高级的聚类方法也不能弥补聚类变量选不好的问题。</p>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>缩放数据</li>
+</ol>
+<p>如果我们在分析中选择的变量变化范围很大，那么该变量对结果的影响也是最大的。这往往是不可取的，分析师往往在分析之前缩放数据。最常用的方法是将每个变量标准化为均值为0和标准差为1的变量。其他的替代方法包括每个变量被其最大值相除或该变量减去它的平均值并除以变量的平均绝对偏差。这三种方法能用下面的代码来解释:</p>
+<pre><code>df1 &lt;- apply(mydata, 2, function(x){(x-mean(x))/sd(x)})
+df2 &lt;- apply(mydata, 2, function(x){x/max(x)})
+df3 &lt;- apply(mydata, 2, function(x){(x – mean(x))/mad(x)})</code></pre>
+<p>在本章中，你可以使用<code>scale()</code>函数来将变量标准化到均值为0和标准差为1的变量。这和第一个代码片段（<code>df1</code>）等价。</p>
+<p> </p>
+<ol start="3" style="list-style-type: decimal">
+<li>寻找异常值</li>
+</ol>
+<p>许多聚类方法对于异常值是十分敏感的，它能扭曲我们得到的聚类方案。你可以通过<code>outliers</code>包中的函数来筛选（和删除）异常单变量离群点。
+<code>mvoutlier</code>包中包含了能识别多元变量的离群点的函数。一个替代的方法是使用对异常值稳健的聚类方法，围绕中心点的划分可以很好地解释这种方法。</p>
+<p> </p>
+<ol start="4" style="list-style-type: decimal">
+<li>计算距离</li>
+</ol>
+<p>尽管不同的聚类算法差异很大，但是它们通常需要计算被聚类的实体之间的距离。两个观测值之间最常用的距离量度是欧几里得距离，其他可选的量度包括曼哈顿距离、兰氏距离、非对称二元距离、最大距离和闵可夫斯基距离（可使用?dist查看详细信息）。在这一章中，计算距离时默认使用欧几里得距离。</p>
+<p> </p>
+<ol start="5" style="list-style-type: decimal">
+<li>选择聚类算法</li>
+</ol>
+<p>接下来选择对数据聚类的方法，层次聚类对于小样本来说很实用（如150个观测值或更少），而且这种情况下嵌套聚类更实用。划分的方法能处理更大的数据量，但是需要事先确定聚类的个数。一旦选定了层次方法或划分方法，就必须选择一个特定的聚类算法。这里再次强调每个算法都有优点和缺点</p>
+<p> </p>
+<ol start="6" style="list-style-type: decimal">
+<li>获得一种或多种聚类方法。这一步可以使用步骤(5)选择的方法。</li>
+</ol>
+<p> </p>
+<ol start="7" style="list-style-type: decimal">
+<li>确定类的数目</li>
+</ol>
+<p>为了得到最终的聚类方案，你必须确定类的数目。对此研究者们也提出了很多相应的解决方法。常用方法是尝试不同的类数（比如2～K）并比较解的质量。在<code>NbClust</code>包中的<code>NbClust()</code>函数提供了30个不同的指标来帮助你进行选择（也表明这个问题有多么难解）。本章将多次使用这个包。</p>
+<p> </p>
+<ol start="8" style="list-style-type: decimal">
+<li>获得最终聚类方案: 一旦类的个数确定下来，就可以提取出子群，形成最终的聚类方案。</li>
+</ol>
+<p> </p>
+<ol start="9" style="list-style-type: decimal">
+<li>结果可视化:可视化可以帮助你判定聚类方案的意义和用处。层次聚类的结果通常表示为一个树状图。划分的结果通常利用可视化双变量聚类图来表示。</li>
+</ol>
+<p> </p>
+<ol start="10" style="list-style-type: decimal">
+<li>解读类</li>
+</ol>
+<p>一旦聚类方案确定，你必须解释（或许命名）这个类。一个类中的观测值有何相似之处？不同的类之间的观测值有何不同？这一步通常通过获得类中每个变量的汇总统计来完成。对于连续数据，每一类中变量的均值和中位数会被计算出来。对于混合数据（数据中包含分类变量），结果中将返回各类的众数或类别分布。</p>
+<p> </p>
+<ol start="11" style="list-style-type: decimal">
+<li>验证结果</li>
+</ol>
+<p>验证聚类方案相当于问：“这种划分并不是因为数据集或聚类方法的某种特性，而是确实给出了一个某种程度上有实际意义的结果吗？”如果采用不同的聚类方法或不同的样本，是否会产生相同的类？<code>fpc</code>、<code>clv</code>和<code>clValid</code>包包含了评估聚类解的稳定性的函数。</p>
+</div>
+<div id="计算距离" class="section level3" number="17.1.4">
+<h3><span class="header-section-number">17.1.4</span> 计算距离</h3>
+<p>聚类分析的第一步都是度量样本单元间的距离、相异性或相似性。两个观测值之间的欧几里得距离定义为：</p>
+<p><span class="math display">\[
+d_{ij}=\sqrt{\sum\limits_{p=1}^{p}(x_{ip}-x_{jp})^2}
+\]</span></p>
+<ul>
+<li>这里i和j代表第i和第j个观测值，p是变量的个数。</li>
+</ul>
+<p>观测值之间的距离越大，异质性越大。观测值和它自己之间的距离是0。</p>
+<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb589-1"><a href="聚类分析.html#cb589-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">ask=</span><span class="cn">TRUE</span>)</span>
+<span id="cb589-2"><a href="聚类分析.html#cb589-2" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly=</span><span class="cn">FALSE</span>)</span>
+<span id="cb589-3"><a href="聚类分析.html#cb589-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flexclust)</span>
+<span id="cb589-4"><a href="聚类分析.html#cb589-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb589-5"><a href="聚类分析.html#cb589-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating Distances</span></span>
+<span id="cb589-6"><a href="聚类分析.html#cb589-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nutrient, <span class="at">package=</span><span class="st">&quot;flexclust&quot;</span>)</span>
+<span id="cb589-7"><a href="聚类分析.html#cb589-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(nutrient, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##              energy protein fat calcium iron
+## BEEF BRAISED    340      20  28       9  2.6
+## HAMBURGER       245      21  17       9  2.7</code></pre>
+<div class="sourceCode" id="cb591"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb591-1"><a href="聚类分析.html#cb591-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">dist</span>(nutrient)</span>
+<span id="cb591-2"><a href="聚类分析.html#cb591-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as.matrix</span>(d)[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div>
+<pre><code>##              BEEF BRAISED HAMBURGER BEEF ROAST BEEF STEAK
+## BEEF BRAISED            0        96         81         35
+## HAMBURGER              96         0        176        131
+## BEEF ROAST             81       176          0         46
+## BEEF STEAK             35       131         46          0</code></pre>
+</div>
+<div id="层次聚类分析" class="section level3" number="17.1.5">
+<h3><span class="header-section-number">17.1.5</span> 层次聚类分析</h3>
+<p>在层次聚类中，起初每一个实例或观测值属于一类。聚类就是每一次把两类聚成新的一类，直到所有的类聚成单个类为止，算法如下：</p>
+<p>➢ (1) 定义每个观测值（行或单元）为一类；</p>
+<p>➢ (2) 计算每类和其他各类的距离；</p>
+<p>➢ (3) 把距离最短的两类合并成一类，这样类的个数就减少一个；</p>
+<p>➢ (4) 重复步骤(2)和步骤(3)，直到包含所有观测值的类合并成单个的类为止。</p>
+<p><img src="fig/X3.png" width="615" /></p>
+<p>营养数据的平均联动聚类</p>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb593-1"><a href="聚类分析.html#cb593-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nutrient, <span class="at">package=</span><span class="st">&quot;flexclust&quot;</span>)</span>
+<span id="cb593-2"><a href="聚类分析.html#cb593-2" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(nutrient) <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">row.names</span>(nutrient))</span>
+<span id="cb593-3"><a href="聚类分析.html#cb593-3" aria-hidden="true" tabindex="-1"></a>nutrient.scaled <span class="ot">&lt;-</span> <span class="fu">scale</span>(nutrient) <span class="co">#标准化数据集                                 </span></span>
+<span id="cb593-4"><a href="聚类分析.html#cb593-4" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">dist</span>(nutrient.scaled)                                          </span>
+<span id="cb593-5"><a href="聚类分析.html#cb593-5" aria-hidden="true" tabindex="-1"></a>fit.average <span class="ot">&lt;-</span> <span class="fu">hclust</span>(d, <span class="at">method=</span><span class="st">&quot;average&quot;</span>)                          </span>
+<span id="cb593-6"><a href="聚类分析.html#cb593-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.average, <span class="at">hang=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">cex=</span>.<span class="dv">8</span>, <span class="at">main=</span><span class="st">&quot;Average Linkage Clustering&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-183-1.png" width="672" /></p>
+</div>
+<div id="选择聚类的个数" class="section level3" number="17.1.6">
+<h3><span class="header-section-number">17.1.6</span> 选择聚类的个数</h3>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb594-1"><a href="聚类分析.html#cb594-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Listing 16.2 - Selecting the number of clusters</span></span>
+<span id="cb594-2"><a href="聚类分析.html#cb594-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(NbClust)</span>
+<span id="cb594-3"><a href="聚类分析.html#cb594-3" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">NbClust</span>(nutrient.scaled, <span class="at">distance=</span><span class="st">&quot;euclidean&quot;</span>, </span>
+<span id="cb594-4"><a href="聚类分析.html#cb594-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">min.nc=</span><span class="dv">2</span>, <span class="at">max.nc=</span><span class="dv">15</span>, <span class="at">method=</span><span class="st">&quot;average&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-184-1.png" width="672" /></p>
+<pre><code>## *** : The Hubert index is a graphical method of determining the number of clusters.
+##                 In the plot of Hubert index, we seek a significant knee that corresponds to a 
+##                 significant increase of the value of the measure i.e the significant peak in Hubert
+##                 index second differences plot. 
+## </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-184-2.png" width="672" /></p>
+<pre><code>## *** : The D index is a graphical method of determining the number of clusters. 
+##                 In the plot of D index, we seek a significant knee (the significant peak in Dindex
+##                 second differences plot) that corresponds to a significant increase of the value of
+##                 the measure. 
+##  
+## ******************************************************************* 
+## * Among all indices:                                                
+## * 4 proposed 2 as the best number of clusters 
+## * 4 proposed 3 as the best number of clusters 
+## * 2 proposed 4 as the best number of clusters 
+## * 4 proposed 5 as the best number of clusters 
+## * 1 proposed 9 as the best number of clusters 
+## * 1 proposed 10 as the best number of clusters 
+## * 2 proposed 13 as the best number of clusters 
+## * 1 proposed 14 as the best number of clusters 
+## * 4 proposed 15 as the best number of clusters 
+## 
+##                    ***** Conclusion *****                            
+##  
+## * According to the majority rule, the best number of clusters is  2 
+##  
+##  
+## *******************************************************************</code></pre>
+<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb597-1"><a href="聚类分析.html#cb597-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(opar)</span>
+<span id="cb597-2"><a href="聚类分析.html#cb597-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(nc<span class="sc">$</span>Best.n[<span class="dv">1</span>,])</span></code></pre></div>
+<pre><code>## 
+##  0  1  2  3  4  5  9 10 13 14 15 
+##  2  1  4  4  2  4  1  1  2  1  4</code></pre>
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb599-1"><a href="聚类分析.html#cb599-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(nc<span class="sc">$</span>Best.n[<span class="dv">1</span>,]), </span>
+<span id="cb599-2"><a href="聚类分析.html#cb599-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">&quot;Numer of Clusters&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Number of Criteria&quot;</span>,</span>
+<span id="cb599-3"><a href="聚类分析.html#cb599-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">main=</span><span class="st">&quot;Number of Clusters Chosen by 26 Criteria&quot;</span>) </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-184-3.png" width="672" /></p>
+</div>
+<div id="获取最终的聚类方案" class="section level3" number="17.1.7">
+<h3><span class="header-section-number">17.1.7</span> 获取最终的聚类方案</h3>
+<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="聚类分析.html#cb600-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Listing 16.3 - Obtaining the final cluster solution</span></span>
+<span id="cb600-2"><a href="聚类分析.html#cb600-2" aria-hidden="true" tabindex="-1"></a>clusters <span class="ot">&lt;-</span> <span class="fu">cutree</span>(fit.average, <span class="at">k=</span><span class="dv">5</span>) </span>
+<span id="cb600-3"><a href="聚类分析.html#cb600-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cutree()函数用来把树状图分成五类</span></span>
+<span id="cb600-4"><a href="聚类分析.html#cb600-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(clusters)</span></code></pre></div>
+<pre><code>## clusters
+##  1  2  3  4  5 
+##  7 16  1  2  1</code></pre>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="聚类分析.html#cb602-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(nutrient, <span class="at">by=</span><span class="fu">list</span>(<span class="at">cluster=</span>clusters), median) </span></code></pre></div>
+<pre><code>##   cluster energy protein fat calcium iron
+## 1       1    340      19  29       9  2.5
+## 2       2    170      20   8      13  1.4
+## 3       3    160      26   5      14  5.9
+## 4       4     58       9   1      78  5.7
+## 5       5    180      22   9     367  2.5</code></pre>
+<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb604-1"><a href="聚类分析.html#cb604-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aggregate()函数用来获取每类的中位数</span></span>
+<span id="cb604-2"><a href="聚类分析.html#cb604-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">as.data.frame</span>(nutrient.scaled), <span class="at">by=</span><span class="fu">list</span>(<span class="at">cluster=</span>clusters),</span>
+<span id="cb604-3"><a href="聚类分析.html#cb604-3" aria-hidden="true" tabindex="-1"></a>          median)</span></code></pre></div>
+<pre><code>##   cluster energy protein   fat calcium   iron
+## 1       1   1.31    0.00  1.38   -0.45  0.081
+## 2       2  -0.37    0.24 -0.49   -0.40 -0.637
+## 3       3  -0.47    1.65 -0.75   -0.38  2.408
+## 4       4  -1.48   -2.35 -1.11    0.44  2.271
+## 5       5  -0.27    0.71 -0.40    4.14  0.081</code></pre>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb606-1"><a href="聚类分析.html#cb606-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.average, <span class="at">hang=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">cex=</span>.<span class="dv">8</span>,  </span>
+<span id="cb606-2"><a href="聚类分析.html#cb606-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Average Linkage Clustering</span><span class="sc">\n</span><span class="st">5 Cluster Solution&quot;</span>)</span>
+<span id="cb606-3"><a href="聚类分析.html#cb606-3" aria-hidden="true" tabindex="-1"></a><span class="co">#树状图被重新绘制</span></span>
+<span id="cb606-4"><a href="聚类分析.html#cb606-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(fit.average, <span class="at">k=</span><span class="dv">5</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-185-1.png" width="672" /></p>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb607-1"><a href="聚类分析.html#cb607-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rect.hclust()函数用来叠加五类的解决方案</span></span></code></pre></div>
+</div>
+</div>
+<div id="k均值算法" class="section level2" number="17.2">
+<h2><span class="header-section-number">17.2</span> K均值算法</h2>
+<p>➢ 最常见的划分方法是K均值聚类分析。从概念上讲，K均值算法如下：</p>
+<ol style="list-style-type: decimal">
+<li><p>选择K个中心点（随机选择K行）；</p></li>
+<li><p>把每个数据点分配到离它最近的中心点；</p></li>
+<li><p>重新计算每类中的点到该类中心点距离的平均值（也就说，得到长度为p的均值向量，这里的p是变量的个数）；</p></li>
+<li><p>分配每个数据到它最近的中心点；</p></li>
+<li><p>重复步骤(3)和步骤(4)直到所有的观测值不再被分配或是达到最大的迭代次数（R把10次作为默认迭代次数）。</p></li>
+</ol>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb608-1"><a href="聚类分析.html#cb608-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot function for within groups sum of squares by number of clusters</span></span>
+<span id="cb608-2"><a href="聚类分析.html#cb608-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb608-3"><a href="聚类分析.html#cb608-3" aria-hidden="true" tabindex="-1"></a>wssplot <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">nc=</span><span class="dv">15</span>, <span class="at">seed=</span><span class="dv">1234</span>){</span>
+<span id="cb608-4"><a href="聚类分析.html#cb608-4" aria-hidden="true" tabindex="-1"></a>  wss <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(data)<span class="sc">-</span><span class="dv">1</span>)<span class="sc">*</span><span class="fu">sum</span>(<span class="fu">apply</span>(data,<span class="dv">2</span>,var))</span>
+<span id="cb608-5"><a href="聚类分析.html#cb608-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>nc){</span>
+<span id="cb608-6"><a href="聚类分析.html#cb608-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(seed)</span>
+<span id="cb608-7"><a href="聚类分析.html#cb608-7" aria-hidden="true" tabindex="-1"></a>    wss[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">kmeans</span>(data, <span class="at">centers=</span>i)<span class="sc">$</span>withinss)}</span>
+<span id="cb608-8"><a href="聚类分析.html#cb608-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>nc, wss, <span class="at">type=</span><span class="st">&quot;b&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Number of Clusters&quot;</span>,</span>
+<span id="cb608-9"><a href="聚类分析.html#cb608-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylab=</span><span class="st">&quot;Within groups sum of squares&quot;</span>)}</span>
+<span id="cb608-10"><a href="聚类分析.html#cb608-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb608-11"><a href="聚类分析.html#cb608-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Listing 16.4 - K-means clustering of wine data</span></span>
+<span id="cb608-12"><a href="聚类分析.html#cb608-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rattle)</span>
+<span id="cb608-13"><a href="聚类分析.html#cb608-13" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wine, <span class="at">package=</span><span class="st">&quot;rattle&quot;</span>)</span>
+<span id="cb608-14"><a href="聚类分析.html#cb608-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wine)</span></code></pre></div>
+<pre><code>##   Type Alcohol Malic Ash Alcalinity Magnesium Phenols Flavanoids Nonflavanoids
+## 1    1      14   1.7 2.4         16       127     2.8        3.1          0.28
+## 2    1      13   1.8 2.1         11       100     2.6        2.8          0.26
+## 3    1      13   2.4 2.7         19       101     2.8        3.2          0.30
+## 4    1      14   1.9 2.5         17       113     3.8        3.5          0.24
+## 5    1      13   2.6 2.9         21       118     2.8        2.7          0.39
+## 6    1      14   1.8 2.4         15       112     3.3        3.4          0.34
+##   Proanthocyanins Color  Hue Dilution Proline
+## 1             2.3   5.6 1.04      3.9    1065
+## 2             1.3   4.4 1.05      3.4    1050
+## 3             2.8   5.7 1.03      3.2    1185
+## 4             2.2   7.8 0.86      3.4    1480
+## 5             1.8   4.3 1.04      2.9     735
+## 6             2.0   6.8 1.05      2.8    1450</code></pre>
+<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb610-1"><a href="聚类分析.html#cb610-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">scale</span>(wine[<span class="sc">-</span><span class="dv">1</span>])  <span class="co"># 标准化数据</span></span>
+<span id="cb610-2"><a href="聚类分析.html#cb610-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb610-3"><a href="聚类分析.html#cb610-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wssplot</span>(df)      </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-186-1.png" width="672" /></p>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb611-1"><a href="聚类分析.html#cb611-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(NbClust)</span>
+<span id="cb611-2"><a href="聚类分析.html#cb611-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>) <span class="co">#设置种子数</span></span>
+<span id="cb611-3"><a href="聚类分析.html#cb611-3" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">NbClust</span>(df, <span class="at">min.nc=</span><span class="dv">2</span>, <span class="at">max.nc=</span><span class="dv">15</span>, <span class="at">method=</span><span class="st">&quot;kmeans&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-186-2.png" width="672" /></p>
+<pre><code>## *** : The Hubert index is a graphical method of determining the number of clusters.
+##                 In the plot of Hubert index, we seek a significant knee that corresponds to a 
+##                 significant increase of the value of the measure i.e the significant peak in Hubert
+##                 index second differences plot. 
+## </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-186-3.png" width="672" /></p>
+<pre><code>## *** : The D index is a graphical method of determining the number of clusters. 
+##                 In the plot of D index, we seek a significant knee (the significant peak in Dindex
+##                 second differences plot) that corresponds to a significant increase of the value of
+##                 the measure. 
+##  
+## ******************************************************************* 
+## * Among all indices:                                                
+## * 2 proposed 2 as the best number of clusters 
+## * 19 proposed 3 as the best number of clusters 
+## * 1 proposed 14 as the best number of clusters 
+## * 1 proposed 15 as the best number of clusters 
+## 
+##                    ***** Conclusion *****                            
+##  
+## * According to the majority rule, the best number of clusters is  3 
+##  
+##  
+## *******************************************************************</code></pre>
+<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb614-1"><a href="聚类分析.html#cb614-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(opar)</span>
+<span id="cb614-2"><a href="聚类分析.html#cb614-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(nc<span class="sc">$</span>Best.n[<span class="dv">1</span>,]) <span class="co"># 决定聚类个数</span></span></code></pre></div>
+<pre><code>## 
+##  0  1  2  3 14 15 
+##  2  1  2 19  1  1</code></pre>
+<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb616-1"><a href="聚类分析.html#cb616-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(nc<span class="sc">$</span>Best.n[<span class="dv">1</span>,]), </span>
+<span id="cb616-2"><a href="聚类分析.html#cb616-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">&quot;Numer of Clusters&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Number of Criteria&quot;</span>,</span>
+<span id="cb616-3"><a href="聚类分析.html#cb616-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">main=</span><span class="st">&quot;Number of Clusters Chosen by 26 Criteria&quot;</span>) </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-186-4.png" width="672" /></p>
+<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="聚类分析.html#cb617-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb617-2"><a href="聚类分析.html#cb617-2" aria-hidden="true" tabindex="-1"></a>fit.km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(df, <span class="dv">3</span>, <span class="at">nstart=</span><span class="dv">25</span>) <span class="co"># 进行K均值聚类分析</span></span>
+<span id="cb617-3"><a href="聚类分析.html#cb617-3" aria-hidden="true" tabindex="-1"></a>fit.km<span class="sc">$</span>size</span></code></pre></div>
+<pre><code>## [1] 62 65 51</code></pre>
+<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="聚类分析.html#cb619-1" aria-hidden="true" tabindex="-1"></a>fit.km<span class="sc">$</span>centers                                               </span></code></pre></div>
+<pre><code>##   Alcohol Malic   Ash Alcalinity Magnesium Phenols Flavanoids Nonflavanoids
+## 1    0.83 -0.30  0.36      -0.61     0.576   0.883      0.975        -0.561
+## 2   -0.92 -0.39 -0.49       0.17    -0.490  -0.076      0.021        -0.033
+## 3    0.16  0.87  0.19       0.52    -0.075  -0.977     -1.212         0.724
+##   Proanthocyanins Color   Hue Dilution Proline
+## 1           0.579  0.17  0.47     0.78    1.12
+## 2           0.058 -0.90  0.46     0.27   -0.75
+## 3          -0.778  0.94 -1.16    -1.29   -0.41</code></pre>
+<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="聚类分析.html#cb621-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(wine[<span class="sc">-</span><span class="dv">1</span>], <span class="at">by=</span><span class="fu">list</span>(<span class="at">cluster=</span>fit.km<span class="sc">$</span>cluster), mean)</span></code></pre></div>
+<pre><code>##   cluster Alcohol Malic Ash Alcalinity Magnesium Phenols Flavanoids
+## 1       1      14   2.0 2.5         17       108     2.8       3.00
+## 2       2      12   1.9 2.2         20        93     2.2       2.05
+## 3       3      13   3.3 2.4         21        99     1.7       0.82
+##   Nonflavanoids Proanthocyanins Color  Hue Dilution Proline
+## 1          0.29             1.9   5.5 1.07      3.2    1100
+## 2          0.36             1.6   3.0 1.06      2.8     510
+## 3          0.45             1.1   7.2 0.69      1.7     619</code></pre>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="聚类分析.html#cb623-1" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluate clustering</span></span>
+<span id="cb623-2"><a href="聚类分析.html#cb623-2" aria-hidden="true" tabindex="-1"></a>ct.km <span class="ot">&lt;-</span> <span class="fu">table</span>(wine<span class="sc">$</span>Type, fit.km<span class="sc">$</span>cluster)</span>
+<span id="cb623-3"><a href="聚类分析.html#cb623-3" aria-hidden="true" tabindex="-1"></a>ct.km   </span></code></pre></div>
+<pre><code>##    
+##      1  2  3
+##   1 59  0  0
+##   2  3 65  3
+##   3  0  0 48</code></pre>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="聚类分析.html#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flexclust)</span>
+<span id="cb625-2"><a href="聚类分析.html#cb625-2" aria-hidden="true" tabindex="-1"></a><span class="fu">randIndex</span>(ct.km)</span></code></pre></div>
+<pre><code>## ARI 
+## 0.9</code></pre>
+</div>
+<div id="围绕中心点的划分" class="section level2" number="17.3">
+<h2><span class="header-section-number">17.3</span> 围绕中心点的划分</h2>
+<p>➢ 因为K均值聚类方法是基于均值的，所以它对异常值是敏感的。一个更稳健的方法是围绕中心点的划分（PAM）。与其用质心（变量均值向量）表示类，不如用一个最有代表性的观测值来表示（称为中心点）。K均值聚类一般使用欧几里得距离，而PAM可以使用任意的距离来计算。因此，PAM可以容纳混合数据类型，并且不仅限于连续变量</p>
+<div id="pam算法步骤" class="section level3" number="17.3.1">
+<h3><span class="header-section-number">17.3.1</span> PAM算法步骤</h3>
+<ol style="list-style-type: decimal">
+<li><p>随机选择K个观测值（每个都称为中心点）；</p></li>
+<li><p>计算观测值到各个中心的距离/相异性；</p></li>
+<li><p>把每个观测值分配到最近的中心点；</p></li>
+<li><p>计算每个中心点到每个观测值的距离的总和（总成本）；</p></li>
+<li><p>选择一个该类中不是中心的点，并和中心点互换；</p></li>
+<li><p>重新把每个点分配到距它最近的中心点；</p></li>
+<li><p>再次计算总成本；</p></li>
+<li><p>如果总成本比步骤(4)计算的总成本少，把新的点作为中心点；</p></li>
+<li><p>重复步骤(5)～(8)直到中心点不再改变。</p></li>
+</ol>
+<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb627-1"><a href="聚类分析.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb627-2"><a href="聚类分析.html#cb627-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb627-3"><a href="聚类分析.html#cb627-3" aria-hidden="true" tabindex="-1"></a>fit.pam <span class="ot">&lt;-</span> <span class="fu">pam</span>(wine[<span class="sc">-</span><span class="dv">1</span>], <span class="at">k=</span><span class="dv">3</span>, <span class="at">stand=</span><span class="cn">TRUE</span>)       </span>
+<span id="cb627-4"><a href="聚类分析.html#cb627-4" aria-hidden="true" tabindex="-1"></a>fit.pam<span class="sc">$</span>medoids                                 </span></code></pre></div>
+<pre><code>##      Alcohol Malic Ash Alcalinity Magnesium Phenols Flavanoids Nonflavanoids
+## [1,]      13   1.8 2.4         20       100     2.7       2.98          0.26
+## [2,]      12   1.7 2.1         19        80     1.6       2.03          0.37
+## [3,]      13   3.9 2.5         23       102     1.8       0.75          0.43
+##      Proanthocyanins Color Hue Dilution Proline
+## [1,]             1.9   5.1 1.0      3.5     920
+## [2,]             1.6   3.4 1.0      3.2     510
+## [3,]             1.4   7.3 0.7      1.6     750</code></pre>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="聚类分析.html#cb629-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clusplot</span>(fit.pam, <span class="at">main=</span><span class="st">&quot;Bivariate Cluster Plot&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-1.png" width="672" /></p>
+<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="聚类分析.html#cb630-1" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluate clustering</span></span>
+<span id="cb630-2"><a href="聚类分析.html#cb630-2" aria-hidden="true" tabindex="-1"></a>ct.pam <span class="ot">&lt;-</span> <span class="fu">table</span>(wine<span class="sc">$</span>Type, fit.pam<span class="sc">$</span>clustering)</span>
+<span id="cb630-3"><a href="聚类分析.html#cb630-3" aria-hidden="true" tabindex="-1"></a>ct.pam</span></code></pre></div>
+<pre><code>##    
+##      1  2  3
+##   1 59  0  0
+##   2 16 53  2
+##   3  0  1 47</code></pre>
+<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="聚类分析.html#cb632-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flexclust)</span>
+<span id="cb632-2"><a href="聚类分析.html#cb632-2" aria-hidden="true" tabindex="-1"></a><span class="fu">randIndex</span>(ct.pam)</span></code></pre></div>
+<pre><code>## ARI 
+## 0.7</code></pre>
+<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="聚类分析.html#cb634-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Avoiding non-existent clusters</span></span>
+<span id="cb634-2"><a href="聚类分析.html#cb634-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fMultivar)</span>
+<span id="cb634-3"><a href="聚类分析.html#cb634-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb634-4"><a href="聚类分析.html#cb634-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">rnorm2d</span>(<span class="dv">1000</span>, <span class="at">rho=</span>.<span class="dv">5</span>)</span>
+<span id="cb634-5"><a href="聚类分析.html#cb634-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb634-6"><a href="聚类分析.html#cb634-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df, <span class="at">main=</span><span class="st">&quot;Bivariate Normal Distribution with rho=0.5&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-2.png" width="672" /></p>
+<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="聚类分析.html#cb635-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wssplot</span>(df)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-3.png" width="672" /></p>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="聚类分析.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(NbClust)</span>
+<span id="cb636-2"><a href="聚类分析.html#cb636-2" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">NbClust</span>(df, <span class="at">min.nc=</span><span class="dv">2</span>, <span class="at">max.nc=</span><span class="dv">15</span>, <span class="at">method=</span><span class="st">&quot;kmeans&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-4.png" width="672" /></p>
+<pre><code>## *** : The Hubert index is a graphical method of determining the number of clusters.
+##                 In the plot of Hubert index, we seek a significant knee that corresponds to a 
+##                 significant increase of the value of the measure i.e the significant peak in Hubert
+##                 index second differences plot. 
+## </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-5.png" width="672" /></p>
+<pre><code>## *** : The D index is a graphical method of determining the number of clusters. 
+##                 In the plot of D index, we seek a significant knee (the significant peak in Dindex
+##                 second differences plot) that corresponds to a significant increase of the value of
+##                 the measure. 
+##  
+## ******************************************************************* 
+## * Among all indices:                                                
+## * 8 proposed 2 as the best number of clusters 
+## * 4 proposed 3 as the best number of clusters 
+## * 1 proposed 4 as the best number of clusters 
+## * 1 proposed 5 as the best number of clusters 
+## * 4 proposed 9 as the best number of clusters 
+## * 1 proposed 10 as the best number of clusters 
+## * 1 proposed 13 as the best number of clusters 
+## * 3 proposed 15 as the best number of clusters 
+## 
+##                    ***** Conclusion *****                            
+##  
+## * According to the majority rule, the best number of clusters is  2 
+##  
+##  
+## *******************************************************************</code></pre>
+<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb639-1"><a href="聚类分析.html#cb639-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(opar)</span>
+<span id="cb639-2"><a href="聚类分析.html#cb639-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(nc<span class="sc">$</span>Best.n[<span class="dv">1</span>,]), </span>
+<span id="cb639-3"><a href="聚类分析.html#cb639-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">&quot;Numer of Clusters&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Number of Criteria&quot;</span>,</span>
+<span id="cb639-4"><a href="聚类分析.html#cb639-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main  =</span><span class="st">&quot;Number of Clusters Chosen by 26 Criteria&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-6.png" width="672" /></p>
+<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="聚类分析.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb640-2"><a href="聚类分析.html#cb640-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb640-3"><a href="聚类分析.html#cb640-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">pam</span>(df, <span class="at">k=</span><span class="dv">2</span>)</span>
+<span id="cb640-4"><a href="聚类分析.html#cb640-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>clustering <span class="ot">&lt;-</span> <span class="fu">factor</span>(fit<span class="sc">$</span>clustering)</span>
+<span id="cb640-5"><a href="聚类分析.html#cb640-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df, <span class="fu">aes</span>(<span class="at">x=</span>V1, <span class="at">y=</span>V2, <span class="at">color=</span>clustering, <span class="at">shape=</span>clustering)) <span class="sc">+</span></span>
+<span id="cb640-6"><a href="聚类分析.html#cb640-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Clustering of Bivariate Normal Data&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-7.png" width="672" /></p>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="聚类分析.html#cb641-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nc<span class="sc">$</span>All.index[,<span class="dv">4</span>], <span class="at">type=</span><span class="st">&quot;o&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;CCC&quot;</span>,</span>
+<span id="cb641-2"><a href="聚类分析.html#cb641-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Number of clusters&quot;</span>, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-187-8.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="探索性因子分析.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/015-clustering.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 多元线性回归 | Medical Statistics wtih R</title>
+  <meta name="description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 多元线性回归 | Medical Statistics wtih R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 多元线性回归 | Medical Statistics wtih R" />
+  
+  <meta name="twitter:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  
+
+<meta name="author" content="Wade Wang" />
+
+
+<meta name="date" content="2021-11-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="残差与回归值预测域与置信带.html"/>
+<link rel="next" href="诊断试验的roc分析.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Medical Statistics wtih R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html"><i class="fa fa-check"></i><b>1</b> <strong>统计描述与基础统计分析方法</strong></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#描述性统计分析"><i class="fa fa-check"></i><b>1.1</b> 描述性统计分析</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单组数据汇总统计量"><i class="fa fa-check"></i><b>1.1.1</b> 单组数据汇总统计量</a></li>
+<li class="chapter" data-level="1.1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#数据分布类型的图形描述"><i class="fa fa-check"></i><b>1.1.2</b> 数据分布类型的图形描述</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#线性相关与秩相关分析"><i class="fa fa-check"></i><b>1.2</b> <strong>线性相关与秩相关分析</strong></a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#三种相关系数"><i class="fa fa-check"></i><b>1.2.1</b> 三种相关系数</a></li>
+<li class="chapter" data-level="1.2.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#相关系数的显著性检验"><i class="fa fa-check"></i><b>1.2.2</b> 相关系数的显著性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异t检验"><i class="fa fa-check"></i><b>1.3</b> <strong>组间差异t检验</strong></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本t检验"><i class="fa fa-check"></i><b>1.3.1</b> 单样本t检验</a></li>
+<li class="chapter" data-level="1.3.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两样本t检验"><i class="fa fa-check"></i><b>1.3.2</b> 两样本t检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异秩和检验"><i class="fa fa-check"></i><b>1.4</b> 组间差异秩和检验</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.1</b> 单样本Wilcoxon符号秩检验</a></li>
+<li class="chapter" data-level="1.4.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两组的比较"><i class="fa fa-check"></i><b>1.4.2</b> 两组的比较</a></li>
+<li class="chapter" data-level="1.4.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#配对wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.3</b> 配对Wilcoxon符号秩检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html"><i class="fa fa-check"></i><b>2</b> <strong>方差分析与秩和Kruskal-Wallis检验</strong></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析概述"><i class="fa fa-check"></i><b>2.1</b> 方差分析概述</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析基本思想"><i class="fa fa-check"></i><b>2.1.1</b> 方差分析基本思想</a></li>
+<li class="chapter" data-level="2.1.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析用途"><i class="fa fa-check"></i><b>2.1.2</b> 方差分析用途</a></li>
+<li class="chapter" data-level="2.1.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分应用条件"><i class="fa fa-check"></i><b>2.1.3</b> 方差分应用条件</a></li>
+<li class="chapter" data-level="2.1.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析的r语言实现"><i class="fa fa-check"></i><b>2.1.4</b> 方差分析的R语言实现</a></li>
+<li class="chapter" data-level="2.1.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#表达式中各项的顺序"><i class="fa fa-check"></i><b>2.1.5</b> 表达式中各项的顺序</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#单因素方差分析"><i class="fa fa-check"></i><b>2.2</b> 单因素方差分析</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#多重比较"><i class="fa fa-check"></i><b>2.2.1</b> 多重比较</a></li>
+<li class="chapter" data-level="2.2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#评估方差分析的假设条件"><i class="fa fa-check"></i><b>2.2.2</b> 评估方差分析的假设条件</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#双因素方差分析"><i class="fa fa-check"></i><b>2.3</b> 双因素方差分析</a></li>
+<li class="chapter" data-level="2.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#重复测量的方差分析"><i class="fa fa-check"></i><b>2.4</b> 重复测量的方差分析</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#概述"><i class="fa fa-check"></i><b>2.4.1</b> 概述</a></li>
+<li class="chapter" data-level="2.4.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#原理"><i class="fa fa-check"></i><b>2.4.2</b> 原理</a></li>
+<li class="chapter" data-level="2.4.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#应用条件"><i class="fa fa-check"></i><b>2.4.3</b> 应用条件</a></li>
+<li class="chapter" data-level="2.4.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#案例1"><i class="fa fa-check"></i><b>2.4.4</b> 案例1</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#注意"><i class="fa fa-check"></i><b>2.5</b> 注意</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html"><i class="fa fa-check"></i><b>3</b> <strong>列联表资料的处理</strong></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#rc表分类"><i class="fa fa-check"></i><b>3.1</b> R×C表分类</a></li>
+<li class="chapter" data-level="3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#列变量为有序变量的行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2</b> 列变量为有序变量的行均分检验（Cochran-Mantel-Haenszel）</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2.1</b> 行均分检验Cochran-Mantel-Haenszel</a></li>
+<li class="chapter" data-level="3.2.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#ordinal-logistic回归模型"><i class="fa fa-check"></i><b>3.2.2</b> Ordinal logistic回归模型</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行列变量均为有序变量检验方法"><i class="fa fa-check"></i><b>3.3</b> 行列变量均为有序变量检验方法</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#sperman秩相关"><i class="fa fa-check"></i><b>3.3.1</b> sperman秩相关</a></li>
+<li class="chapter" data-level="3.3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#线性趋势检验"><i class="fa fa-check"></i><b>3.3.2</b> 线性趋势检验</a></li>
+<li class="chapter" data-level="3.3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#一致性检验"><i class="fa fa-check"></i><b>3.3.3</b> 一致性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#分层行列表分析-mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4</b> 分层行列表分析 Mantel-Haenszel 检验</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4.1</b> Mantel-Haenszel 检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html"><i class="fa fa-check"></i><b>4</b> <strong>秩和检验处理列联表资料</strong></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#等级分组资料的非参数检验"><i class="fa fa-check"></i><b>4.1</b> 等级分组资料的非参数检验</a></li>
+<li class="chapter" data-level="4.2" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#多个组的等级指标的非参数检验"><i class="fa fa-check"></i><b>4.2</b> 多个组的等级指标的非参数检验</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="简单线性回归.html"><a href="简单线性回归.html"><i class="fa fa-check"></i><b>5</b> <strong>简单线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析对资料的要求"><i class="fa fa-check"></i><b>5.1</b> 回归分析对资料的要求</a></li>
+<li class="chapter" data-level="5.2" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程"><i class="fa fa-check"></i><b>5.2</b> 直线回归方程</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程的建立"><i class="fa fa-check"></i><b>5.2.1</b> 直线回归方程的建立</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="简单线性回归.html"><a href="简单线性回归.html#回归系数b的统计学意义"><i class="fa fa-check"></i><b>5.3</b> 回归系数b的统计学意义</a></li>
+<li class="chapter" data-level="5.4" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析的步骤"><i class="fa fa-check"></i><b>5.4</b> 回归分析的步骤</a></li>
+<li class="chapter" data-level="5.5" data-path="简单线性回归.html"><a href="简单线性回归.html#y的离均差平方和的划分"><i class="fa fa-check"></i><b>5.5</b> Y的离均差平方和的划分</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的关系"><i class="fa fa-check"></i><b>5.5.1</b> 三种平方和的关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的意义"><i class="fa fa-check"></i><b>5.6</b> 三种平方和的意义</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的自由度及其关系"><i class="fa fa-check"></i><b>5.6.1</b> 三种平方和的自由度及其关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="简单线性回归.html"><a href="简单线性回归.html#应用回归分析应注意的问题"><i class="fa fa-check"></i><b>5.7</b> 应用回归分析应注意的问题</a></li>
+<li class="chapter" data-level="5.8" data-path="简单线性回归.html"><a href="简单线性回归.html#简单线性回归的r语言实现"><i class="fa fa-check"></i><b>5.8</b> 简单线性回归的R语言实现</a></li>
+<li class="chapter" data-level="5.9" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-1"><i class="fa fa-check"></i><b>5.9</b> 案例 1</a></li>
+<li class="chapter" data-level="5.10" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-2"><i class="fa fa-check"></i><b>5.10</b> 案例 2</a></li>
+<li class="chapter" data-level="5.11" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-3"><i class="fa fa-check"></i><b>5.11</b> 案例 3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="残差与回归值预测域与置信带.html"><a href="残差与回归值预测域与置信带.html"><i class="fa fa-check"></i><b>6</b> 残差与回归值&amp;预测域与置信带</a></li>
+<li class="chapter" data-level="7" data-path="多元线性回归.html"><a href="多元线性回归.html"><i class="fa fa-check"></i><b>7</b> <strong>多元线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="多元线性回归.html"><a href="多元线性回归.html#多元线性回归模型"><i class="fa fa-check"></i><b>7.1</b> 多元线性回归模型</a></li>
+<li class="chapter" data-level="7.2" data-path="多元线性回归.html"><a href="多元线性回归.html#回归模型的应用条件"><i class="fa fa-check"></i><b>7.2</b> 回归模型的应用条件</a></li>
+<li class="chapter" data-level="7.3" data-path="多元线性回归.html"><a href="多元线性回归.html#偏回归系数的估计"><i class="fa fa-check"></i><b>7.3</b> 偏回归系数的估计</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="多元线性回归.html"><a href="多元线性回归.html#回归方程的假设检验"><i class="fa fa-check"></i><b>7.3.1</b> 回归方程的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="多元线性回归.html"><a href="多元线性回归.html#案例一"><i class="fa fa-check"></i><b>7.4</b> 案例一</a></li>
+<li class="chapter" data-level="7.5" data-path="多元线性回归.html"><a href="多元线性回归.html#案例二"><i class="fa fa-check"></i><b>7.5</b> 案例二</a></li>
+<li class="chapter" data-level="7.6" data-path="多元线性回归.html"><a href="多元线性回归.html#用线性回归来做anova"><i class="fa fa-check"></i><b>7.6</b> 用线性回归来做ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html"><i class="fa fa-check"></i><b>8</b> <strong>诊断试验的ROC分析</strong></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验设计原理"><i class="fa fa-check"></i><b>8.1</b> 诊断试验设计原理</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#队列研究设计"><i class="fa fa-check"></i><b>8.1.1</b> 队列研究设计</a></li>
+<li class="chapter" data-level="8.1.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#横断面设计单门设计"><i class="fa fa-check"></i><b>8.1.2</b> 横断面设计/单门设计</a></li>
+<li class="chapter" data-level="8.1.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#病例对照设计双门设计"><i class="fa fa-check"></i><b>8.1.3</b> 病例对照设计/双门设计</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验的统计指标"><i class="fa fa-check"></i><b>8.2</b> 诊断试验的统计指标</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#基本概念"><i class="fa fa-check"></i><b>8.2.1</b> 基本概念</a></li>
+<li class="chapter" data-level="8.2.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#灵敏度和特异度之间的权衡"><i class="fa fa-check"></i><b>8.2.2</b> 灵敏度和特异度之间的权衡</a></li>
+<li class="chapter" data-level="8.2.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#受试者工作特征曲线-roc"><i class="fa fa-check"></i><b>8.2.3</b> 受试者工作特征曲线 (ROC)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#roc分析的r语言实现"><i class="fa fa-check"></i><b>8.3</b> ROC分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例1-1"><i class="fa fa-check"></i><b>8.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="8.3.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例2"><i class="fa fa-check"></i><b>8.3.2</b> 案例2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="logistic回归.html"><a href="logistic回归.html"><i class="fa fa-check"></i><b>9</b> <strong>Logistic回归</strong></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="logistic回归.html"><a href="logistic回归.html#模型概述"><i class="fa fa-check"></i><b>9.1</b> 模型概述</a></li>
+<li class="chapter" data-level="9.2" data-path="logistic回归.html"><a href="logistic回归.html#模型结构"><i class="fa fa-check"></i><b>9.2</b> 模型结构</a></li>
+<li class="chapter" data-level="9.3" data-path="logistic回归.html"><a href="logistic回归.html#比值比或优势比or"><i class="fa fa-check"></i><b>9.3</b> 比值比或优势比（OR）</a></li>
+<li class="chapter" data-level="9.4" data-path="logistic回归.html"><a href="logistic回归.html#案例1-2"><i class="fa fa-check"></i><b>9.4</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="logistic回归.html"><a href="logistic回归.html#评价预测变量对结果概率的影响"><i class="fa fa-check"></i><b>9.4.1</b> 评价预测变量对结果概率的影响</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="logistic回归.html"><a href="logistic回归.html#案例2-1"><i class="fa fa-check"></i><b>9.5</b> 案例2</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="logistic回归.html"><a href="logistic回归.html#因素间的交互作用"><i class="fa fa-check"></i><b>9.5.1</b> 因素间的交互作用</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="logistic回归.html"><a href="logistic回归.html#案例-3-1"><i class="fa fa-check"></i><b>9.6</b> 案例 3</a></li>
+<li class="chapter" data-level="9.7" data-path="logistic回归.html"><a href="logistic回归.html#案例4"><i class="fa fa-check"></i><b>9.7</b> 案例4</a></li>
+<li class="chapter" data-level="9.8" data-path="logistic回归.html"><a href="logistic回归.html#扩展的logistic回归及其变种"><i class="fa fa-check"></i><b>9.8</b> 扩展的Logistic回归及其变种</a>
+<ul>
+<li class="chapter" data-level="9.8.1" data-path="logistic回归.html"><a href="logistic回归.html#稳健logistic回归"><i class="fa fa-check"></i><b>9.8.1</b> 稳健Logistic回归</a></li>
+<li class="chapter" data-level="9.8.2" data-path="logistic回归.html"><a href="logistic回归.html#多项分布回归"><i class="fa fa-check"></i><b>9.8.2</b> 多项分布回归</a></li>
+<li class="chapter" data-level="9.8.3" data-path="logistic回归.html"><a href="logistic回归.html#序数logistic回归"><i class="fa fa-check"></i><b>9.8.3</b> 序数Logistic回归</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="logistic回归模型.html"><a href="logistic回归模型.html"><i class="fa fa-check"></i><b>10</b> <strong>Logistic回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型的本质"><i class="fa fa-check"></i><b>10.1</b> 临床预测模型的本质</a></li>
+<li class="chapter" data-level="10.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型建立"><i class="fa fa-check"></i><b>10.2</b> 临床预测模型建立</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#验证步骤"><i class="fa fa-check"></i><b>10.2.1</b> 验证步骤</a></li>
+<li class="chapter" data-level="10.2.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#研究思路"><i class="fa fa-check"></i><b>10.2.2</b> 研究思路</a></li>
+<li class="chapter" data-level="10.2.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#预测类案例研究思路总结"><i class="fa fa-check"></i><b>10.2.3</b> 预测类案例研究思路总结</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#案例1-3"><i class="fa fa-check"></i><b>10.3</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#变量筛选"><i class="fa fa-check"></i><b>10.3.1</b> 变量筛选</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="logistic回归模型.html"><a href="logistic回归模型.html#列线图及校正曲线的绘制"><i class="fa fa-check"></i><b>10.4</b> 列线图及校正曲线的绘制</a></li>
+<li class="chapter" data-level="10.5" data-path="logistic回归模型.html"><a href="logistic回归模型.html#c-statistics-计算"><i class="fa fa-check"></i><b>10.5</b> C-Statistics 计算</a></li>
+<li class="chapter" data-level="10.6" data-path="logistic回归模型.html"><a href="logistic回归模型.html#亚组分析森林图的绘制"><i class="fa fa-check"></i><b>10.6</b> 亚组分析森林图的绘制</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#数据录入"><i class="fa fa-check"></i><b>10.6.1</b> 数据录入</a></li>
+<li class="chapter" data-level="10.6.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#绘制图形"><i class="fa fa-check"></i><b>10.6.2</b> 绘制图形</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="泊松回归模型.html"><a href="泊松回归模型.html"><i class="fa fa-check"></i><b>11</b> <strong>泊松回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="泊松回归模型.html"><a href="泊松回归模型.html#拟合泊松回归"><i class="fa fa-check"></i><b>11.1</b> 拟合泊松回归</a></li>
+<li class="chapter" data-level="11.2" data-path="泊松回归模型.html"><a href="泊松回归模型.html#解释模型参数"><i class="fa fa-check"></i><b>11.2</b> 解释模型参数</a></li>
+<li class="chapter" data-level="11.3" data-path="泊松回归模型.html"><a href="泊松回归模型.html#过度离势"><i class="fa fa-check"></i><b>11.3</b> 过度离势</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="生存分析.html"><a href="生存分析.html"><i class="fa fa-check"></i><b>12</b> <strong>生存分析</strong></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="生存分析.html"><a href="生存分析.html#生存资料的描述"><i class="fa fa-check"></i><b>12.1</b> 生存资料的描述</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="生存分析.html"><a href="生存分析.html#生存分析方法的正确表达"><i class="fa fa-check"></i><b>12.1.1</b> 生存分析方法的正确表达</a></li>
+<li class="chapter" data-level="12.1.2" data-path="生存分析.html"><a href="生存分析.html#生存分析的基本概念"><i class="fa fa-check"></i><b>12.1.2</b> 生存分析的基本概念</a></li>
+<li class="chapter" data-level="12.1.3" data-path="生存分析.html"><a href="生存分析.html#生存分析的几个重要名词"><i class="fa fa-check"></i><b>12.1.3</b> 生存分析的几个重要名词</a></li>
+<li class="chapter" data-level="12.1.4" data-path="生存分析.html"><a href="生存分析.html#生存数据的两种类型"><i class="fa fa-check"></i><b>12.1.4</b> 生存数据的两种类型</a></li>
+<li class="chapter" data-level="12.1.5" data-path="生存分析.html"><a href="生存分析.html#生存分析的主要任务"><i class="fa fa-check"></i><b>12.1.5</b> 生存分析的主要任务</a></li>
+<li class="chapter" data-level="12.1.6" data-path="生存分析.html"><a href="生存分析.html#生存分析基本方法"><i class="fa fa-check"></i><b>12.1.6</b> 生存分析基本方法</a></li>
+<li class="chapter" data-level="12.1.7" data-path="生存分析.html"><a href="生存分析.html#随访研究的几个问题"><i class="fa fa-check"></i><b>12.1.7</b> 随访研究的几个问题</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="生存分析.html"><a href="生存分析.html#生存率的估计与生存曲线"><i class="fa fa-check"></i><b>12.2</b> 生存率的估计与生存曲线</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法"><i class="fa fa-check"></i><b>12.2.1</b> Kaplan-Meier法</a></li>
+<li class="chapter" data-level="12.2.2" data-path="生存分析.html"><a href="生存分析.html#寿命表法"><i class="fa fa-check"></i><b>12.2.2</b> 寿命表法</a></li>
+<li class="chapter" data-level="12.2.3" data-path="生存分析.html"><a href="生存分析.html#生存分析对生存资料的基本要求"><i class="fa fa-check"></i><b>12.2.3</b> 生存分析对生存资料的基本要求</a></li>
+<li class="chapter" data-level="12.2.4" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法估计案例"><i class="fa fa-check"></i><b>12.2.4</b> Kaplan-Meier法估计案例</a></li>
+<li class="chapter" data-level="12.2.5" data-path="生存分析.html"><a href="生存分析.html#lifetable寿命表法"><i class="fa fa-check"></i><b>12.2.5</b> LifeTable寿命表法</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="生存分析.html"><a href="生存分析.html#组间生存曲线的比较"><i class="fa fa-check"></i><b>12.3</b> 组间生存曲线的比较</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="生存分析.html"><a href="生存分析.html#log-rank检验"><i class="fa fa-check"></i><b>12.3.1</b> Log-rank检验</a></li>
+<li class="chapter" data-level="12.3.2" data-path="生存分析.html"><a href="生存分析.html#案例1-4"><i class="fa fa-check"></i><b>12.3.2</b> 案例1</a></li>
+<li class="chapter" data-level="12.3.3" data-path="生存分析.html"><a href="生存分析.html#案例2-2"><i class="fa fa-check"></i><b>12.3.3</b> 案例2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="生存分析.html"><a href="生存分析.html#画一幅高水准的生存曲线"><i class="fa fa-check"></i><b>12.4</b> 画一幅高水准的生存曲线</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html"><i class="fa fa-check"></i><b>13</b> <strong>COX比例风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#模型简介"><i class="fa fa-check"></i><b>13.1</b> <strong>模型简介</strong></a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox模型的基本结构"><i class="fa fa-check"></i><b>13.1.1</b> COX模型的基本结构</a></li>
+<li class="chapter" data-level="13.1.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的构建"><i class="fa fa-check"></i><b>13.1.2</b> COX回归模型的构建</a></li>
+<li class="chapter" data-level="13.1.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的主要用途"><i class="fa fa-check"></i><b>13.1.3</b> COX回归模型的主要用途</a></li>
+<li class="chapter" data-level="13.1.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的应用条件"><i class="fa fa-check"></i><b>13.1.4</b> COX回归模型的应用条件</a></li>
+<li class="chapter" data-level="13.1.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归分析的假设检验"><i class="fa fa-check"></i><b>13.1.5</b> COX回归分析的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox分析的一般步骤"><i class="fa fa-check"></i><b>13.2</b> COX分析的一般步骤</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#收集资料"><i class="fa fa-check"></i><b>13.2.1</b> 收集资料</a></li>
+<li class="chapter" data-level="13.2.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#因子初步筛选"><i class="fa fa-check"></i><b>13.2.2</b> 因子初步筛选</a></li>
+<li class="chapter" data-level="13.2.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#拟合多因素模型"><i class="fa fa-check"></i><b>13.2.3</b> 拟合多因素模型</a></li>
+<li class="chapter" data-level="13.2.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#结果解析与评价"><i class="fa fa-check"></i><b>13.2.4</b> 结果解析与评价</a></li>
+<li class="chapter" data-level="13.2.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#标准回归系数的计算方法"><i class="fa fa-check"></i><b>13.2.5</b> 标准回归系数的计算方法</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例"><i class="fa fa-check"></i><b>13.3</b> <strong>案例</strong></a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例1-5"><i class="fa fa-check"></i><b>13.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="13.3.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例2-3"><i class="fa fa-check"></i><b>13.3.2</b> 案例2</a></li>
+<li class="chapter" data-level="13.3.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例3"><i class="fa fa-check"></i><b>13.3.3</b> 案例3</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#列线图绘制"><i class="fa fa-check"></i><b>13.4</b> 列线图绘制</a></li>
+<li class="chapter" data-level="13.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#亚组分析森林图的绘制-1"><i class="fa fa-check"></i><b>13.5</b> 亚组分析森林图的绘制</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="竞争风险模型.html"><a href="竞争风险模型.html"><i class="fa fa-check"></i><b>14</b> <strong>竞争风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="竞争风险模型.html"><a href="竞争风险模型.html#竞争风险的概念"><i class="fa fa-check"></i><b>14.1</b> 竞争风险的概念</a></li>
+<li class="chapter" data-level="14.2" data-path="竞争风险模型.html"><a href="竞争风险模型.html#单因素竞争风险模型"><i class="fa fa-check"></i><b>14.2</b> 单因素竞争风险模型</a></li>
+<li class="chapter" data-level="14.3" data-path="竞争风险模型.html"><a href="竞争风险模型.html#多因素竞争风险模型"><i class="fa fa-check"></i><b>14.3</b> 多因素竞争风险模型</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="主成分分析.html"><a href="主成分分析.html"><i class="fa fa-check"></i><b>15</b> <strong>主成分分析</strong></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="主成分分析.html"><a href="主成分分析.html#概述-1"><i class="fa fa-check"></i><b>15.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="主成分分析.html"><a href="主成分分析.html#基本思想"><i class="fa fa-check"></i><b>15.1.1</b> 基本思想</a></li>
+<li class="chapter" data-level="15.1.2" data-path="主成分分析.html"><a href="主成分分析.html#模型示意图"><i class="fa fa-check"></i><b>15.1.2</b> 模型示意图</a></li>
+<li class="chapter" data-level="15.1.3" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析基本思想应用"><i class="fa fa-check"></i><b>15.1.3</b> 主成分分析基本思想应用</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析的数学模型"><i class="fa fa-check"></i><b>15.2</b> 主成分分析的数学模型</a></li>
+<li class="chapter" data-level="15.3" data-path="主成分分析.html"><a href="主成分分析.html#pca的r语言实现"><i class="fa fa-check"></i><b>15.3</b> PCA的R语言实现</a>
+<ul>
+<li class="chapter" data-level="15.3.1" data-path="主成分分析.html"><a href="主成分分析.html#psych包中的函数"><i class="fa fa-check"></i><b>15.3.1</b> psych包中的函数</a></li>
+<li class="chapter" data-level="15.3.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分与因子分析的一般步骤"><i class="fa fa-check"></i><b>15.3.2</b> 主成分与因子分析的一般步骤</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="主成分分析.html"><a href="主成分分析.html#案例-4"><i class="fa fa-check"></i><b>15.4</b> 案例</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="主成分分析.html"><a href="主成分分析.html#案例1-6"><i class="fa fa-check"></i><b>15.4.1</b> 案例1</a></li>
+<li class="chapter" data-level="15.4.2" data-path="主成分分析.html"><a href="主成分分析.html#案例-2-1"><i class="fa fa-check"></i><b>15.4.2</b> 案例 2</a></li>
+<li class="chapter" data-level="15.4.3" data-path="主成分分析.html"><a href="主成分分析.html#案例3在线性回归中的应用"><i class="fa fa-check"></i><b>15.4.3</b> 案例3——在线性回归中的应用</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="探索性因子分析.html"><a href="探索性因子分析.html"><i class="fa fa-check"></i><b>16</b> <strong>探索性因子分析</strong></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析"><i class="fa fa-check"></i><b>16.1</b> 因子分析</a></li>
+<li class="chapter" data-level="16.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析模型形式"><i class="fa fa-check"></i><b>16.2</b> 因子分析模型形式</a></li>
+<li class="chapter" data-level="16.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析的r语言实现"><i class="fa fa-check"></i><b>16.3</b> 因子分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#判断需提取的公共因子数"><i class="fa fa-check"></i><b>16.3.1</b> 判断需提取的公共因子数</a></li>
+<li class="chapter" data-level="16.3.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#提取公共因子"><i class="fa fa-check"></i><b>16.3.2</b> 提取公共因子</a></li>
+<li class="chapter" data-level="16.3.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子旋转"><i class="fa fa-check"></i><b>16.3.3</b> 因子旋转</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析应用案例"><i class="fa fa-check"></i><b>16.4</b> 因子分析应用案例</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="聚类分析.html"><a href="聚类分析.html"><i class="fa fa-check"></i><b>17</b> <strong>聚类分析</strong></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="聚类分析.html"><a href="聚类分析.html#概述-2"><i class="fa fa-check"></i><b>17.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="17.1.1" data-path="聚类分析.html"><a href="聚类分析.html#聚类的定义"><i class="fa fa-check"></i><b>17.1.1</b> 聚类的定义</a></li>
+<li class="chapter" data-level="17.1.2" data-path="聚类分析.html"><a href="聚类分析.html#两种聚类分析"><i class="fa fa-check"></i><b>17.1.2</b> 两种聚类分析</a></li>
+<li class="chapter" data-level="17.1.3" data-path="聚类分析.html"><a href="聚类分析.html#聚类分析的一般步骤"><i class="fa fa-check"></i><b>17.1.3</b> 聚类分析的一般步骤</a></li>
+<li class="chapter" data-level="17.1.4" data-path="聚类分析.html"><a href="聚类分析.html#计算距离"><i class="fa fa-check"></i><b>17.1.4</b> 计算距离</a></li>
+<li class="chapter" data-level="17.1.5" data-path="聚类分析.html"><a href="聚类分析.html#层次聚类分析"><i class="fa fa-check"></i><b>17.1.5</b> 层次聚类分析</a></li>
+<li class="chapter" data-level="17.1.6" data-path="聚类分析.html"><a href="聚类分析.html#选择聚类的个数"><i class="fa fa-check"></i><b>17.1.6</b> 选择聚类的个数</a></li>
+<li class="chapter" data-level="17.1.7" data-path="聚类分析.html"><a href="聚类分析.html#获取最终的聚类方案"><i class="fa fa-check"></i><b>17.1.7</b> 获取最终的聚类方案</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="聚类分析.html"><a href="聚类分析.html#k均值算法"><i class="fa fa-check"></i><b>17.2</b> K均值算法</a></li>
+<li class="chapter" data-level="17.3" data-path="聚类分析.html"><a href="聚类分析.html#围绕中心点的划分"><i class="fa fa-check"></i><b>17.3</b> 围绕中心点的划分</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="聚类分析.html"><a href="聚类分析.html#pam算法步骤"><i class="fa fa-check"></i><b>17.3.1</b> PAM算法步骤</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Medical Statistics wtih R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="多元线性回归" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> <strong>多元线性回归</strong></h1>
+<div id="多元线性回归模型" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> 多元线性回归模型</h2>
+<p>➢ 因变量y, 自变量为x1,x2,…,xm</p>
+<p><span class="math display">\[
+\widehat{y}=a+b_1x_1+b_2x_2+…+b_mx_m
+\]</span></p>
+<p>➢ a为截距(intercept)，又称常数项(constant),表示各自变量均为0时y 的估计值</p>
+<p>➢ bi 称为偏回归系数(partial regression coefficient)，简称为回归系数</p>
+<p>➢ <span class="math inline">\(\hat{y}\)</span>称为 y 的估计值或预测值(predicted value)</p>
+</div>
+<div id="回归模型的应用条件" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> 回归模型的应用条件</h2>
+<p><span class="math display">\[
+y_i=\widehat{y}+e_i=b_0+b_1x_{1i}+b_2x_{2i}+ \cdots +b_mx_{mi}+e_i
+\]</span></p>
+<p><font color=red><span class="math inline">\(e_i\)</span></font> 称为残差:</p>
+<ul>
+<li><p>自变量与因变量的关系是<strong>线性</strong>的(<font color=blue>Linear</font> )；</p></li>
+<li><p><span class="math inline">\(Cov(e_i,e_j)=0\)</span>，即<strong>独立性</strong>(<font color=blue>Independence</font> )；</p></li>
+<li><p><span class="math inline">\(e_i\)</span>~<span class="math inline">\(N(0,\sigma^2)\)</span>，即<strong>正态性</strong>(<font color=blue>Normality</font>)；</p></li>
+<li><p><span class="math inline">\(Var(e_i)=\sigma^2\)</span>，即<strong>方差齐性</strong>(<font color=blue>Equal variance</font>)；</p></li>
+</ul>
+</div>
+<div id="偏回归系数的估计" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> 偏回归系数的估计</h2>
+<ul>
+<li><p>最小二乘法 (least square, LS)</p></li>
+<li><p>基本思想：残差平方和(sum of squares for residuals)最小！</p></li>
+</ul>
+<div id="回归方程的假设检验" class="section level3" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> 回归方程的假设检验</h3>
+<p><img src="fig/62.png" width="640" /></p>
+<ul>
+<li><p>未引进回归时的总变异(sum of squares about the mean of Y):<span class="math inline">\(\sum (Y-\overline Y)^2\)</span></p></li>
+<li><p>引进回归以后的剩余变异(sum of squares about regression): <span class="math inline">\(\sum (Y-\widehat Y)^2\)</span></p></li>
+<li><p>回归的贡献，回归平方和(sum of squares due to regression)：<span class="math inline">\(\sum (\widehat Y-\overline Y)^2\)</span></p></li>
+</ul>
+</div>
+</div>
+<div id="案例一" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> 案例一</h2>
+<p>例10-1 某学校20 名一年级女大学生体重(公斤)、胸围(厘米)、肩宽(厘米)及肺活量(升)实测值如表1 0-1 所示，试对影响女大学生肺活量的有关因素作多元回归分析</p>
+<p><img src="fig/68.png" width="659" /></p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="多元线性回归.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 第三节多元线性回归案例1</span></span>
+<span id="cb247-2"><a href="多元线性回归.html#cb247-2" aria-hidden="true" tabindex="-1"></a>Example10_1  <span class="ot">&lt;-</span> <span class="fu">read.table</span> (<span class="st">&quot;data/example10_1.csv&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb247-3"><a href="多元线性回归.html#cb247-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb247-4"><a href="多元线性回归.html#cb247-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Example10_1)</span>
+<span id="cb247-5"><a href="多元线性回归.html#cb247-5" aria-hidden="true" tabindex="-1"></a>fit1  <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3)</span>
+<span id="cb247-6"><a href="多元线性回归.html#cb247-6" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>)<span class="co">#拟合一个空模型</span></span>
+<span id="cb247-7"><a href="多元线性回归.html#cb247-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stepAIC</span>(fit2,<span class="at">direction=</span><span class="st">&quot;both&quot;</span>,<span class="at">scope=</span><span class="fu">list</span>(<span class="at">upper=</span>fit1,<span class="at">lower=</span>fit2))</span></code></pre></div>
+<pre><code>## Start:  AIC=-26.8
+## y ~ 1
+## 
+##        Df Sum of Sq    RSS     AIC
+## + x3    1    2.4153 2.3227 -39.060
+## + x1    1    2.3089 2.4291 -38.164
+## + x2    1    1.2593 3.4787 -30.982
+## &lt;none&gt;              4.7380 -26.802
+## 
+## Step:  AIC=-39.06
+## y ~ x3
+## 
+##        Df Sum of Sq    RSS     AIC
+## + x1    1   0.57921 1.7435 -42.797
+## + x2    1   0.30171 2.0210 -39.843
+## &lt;none&gt;              2.3227 -39.060
+## - x3    1   2.41534 4.7380 -26.802
+## 
+## Step:  AIC=-42.8
+## y ~ x3 + x1
+## 
+##        Df Sum of Sq    RSS     AIC
+## + x2    1   0.44098 1.3025 -46.629
+## &lt;none&gt;              1.7435 -42.797
+## - x1    1   0.57921 2.3227 -39.060
+## - x3    1   0.68561 2.4291 -38.164
+## 
+## Step:  AIC=-46.63
+## y ~ x3 + x1 + x2
+## 
+##        Df Sum of Sq    RSS     AIC
+## &lt;none&gt;              1.3025 -46.629
+## - x3    1   0.24029 1.5428 -45.243
+## - x2    1   0.44098 1.7435 -42.797
+## - x1    1   0.71848 2.0210 -39.843</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x3 + x1 + x2)
+## 
+## Coefficients:
+## (Intercept)           x3           x1           x2  
+##    -4.71489      0.04924      0.06091      0.03563</code></pre>
+<p><strong><em>结果解读 1.1</em></strong></p>
+<ul>
+<li><p>Start: AIC=-26.8; y ~ 1: 空载模型</p></li>
+<li><p>Step: AIC=-39.06;y ~ x3:剔除x3后，AIC变小，说明X3应该在方程内</p></li>
+<li><p>Step: AIC=-46.63;y ~ x3 + x1 + x2: 直至最后一步，AIC仍在变小，说明x1、x2、x3均应纳入回归方程。</p></li>
+<li><p>若有一步剔除某个变量后，AIC值没有变化或者变大，则说明该变量应该从回归方程中剔除。</p></li>
+</ul>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="多元线性回归.html#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (fit1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x1 + x2 + x3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.3749 -0.2747  0.1042  0.1820  0.4277 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) -4.71489    1.30082  -3.625  0.00228 **
+## x1           0.06091    0.02050   2.971  0.00901 **
+## x2           0.03563    0.01531   2.327  0.03339 * 
+## x3           0.04924    0.02866   1.718  0.10507   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2853 on 16 degrees of freedom
+## Multiple R-squared:  0.7251, Adjusted R-squared:  0.6736 
+## F-statistic: 14.07 on 3 and 16 DF,  p-value: 9.464e-05</code></pre>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="多元线性回归.html#cb252-1" aria-hidden="true" tabindex="-1"></a>y <span class="co">#观察值</span></span></code></pre></div>
+<pre><code>##  [1] 2.99 3.11 1.91 2.63 2.86 1.91 2.98 3.28 2.52 3.27 3.10 3.28 1.92 3.27 2.64
+## [16] 2.85 3.16 2.51 3.15 1.92</code></pre>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="多元线性回归.html#cb254-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fitted</span> (fit1) <span class="co">#预测值</span></span></code></pre></div>
+<pre><code>##        1        2        3        4        5        6        7        8 
+## 2.824232 2.926867 2.208092 2.908425 2.432268 2.284897 2.838810 3.212696 
+##        9       10       11       12       13       14       15       16 
+## 2.338328 3.227273 2.912290 3.509504 2.193514 3.504774 2.923002 2.432461 
+##       17       18       19       20 
+## 3.002704 2.311569 2.988127 2.280167</code></pre>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="多元线性回归.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residuals</span> (fit1) <span class="co">#残差</span></span></code></pre></div>
+<pre><code>##           1           2           3           4           5           6 
+##  0.16576766  0.18313311 -0.29809186 -0.27842491  0.42773214 -0.37489727 
+##           7           8           9          10          11          12 
+##  0.14119028  0.06730433  0.18167211  0.04272695  0.18771049 -0.22950412 
+##          13          14          15          16          17          18 
+## -0.27351448 -0.23477387 -0.28300229  0.41753882  0.15729565  0.19843126 
+##          19          20 
+##  0.16187303 -0.36016703</code></pre>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="多元线性回归.html#cb258-1" aria-hidden="true" tabindex="-1"></a>fit3<span class="ot">&lt;-</span><span class="fu">lm</span>(y<span class="sc">~</span> x1<span class="sc">+</span>x2)<span class="co">#拟合一个不包含x3的模型</span></span>
+<span id="cb258-2"><a href="多元线性回归.html#cb258-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit1,fit2)<span class="co">#比较含有x3和不含x3模型的差别</span></span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: y ~ x1 + x2 + x3
+## Model 2: y ~ 1
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1     16 1.3025                                  
+## 2     19 4.7380 -3   -3.4355 14.067 9.464e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="多元线性回归.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span> (Example10_1)</span></code></pre></div>
+<p><strong><em>结果解读 1.2</em></strong></p>
+<p>事实证明，对于是否含有x3，对模型来说意义不大</p>
+</div>
+<div id="案例二" class="section level2" number="7.5">
+<h2><span class="header-section-number">7.5</span> 案例二</h2>
+<p>例 10-2 一家皮鞋零售店将其连续18 个月的库存占用资金情况、广告投入的费用、员工薪酬以及销售额等方面的数据作了一个汇总， 如表10-2 所示。该皮鞋店老板试图根据这些数据找到销售额与其他3 个变量之间的关系，以便进行销售额预测并为未来的预算工作提供参考。根据这些数据建立回归模型</p>
+<p><img src="fig/69.png" width="506" /></p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="多元线性回归.html#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 第三节多元线性回归案例2</span></span>
+<span id="cb261-2"><a href="多元线性回归.html#cb261-2" aria-hidden="true" tabindex="-1"></a>Example10_2  <span class="ot">&lt;-</span> <span class="fu">read.table</span> (<span class="st">&quot;data/example10_2.csv&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb261-3"><a href="多元线性回归.html#cb261-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb261-4"><a href="多元线性回归.html#cb261-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Example10_2)</span>
+<span id="cb261-5"><a href="多元线性回归.html#cb261-5" aria-hidden="true" tabindex="-1"></a>fit1  <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y<span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3)</span>
+<span id="cb261-6"><a href="多元线性回归.html#cb261-6" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> <span class="dv">1</span>)<span class="co">#空模型</span></span>
+<span id="cb261-7"><a href="多元线性回归.html#cb261-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stepAIC</span>(fit2,<span class="at">direction=</span><span class="st">&quot;both&quot;</span>,<span class="at">scope=</span><span class="fu">list</span>(<span class="at">upper=</span>fit1,<span class="at">lower=</span>fit2))</span></code></pre></div>
+<pre><code>## Start:  AIC=220.24
+## Y ~ 1
+## 
+##        Df Sum of Sq     RSS    AIC
+## + X1    1   2955167  363111 182.42
+## + X2    1   2778824  539453 189.54
+## + X3    1   2354756  963521 199.98
+## &lt;none&gt;              3318277 220.24
+## 
+## Step:  AIC=182.42
+## Y ~ X1
+## 
+##        Df Sum of Sq     RSS    AIC
+## + X2    1    221519  141591 167.47
+## &lt;none&gt;               363111 182.42
+## + X3    1     26278  336833 183.06
+## - X1    1   2955167 3318277 220.24
+## 
+## Step:  AIC=167.47
+## Y ~ X1 + X2
+## 
+##        Df Sum of Sq    RSS    AIC
+## &lt;none&gt;              141591 167.47
+## + X3    1       500 141092 169.40
+## - X2    1    221519 363111 182.42
+## - X1    1    397862 539453 189.54</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X1 + X2)
+## 
+## Coefficients:
+## (Intercept)           X1           X2  
+##      86.953        7.109       13.684</code></pre>
+<p><strong><em>结果解读 2.1</em></strong></p>
+<ul>
+<li>在排除x3后,模型的AIC值不降反增(167.47→169.40)，故x3应从模型中剔除。</li>
+</ul>
+<pre><code>Step:  AIC=167.47
+Y ~ X1 + X2
+       Df Sum of Sq    RSS    AIC
+&lt;none&gt;              141591 167.47
++ X3    1       500 141092 169.40</code></pre>
+<ul>
+<li><code>lm(formula = Y ~ X1 + X2)</code>：最终纳入模型的变量为x1、x2。</li>
+</ul>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="多元线性回归.html#cb265-1" aria-hidden="true" tabindex="-1"></a>fit  <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y<span class="sc">~</span> X1 <span class="sc">+</span> X2)<span class="co">#拟合一个只纳入两个变量的模型</span></span>
+<span id="cb265-2"><a href="多元线性回归.html#cb265-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Y
+##           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## X1         1 2955167 2955167 313.066 1.847e-11 ***
+## X2         1  221519  221519  23.467 0.0002144 ***
+## Residuals 15  141591    9439                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="多元线性回归.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X1 + X2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -172.812  -50.486   -5.579   55.188  186.366 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   86.953     75.117   1.158 0.265141    
+## X1             7.109      1.095   6.492 1.02e-05 ***
+## X2            13.684      2.825   4.844 0.000214 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 97.16 on 15 degrees of freedom
+## Multiple R-squared:  0.9573, Adjusted R-squared:  0.9516 
+## F-statistic: 168.3 on 2 and 15 DF,  p-value: 5.32e-11</code></pre>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="多元线性回归.html#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span> (Example10_2)</span></code></pre></div>
+<p><strong><em>结果解读 2.2</em></strong></p>
+<ul>
+<li><p>在排除x3后,构建的只含有x1、x2的新模型中，x1、x2的P值均小于0.05，说明模型的x1、x2均有统计学意义</p></li>
+<li><p>最终模型的R方值为0.957，说明因变量有95.7%是由回归解释的，决定系数0.951，证明剔除X3后，模型的拟合效果良好。</p></li>
+</ul>
+</div>
+<div id="用线性回归来做anova" class="section level2" number="7.6">
+<h2><span class="header-section-number">7.6</span> 用线性回归来做ANOVA</h2>
+<p>ANOVA和回归都是广义线性模型的特例。因此，本章所有的设计都可以用 <code>lm()</code>函数来分析。但是，为了更好地理解输出结果，需要弄明白在拟合模型时，R是如何处理类别型变量的。</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="残差与回归值预测域与置信带.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="诊断试验的roc分析.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/005-glm.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

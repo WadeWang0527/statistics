@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Logistic回归模型 | Medical Statistics wtih R</title>
+  <meta name="description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Logistic回归模型 | Medical Statistics wtih R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Logistic回归模型 | Medical Statistics wtih R" />
+  
+  <meta name="twitter:description" content="This is a Medical Statistics study notes based on R Markdown and bookdown ." />
+  
+
+<meta name="author" content="Wade Wang" />
+
+
+<meta name="date" content="2021-11-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="logistic回归.html"/>
+<link rel="next" href="泊松回归模型.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Medical Statistics wtih R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html"><i class="fa fa-check"></i><b>1</b> <strong>统计描述与基础统计分析方法</strong></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#描述性统计分析"><i class="fa fa-check"></i><b>1.1</b> 描述性统计分析</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单组数据汇总统计量"><i class="fa fa-check"></i><b>1.1.1</b> 单组数据汇总统计量</a></li>
+<li class="chapter" data-level="1.1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#数据分布类型的图形描述"><i class="fa fa-check"></i><b>1.1.2</b> 数据分布类型的图形描述</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#线性相关与秩相关分析"><i class="fa fa-check"></i><b>1.2</b> <strong>线性相关与秩相关分析</strong></a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#三种相关系数"><i class="fa fa-check"></i><b>1.2.1</b> 三种相关系数</a></li>
+<li class="chapter" data-level="1.2.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#相关系数的显著性检验"><i class="fa fa-check"></i><b>1.2.2</b> 相关系数的显著性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异t检验"><i class="fa fa-check"></i><b>1.3</b> <strong>组间差异t检验</strong></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本t检验"><i class="fa fa-check"></i><b>1.3.1</b> 单样本t检验</a></li>
+<li class="chapter" data-level="1.3.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两样本t检验"><i class="fa fa-check"></i><b>1.3.2</b> 两样本t检验</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#组间差异秩和检验"><i class="fa fa-check"></i><b>1.4</b> 组间差异秩和检验</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#单样本wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.1</b> 单样本Wilcoxon符号秩检验</a></li>
+<li class="chapter" data-level="1.4.2" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#两组的比较"><i class="fa fa-check"></i><b>1.4.2</b> 两组的比较</a></li>
+<li class="chapter" data-level="1.4.3" data-path="统计描述与基础统计分析方法.html"><a href="统计描述与基础统计分析方法.html#配对wilcoxon符号秩检验"><i class="fa fa-check"></i><b>1.4.3</b> 配对Wilcoxon符号秩检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html"><i class="fa fa-check"></i><b>2</b> <strong>方差分析与秩和Kruskal-Wallis检验</strong></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析概述"><i class="fa fa-check"></i><b>2.1</b> 方差分析概述</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析基本思想"><i class="fa fa-check"></i><b>2.1.1</b> 方差分析基本思想</a></li>
+<li class="chapter" data-level="2.1.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析用途"><i class="fa fa-check"></i><b>2.1.2</b> 方差分析用途</a></li>
+<li class="chapter" data-level="2.1.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分应用条件"><i class="fa fa-check"></i><b>2.1.3</b> 方差分应用条件</a></li>
+<li class="chapter" data-level="2.1.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#方差分析的r语言实现"><i class="fa fa-check"></i><b>2.1.4</b> 方差分析的R语言实现</a></li>
+<li class="chapter" data-level="2.1.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#表达式中各项的顺序"><i class="fa fa-check"></i><b>2.1.5</b> 表达式中各项的顺序</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#单因素方差分析"><i class="fa fa-check"></i><b>2.2</b> 单因素方差分析</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#多重比较"><i class="fa fa-check"></i><b>2.2.1</b> 多重比较</a></li>
+<li class="chapter" data-level="2.2.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#评估方差分析的假设条件"><i class="fa fa-check"></i><b>2.2.2</b> 评估方差分析的假设条件</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#双因素方差分析"><i class="fa fa-check"></i><b>2.3</b> 双因素方差分析</a></li>
+<li class="chapter" data-level="2.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#重复测量的方差分析"><i class="fa fa-check"></i><b>2.4</b> 重复测量的方差分析</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#概述"><i class="fa fa-check"></i><b>2.4.1</b> 概述</a></li>
+<li class="chapter" data-level="2.4.2" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#原理"><i class="fa fa-check"></i><b>2.4.2</b> 原理</a></li>
+<li class="chapter" data-level="2.4.3" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#应用条件"><i class="fa fa-check"></i><b>2.4.3</b> 应用条件</a></li>
+<li class="chapter" data-level="2.4.4" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#案例1"><i class="fa fa-check"></i><b>2.4.4</b> 案例1</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="方差分析与秩和kruskal-wallis检验.html"><a href="方差分析与秩和kruskal-wallis检验.html#注意"><i class="fa fa-check"></i><b>2.5</b> 注意</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html"><i class="fa fa-check"></i><b>3</b> <strong>列联表资料的处理</strong></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#rc表分类"><i class="fa fa-check"></i><b>3.1</b> R×C表分类</a></li>
+<li class="chapter" data-level="3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#列变量为有序变量的行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2</b> 列变量为有序变量的行均分检验（Cochran-Mantel-Haenszel）</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行均分检验cochran-mantel-haenszel"><i class="fa fa-check"></i><b>3.2.1</b> 行均分检验Cochran-Mantel-Haenszel</a></li>
+<li class="chapter" data-level="3.2.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#ordinal-logistic回归模型"><i class="fa fa-check"></i><b>3.2.2</b> Ordinal logistic回归模型</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#行列变量均为有序变量检验方法"><i class="fa fa-check"></i><b>3.3</b> 行列变量均为有序变量检验方法</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#sperman秩相关"><i class="fa fa-check"></i><b>3.3.1</b> sperman秩相关</a></li>
+<li class="chapter" data-level="3.3.2" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#线性趋势检验"><i class="fa fa-check"></i><b>3.3.2</b> 线性趋势检验</a></li>
+<li class="chapter" data-level="3.3.3" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#一致性检验"><i class="fa fa-check"></i><b>3.3.3</b> 一致性检验</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#分层行列表分析-mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4</b> 分层行列表分析 Mantel-Haenszel 检验</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="列联表资料的处理.html"><a href="列联表资料的处理.html#mantel-haenszel-检验"><i class="fa fa-check"></i><b>3.4.1</b> Mantel-Haenszel 检验</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html"><i class="fa fa-check"></i><b>4</b> <strong>秩和检验处理列联表资料</strong></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#等级分组资料的非参数检验"><i class="fa fa-check"></i><b>4.1</b> 等级分组资料的非参数检验</a></li>
+<li class="chapter" data-level="4.2" data-path="秩和检验处理列联表资料.html"><a href="秩和检验处理列联表资料.html#多个组的等级指标的非参数检验"><i class="fa fa-check"></i><b>4.2</b> 多个组的等级指标的非参数检验</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="简单线性回归.html"><a href="简单线性回归.html"><i class="fa fa-check"></i><b>5</b> <strong>简单线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析对资料的要求"><i class="fa fa-check"></i><b>5.1</b> 回归分析对资料的要求</a></li>
+<li class="chapter" data-level="5.2" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程"><i class="fa fa-check"></i><b>5.2</b> 直线回归方程</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="简单线性回归.html"><a href="简单线性回归.html#直线回归方程的建立"><i class="fa fa-check"></i><b>5.2.1</b> 直线回归方程的建立</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="简单线性回归.html"><a href="简单线性回归.html#回归系数b的统计学意义"><i class="fa fa-check"></i><b>5.3</b> 回归系数b的统计学意义</a></li>
+<li class="chapter" data-level="5.4" data-path="简单线性回归.html"><a href="简单线性回归.html#回归分析的步骤"><i class="fa fa-check"></i><b>5.4</b> 回归分析的步骤</a></li>
+<li class="chapter" data-level="5.5" data-path="简单线性回归.html"><a href="简单线性回归.html#y的离均差平方和的划分"><i class="fa fa-check"></i><b>5.5</b> Y的离均差平方和的划分</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的关系"><i class="fa fa-check"></i><b>5.5.1</b> 三种平方和的关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的意义"><i class="fa fa-check"></i><b>5.6</b> 三种平方和的意义</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="简单线性回归.html"><a href="简单线性回归.html#三种平方和的自由度及其关系"><i class="fa fa-check"></i><b>5.6.1</b> 三种平方和的自由度及其关系</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="简单线性回归.html"><a href="简单线性回归.html#应用回归分析应注意的问题"><i class="fa fa-check"></i><b>5.7</b> 应用回归分析应注意的问题</a></li>
+<li class="chapter" data-level="5.8" data-path="简单线性回归.html"><a href="简单线性回归.html#简单线性回归的r语言实现"><i class="fa fa-check"></i><b>5.8</b> 简单线性回归的R语言实现</a></li>
+<li class="chapter" data-level="5.9" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-1"><i class="fa fa-check"></i><b>5.9</b> 案例 1</a></li>
+<li class="chapter" data-level="5.10" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-2"><i class="fa fa-check"></i><b>5.10</b> 案例 2</a></li>
+<li class="chapter" data-level="5.11" data-path="简单线性回归.html"><a href="简单线性回归.html#案例-3"><i class="fa fa-check"></i><b>5.11</b> 案例 3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="残差与回归值预测域与置信带.html"><a href="残差与回归值预测域与置信带.html"><i class="fa fa-check"></i><b>6</b> 残差与回归值&amp;预测域与置信带</a></li>
+<li class="chapter" data-level="7" data-path="多元线性回归.html"><a href="多元线性回归.html"><i class="fa fa-check"></i><b>7</b> <strong>多元线性回归</strong></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="多元线性回归.html"><a href="多元线性回归.html#多元线性回归模型"><i class="fa fa-check"></i><b>7.1</b> 多元线性回归模型</a></li>
+<li class="chapter" data-level="7.2" data-path="多元线性回归.html"><a href="多元线性回归.html#回归模型的应用条件"><i class="fa fa-check"></i><b>7.2</b> 回归模型的应用条件</a></li>
+<li class="chapter" data-level="7.3" data-path="多元线性回归.html"><a href="多元线性回归.html#偏回归系数的估计"><i class="fa fa-check"></i><b>7.3</b> 偏回归系数的估计</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="多元线性回归.html"><a href="多元线性回归.html#回归方程的假设检验"><i class="fa fa-check"></i><b>7.3.1</b> 回归方程的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="多元线性回归.html"><a href="多元线性回归.html#案例一"><i class="fa fa-check"></i><b>7.4</b> 案例一</a></li>
+<li class="chapter" data-level="7.5" data-path="多元线性回归.html"><a href="多元线性回归.html#案例二"><i class="fa fa-check"></i><b>7.5</b> 案例二</a></li>
+<li class="chapter" data-level="7.6" data-path="多元线性回归.html"><a href="多元线性回归.html#用线性回归来做anova"><i class="fa fa-check"></i><b>7.6</b> 用线性回归来做ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html"><i class="fa fa-check"></i><b>8</b> <strong>诊断试验的ROC分析</strong></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验设计原理"><i class="fa fa-check"></i><b>8.1</b> 诊断试验设计原理</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#队列研究设计"><i class="fa fa-check"></i><b>8.1.1</b> 队列研究设计</a></li>
+<li class="chapter" data-level="8.1.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#横断面设计单门设计"><i class="fa fa-check"></i><b>8.1.2</b> 横断面设计/单门设计</a></li>
+<li class="chapter" data-level="8.1.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#病例对照设计双门设计"><i class="fa fa-check"></i><b>8.1.3</b> 病例对照设计/双门设计</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#诊断试验的统计指标"><i class="fa fa-check"></i><b>8.2</b> 诊断试验的统计指标</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#基本概念"><i class="fa fa-check"></i><b>8.2.1</b> 基本概念</a></li>
+<li class="chapter" data-level="8.2.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#灵敏度和特异度之间的权衡"><i class="fa fa-check"></i><b>8.2.2</b> 灵敏度和特异度之间的权衡</a></li>
+<li class="chapter" data-level="8.2.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#受试者工作特征曲线-roc"><i class="fa fa-check"></i><b>8.2.3</b> 受试者工作特征曲线 (ROC)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#roc分析的r语言实现"><i class="fa fa-check"></i><b>8.3</b> ROC分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例1-1"><i class="fa fa-check"></i><b>8.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="8.3.2" data-path="诊断试验的roc分析.html"><a href="诊断试验的roc分析.html#案例2"><i class="fa fa-check"></i><b>8.3.2</b> 案例2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="logistic回归.html"><a href="logistic回归.html"><i class="fa fa-check"></i><b>9</b> <strong>Logistic回归</strong></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="logistic回归.html"><a href="logistic回归.html#模型概述"><i class="fa fa-check"></i><b>9.1</b> 模型概述</a></li>
+<li class="chapter" data-level="9.2" data-path="logistic回归.html"><a href="logistic回归.html#模型结构"><i class="fa fa-check"></i><b>9.2</b> 模型结构</a></li>
+<li class="chapter" data-level="9.3" data-path="logistic回归.html"><a href="logistic回归.html#比值比或优势比or"><i class="fa fa-check"></i><b>9.3</b> 比值比或优势比（OR）</a></li>
+<li class="chapter" data-level="9.4" data-path="logistic回归.html"><a href="logistic回归.html#案例1-2"><i class="fa fa-check"></i><b>9.4</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="logistic回归.html"><a href="logistic回归.html#评价预测变量对结果概率的影响"><i class="fa fa-check"></i><b>9.4.1</b> 评价预测变量对结果概率的影响</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="logistic回归.html"><a href="logistic回归.html#案例2-1"><i class="fa fa-check"></i><b>9.5</b> 案例2</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="logistic回归.html"><a href="logistic回归.html#因素间的交互作用"><i class="fa fa-check"></i><b>9.5.1</b> 因素间的交互作用</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="logistic回归.html"><a href="logistic回归.html#案例-3-1"><i class="fa fa-check"></i><b>9.6</b> 案例 3</a></li>
+<li class="chapter" data-level="9.7" data-path="logistic回归.html"><a href="logistic回归.html#案例4"><i class="fa fa-check"></i><b>9.7</b> 案例4</a></li>
+<li class="chapter" data-level="9.8" data-path="logistic回归.html"><a href="logistic回归.html#扩展的logistic回归及其变种"><i class="fa fa-check"></i><b>9.8</b> 扩展的Logistic回归及其变种</a>
+<ul>
+<li class="chapter" data-level="9.8.1" data-path="logistic回归.html"><a href="logistic回归.html#稳健logistic回归"><i class="fa fa-check"></i><b>9.8.1</b> 稳健Logistic回归</a></li>
+<li class="chapter" data-level="9.8.2" data-path="logistic回归.html"><a href="logistic回归.html#多项分布回归"><i class="fa fa-check"></i><b>9.8.2</b> 多项分布回归</a></li>
+<li class="chapter" data-level="9.8.3" data-path="logistic回归.html"><a href="logistic回归.html#序数logistic回归"><i class="fa fa-check"></i><b>9.8.3</b> 序数Logistic回归</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="logistic回归模型.html"><a href="logistic回归模型.html"><i class="fa fa-check"></i><b>10</b> <strong>Logistic回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型的本质"><i class="fa fa-check"></i><b>10.1</b> 临床预测模型的本质</a></li>
+<li class="chapter" data-level="10.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#临床预测模型建立"><i class="fa fa-check"></i><b>10.2</b> 临床预测模型建立</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#验证步骤"><i class="fa fa-check"></i><b>10.2.1</b> 验证步骤</a></li>
+<li class="chapter" data-level="10.2.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#研究思路"><i class="fa fa-check"></i><b>10.2.2</b> 研究思路</a></li>
+<li class="chapter" data-level="10.2.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#预测类案例研究思路总结"><i class="fa fa-check"></i><b>10.2.3</b> 预测类案例研究思路总结</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="logistic回归模型.html"><a href="logistic回归模型.html#案例1-3"><i class="fa fa-check"></i><b>10.3</b> 案例1</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#变量筛选"><i class="fa fa-check"></i><b>10.3.1</b> 变量筛选</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="logistic回归模型.html"><a href="logistic回归模型.html#列线图及校正曲线的绘制"><i class="fa fa-check"></i><b>10.4</b> 列线图及校正曲线的绘制</a></li>
+<li class="chapter" data-level="10.5" data-path="logistic回归模型.html"><a href="logistic回归模型.html#c-statistics-计算"><i class="fa fa-check"></i><b>10.5</b> C-Statistics 计算</a></li>
+<li class="chapter" data-level="10.6" data-path="logistic回归模型.html"><a href="logistic回归模型.html#亚组分析森林图的绘制"><i class="fa fa-check"></i><b>10.6</b> 亚组分析森林图的绘制</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="logistic回归模型.html"><a href="logistic回归模型.html#数据录入"><i class="fa fa-check"></i><b>10.6.1</b> 数据录入</a></li>
+<li class="chapter" data-level="10.6.2" data-path="logistic回归模型.html"><a href="logistic回归模型.html#绘制图形"><i class="fa fa-check"></i><b>10.6.2</b> 绘制图形</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="泊松回归模型.html"><a href="泊松回归模型.html"><i class="fa fa-check"></i><b>11</b> <strong>泊松回归模型</strong></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="泊松回归模型.html"><a href="泊松回归模型.html#拟合泊松回归"><i class="fa fa-check"></i><b>11.1</b> 拟合泊松回归</a></li>
+<li class="chapter" data-level="11.2" data-path="泊松回归模型.html"><a href="泊松回归模型.html#解释模型参数"><i class="fa fa-check"></i><b>11.2</b> 解释模型参数</a></li>
+<li class="chapter" data-level="11.3" data-path="泊松回归模型.html"><a href="泊松回归模型.html#过度离势"><i class="fa fa-check"></i><b>11.3</b> 过度离势</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="生存分析.html"><a href="生存分析.html"><i class="fa fa-check"></i><b>12</b> <strong>生存分析</strong></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="生存分析.html"><a href="生存分析.html#生存资料的描述"><i class="fa fa-check"></i><b>12.1</b> 生存资料的描述</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="生存分析.html"><a href="生存分析.html#生存分析方法的正确表达"><i class="fa fa-check"></i><b>12.1.1</b> 生存分析方法的正确表达</a></li>
+<li class="chapter" data-level="12.1.2" data-path="生存分析.html"><a href="生存分析.html#生存分析的基本概念"><i class="fa fa-check"></i><b>12.1.2</b> 生存分析的基本概念</a></li>
+<li class="chapter" data-level="12.1.3" data-path="生存分析.html"><a href="生存分析.html#生存分析的几个重要名词"><i class="fa fa-check"></i><b>12.1.3</b> 生存分析的几个重要名词</a></li>
+<li class="chapter" data-level="12.1.4" data-path="生存分析.html"><a href="生存分析.html#生存数据的两种类型"><i class="fa fa-check"></i><b>12.1.4</b> 生存数据的两种类型</a></li>
+<li class="chapter" data-level="12.1.5" data-path="生存分析.html"><a href="生存分析.html#生存分析的主要任务"><i class="fa fa-check"></i><b>12.1.5</b> 生存分析的主要任务</a></li>
+<li class="chapter" data-level="12.1.6" data-path="生存分析.html"><a href="生存分析.html#生存分析基本方法"><i class="fa fa-check"></i><b>12.1.6</b> 生存分析基本方法</a></li>
+<li class="chapter" data-level="12.1.7" data-path="生存分析.html"><a href="生存分析.html#随访研究的几个问题"><i class="fa fa-check"></i><b>12.1.7</b> 随访研究的几个问题</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="生存分析.html"><a href="生存分析.html#生存率的估计与生存曲线"><i class="fa fa-check"></i><b>12.2</b> 生存率的估计与生存曲线</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法"><i class="fa fa-check"></i><b>12.2.1</b> Kaplan-Meier法</a></li>
+<li class="chapter" data-level="12.2.2" data-path="生存分析.html"><a href="生存分析.html#寿命表法"><i class="fa fa-check"></i><b>12.2.2</b> 寿命表法</a></li>
+<li class="chapter" data-level="12.2.3" data-path="生存分析.html"><a href="生存分析.html#生存分析对生存资料的基本要求"><i class="fa fa-check"></i><b>12.2.3</b> 生存分析对生存资料的基本要求</a></li>
+<li class="chapter" data-level="12.2.4" data-path="生存分析.html"><a href="生存分析.html#kaplan-meier法估计案例"><i class="fa fa-check"></i><b>12.2.4</b> Kaplan-Meier法估计案例</a></li>
+<li class="chapter" data-level="12.2.5" data-path="生存分析.html"><a href="生存分析.html#lifetable寿命表法"><i class="fa fa-check"></i><b>12.2.5</b> LifeTable寿命表法</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="生存分析.html"><a href="生存分析.html#组间生存曲线的比较"><i class="fa fa-check"></i><b>12.3</b> 组间生存曲线的比较</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="生存分析.html"><a href="生存分析.html#log-rank检验"><i class="fa fa-check"></i><b>12.3.1</b> Log-rank检验</a></li>
+<li class="chapter" data-level="12.3.2" data-path="生存分析.html"><a href="生存分析.html#案例1-4"><i class="fa fa-check"></i><b>12.3.2</b> 案例1</a></li>
+<li class="chapter" data-level="12.3.3" data-path="生存分析.html"><a href="生存分析.html#案例2-2"><i class="fa fa-check"></i><b>12.3.3</b> 案例2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="生存分析.html"><a href="生存分析.html#画一幅高水准的生存曲线"><i class="fa fa-check"></i><b>12.4</b> 画一幅高水准的生存曲线</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html"><i class="fa fa-check"></i><b>13</b> <strong>COX比例风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#模型简介"><i class="fa fa-check"></i><b>13.1</b> <strong>模型简介</strong></a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox模型的基本结构"><i class="fa fa-check"></i><b>13.1.1</b> COX模型的基本结构</a></li>
+<li class="chapter" data-level="13.1.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的构建"><i class="fa fa-check"></i><b>13.1.2</b> COX回归模型的构建</a></li>
+<li class="chapter" data-level="13.1.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的主要用途"><i class="fa fa-check"></i><b>13.1.3</b> COX回归模型的主要用途</a></li>
+<li class="chapter" data-level="13.1.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归模型的应用条件"><i class="fa fa-check"></i><b>13.1.4</b> COX回归模型的应用条件</a></li>
+<li class="chapter" data-level="13.1.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox回归分析的假设检验"><i class="fa fa-check"></i><b>13.1.5</b> COX回归分析的假设检验</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#cox分析的一般步骤"><i class="fa fa-check"></i><b>13.2</b> COX分析的一般步骤</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#收集资料"><i class="fa fa-check"></i><b>13.2.1</b> 收集资料</a></li>
+<li class="chapter" data-level="13.2.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#因子初步筛选"><i class="fa fa-check"></i><b>13.2.2</b> 因子初步筛选</a></li>
+<li class="chapter" data-level="13.2.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#拟合多因素模型"><i class="fa fa-check"></i><b>13.2.3</b> 拟合多因素模型</a></li>
+<li class="chapter" data-level="13.2.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#结果解析与评价"><i class="fa fa-check"></i><b>13.2.4</b> 结果解析与评价</a></li>
+<li class="chapter" data-level="13.2.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#标准回归系数的计算方法"><i class="fa fa-check"></i><b>13.2.5</b> 标准回归系数的计算方法</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例"><i class="fa fa-check"></i><b>13.3</b> <strong>案例</strong></a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例1-5"><i class="fa fa-check"></i><b>13.3.1</b> 案例1</a></li>
+<li class="chapter" data-level="13.3.2" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例2-3"><i class="fa fa-check"></i><b>13.3.2</b> 案例2</a></li>
+<li class="chapter" data-level="13.3.3" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#案例3"><i class="fa fa-check"></i><b>13.3.3</b> 案例3</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#列线图绘制"><i class="fa fa-check"></i><b>13.4</b> 列线图绘制</a></li>
+<li class="chapter" data-level="13.5" data-path="cox比例风险模型.html"><a href="cox比例风险模型.html#亚组分析森林图的绘制-1"><i class="fa fa-check"></i><b>13.5</b> 亚组分析森林图的绘制</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="竞争风险模型.html"><a href="竞争风险模型.html"><i class="fa fa-check"></i><b>14</b> <strong>竞争风险模型</strong></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="竞争风险模型.html"><a href="竞争风险模型.html#竞争风险的概念"><i class="fa fa-check"></i><b>14.1</b> 竞争风险的概念</a></li>
+<li class="chapter" data-level="14.2" data-path="竞争风险模型.html"><a href="竞争风险模型.html#单因素竞争风险模型"><i class="fa fa-check"></i><b>14.2</b> 单因素竞争风险模型</a></li>
+<li class="chapter" data-level="14.3" data-path="竞争风险模型.html"><a href="竞争风险模型.html#多因素竞争风险模型"><i class="fa fa-check"></i><b>14.3</b> 多因素竞争风险模型</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="主成分分析.html"><a href="主成分分析.html"><i class="fa fa-check"></i><b>15</b> <strong>主成分分析</strong></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="主成分分析.html"><a href="主成分分析.html#概述-1"><i class="fa fa-check"></i><b>15.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="主成分分析.html"><a href="主成分分析.html#基本思想"><i class="fa fa-check"></i><b>15.1.1</b> 基本思想</a></li>
+<li class="chapter" data-level="15.1.2" data-path="主成分分析.html"><a href="主成分分析.html#模型示意图"><i class="fa fa-check"></i><b>15.1.2</b> 模型示意图</a></li>
+<li class="chapter" data-level="15.1.3" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析基本思想应用"><i class="fa fa-check"></i><b>15.1.3</b> 主成分分析基本思想应用</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分分析的数学模型"><i class="fa fa-check"></i><b>15.2</b> 主成分分析的数学模型</a></li>
+<li class="chapter" data-level="15.3" data-path="主成分分析.html"><a href="主成分分析.html#pca的r语言实现"><i class="fa fa-check"></i><b>15.3</b> PCA的R语言实现</a>
+<ul>
+<li class="chapter" data-level="15.3.1" data-path="主成分分析.html"><a href="主成分分析.html#psych包中的函数"><i class="fa fa-check"></i><b>15.3.1</b> psych包中的函数</a></li>
+<li class="chapter" data-level="15.3.2" data-path="主成分分析.html"><a href="主成分分析.html#主成分与因子分析的一般步骤"><i class="fa fa-check"></i><b>15.3.2</b> 主成分与因子分析的一般步骤</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="主成分分析.html"><a href="主成分分析.html#案例-4"><i class="fa fa-check"></i><b>15.4</b> 案例</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="主成分分析.html"><a href="主成分分析.html#案例1-6"><i class="fa fa-check"></i><b>15.4.1</b> 案例1</a></li>
+<li class="chapter" data-level="15.4.2" data-path="主成分分析.html"><a href="主成分分析.html#案例-2-1"><i class="fa fa-check"></i><b>15.4.2</b> 案例 2</a></li>
+<li class="chapter" data-level="15.4.3" data-path="主成分分析.html"><a href="主成分分析.html#案例3在线性回归中的应用"><i class="fa fa-check"></i><b>15.4.3</b> 案例3——在线性回归中的应用</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="探索性因子分析.html"><a href="探索性因子分析.html"><i class="fa fa-check"></i><b>16</b> <strong>探索性因子分析</strong></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析"><i class="fa fa-check"></i><b>16.1</b> 因子分析</a></li>
+<li class="chapter" data-level="16.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析模型形式"><i class="fa fa-check"></i><b>16.2</b> 因子分析模型形式</a></li>
+<li class="chapter" data-level="16.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析的r语言实现"><i class="fa fa-check"></i><b>16.3</b> 因子分析的R语言实现</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="探索性因子分析.html"><a href="探索性因子分析.html#判断需提取的公共因子数"><i class="fa fa-check"></i><b>16.3.1</b> 判断需提取的公共因子数</a></li>
+<li class="chapter" data-level="16.3.2" data-path="探索性因子分析.html"><a href="探索性因子分析.html#提取公共因子"><i class="fa fa-check"></i><b>16.3.2</b> 提取公共因子</a></li>
+<li class="chapter" data-level="16.3.3" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子旋转"><i class="fa fa-check"></i><b>16.3.3</b> 因子旋转</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="探索性因子分析.html"><a href="探索性因子分析.html#因子分析应用案例"><i class="fa fa-check"></i><b>16.4</b> 因子分析应用案例</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="聚类分析.html"><a href="聚类分析.html"><i class="fa fa-check"></i><b>17</b> <strong>聚类分析</strong></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="聚类分析.html"><a href="聚类分析.html#概述-2"><i class="fa fa-check"></i><b>17.1</b> 概述</a>
+<ul>
+<li class="chapter" data-level="17.1.1" data-path="聚类分析.html"><a href="聚类分析.html#聚类的定义"><i class="fa fa-check"></i><b>17.1.1</b> 聚类的定义</a></li>
+<li class="chapter" data-level="17.1.2" data-path="聚类分析.html"><a href="聚类分析.html#两种聚类分析"><i class="fa fa-check"></i><b>17.1.2</b> 两种聚类分析</a></li>
+<li class="chapter" data-level="17.1.3" data-path="聚类分析.html"><a href="聚类分析.html#聚类分析的一般步骤"><i class="fa fa-check"></i><b>17.1.3</b> 聚类分析的一般步骤</a></li>
+<li class="chapter" data-level="17.1.4" data-path="聚类分析.html"><a href="聚类分析.html#计算距离"><i class="fa fa-check"></i><b>17.1.4</b> 计算距离</a></li>
+<li class="chapter" data-level="17.1.5" data-path="聚类分析.html"><a href="聚类分析.html#层次聚类分析"><i class="fa fa-check"></i><b>17.1.5</b> 层次聚类分析</a></li>
+<li class="chapter" data-level="17.1.6" data-path="聚类分析.html"><a href="聚类分析.html#选择聚类的个数"><i class="fa fa-check"></i><b>17.1.6</b> 选择聚类的个数</a></li>
+<li class="chapter" data-level="17.1.7" data-path="聚类分析.html"><a href="聚类分析.html#获取最终的聚类方案"><i class="fa fa-check"></i><b>17.1.7</b> 获取最终的聚类方案</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="聚类分析.html"><a href="聚类分析.html#k均值算法"><i class="fa fa-check"></i><b>17.2</b> K均值算法</a></li>
+<li class="chapter" data-level="17.3" data-path="聚类分析.html"><a href="聚类分析.html#围绕中心点的划分"><i class="fa fa-check"></i><b>17.3</b> 围绕中心点的划分</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="聚类分析.html"><a href="聚类分析.html#pam算法步骤"><i class="fa fa-check"></i><b>17.3.1</b> PAM算法步骤</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Medical Statistics wtih R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="logistic回归模型" class="section level1" number="10">
+<h1><span class="header-section-number">Chapter 10</span> <strong>Logistic回归模型</strong></h1>
+<div id="临床预测模型的本质" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> 临床预测模型的本质</h2>
+<p>➢ 科研预测模型是通过已知来预测未知，而模型就是一个复杂的公式。也就是把已
+知的东西通过这个模型的计算来预测未知的东西。</p>
+<p>➢ 临床预测模型的本质就是通过回归建模分析，回归的本质就是发现规律。回归是
+量化刻画，X多大程度上影响Y。尤其是多元线性、Logistic、Cox回归分析等。</p>
+<p>➢ 模型的验证也体现着较高技术难度。模型效能评价是统计分析、数据建模、课题
+设计的关键所在。</p>
+</div>
+<div id="临床预测模型建立" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> 临床预测模型建立</h2>
+<div id="验证步骤" class="section level3" number="10.2.1">
+<h3><span class="header-section-number">10.2.1</span> 验证步骤</h3>
+<p><img src="fig/78.png" width="572" /></p>
+</div>
+<div id="研究思路" class="section level3" number="10.2.2">
+<h3><span class="header-section-number">10.2.2</span> 研究思路</h3>
+<p><img src="fig/79.png" width="356" /></p>
+<p><strong><em>【举例】</em></strong></p>
+<p>➢ 临床上有多个心血管疾病风险预测工具：Framingham、QRISK、PROCAM、
+ASSIGN评分。Heart发表综述《Graphics and Statistics for Cardiology:
+Clinical Prediction Rules》以心血管风险评分(CVD risk factor)为例探讨如何借
+助图形优势构建疾病的预测模型，并提出了6个重要步骤。</p>
+<ol style="list-style-type: decimal">
+<li><p>选择一组预测变量作为潜在CVD影响因素纳入到风险评分中</p></li>
+<li><p>选择一个合适的统计模型来分析预测变量和CVD之间的关系</p></li>
+<li><p>从已有的预测变量中，选择足够重要的变量纳入到风险评分中</p></li>
+<li><p>构造风险评分模型</p></li>
+<li><p>评价风险评分模型</p></li>
+<li><p>在临床实践中解释风险评分的使用。</p></li>
+</ol>
+</div>
+<div id="预测类案例研究思路总结" class="section level3" number="10.2.3">
+<h3><span class="header-section-number">10.2.3</span> 预测类案例研究思路总结</h3>
+<p><img src="fig/710.png" width="632" /></p>
+</div>
+</div>
+<div id="案例1-3" class="section level2" number="10.3">
+<h2><span class="header-section-number">10.3</span> 案例1</h2>
+<p>➢ Hosmer 和 Lemeshow于1989年研究了低出生体重婴儿的影响因素。结果变量为是否娩出低出生体重儿（变量名为LOW，1=低出生体重，即婴儿出生体重&lt;2500g; 0=非低出生体重），考虑的影响因素（自变量）有：产妇妊娠前体重（lwt，磅）；产妇年龄（age，岁）；产妇在妊娠期间是否吸烟（smoke，0＝未吸、1＝吸烟）；本次妊娠前早产次数（ptl，次）；是否患有高血压（ht，0＝未患、1＝患病）；子宫对按摩、催产素等刺激引起收缩的应激性（ui，0＝无、1＝有）；妊娠前三个月社区医生随访次数（ftv，次）；种族（race，1＝白人、2＝黑人、3＝其他民族）。</p>
+<div id="变量筛选" class="section level3" number="10.3.1">
+<h3><span class="header-section-number">10.3.1</span> 变量筛选</h3>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="logistic回归模型.html#cb368-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign) <span class="co">#为了载入sav等形式的外部数据</span></span>
+<span id="cb368-2"><a href="logistic回归模型.html#cb368-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rms)</span>
+<span id="cb368-3"><a href="logistic回归模型.html#cb368-3" aria-hidden="true" tabindex="-1"></a>mydata<span class="ot">&lt;-</span><span class="fu">read.spss</span>(<span class="st">&quot;data/lweight.sav&quot;</span>)</span>
+<span id="cb368-4"><a href="logistic回归模型.html#cb368-4" aria-hidden="true" tabindex="-1"></a>mydata<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(mydata) <span class="co">#将数据转换为数据框结构</span></span>
+<span id="cb368-5"><a href="logistic回归模型.html#cb368-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mydata)  <span class="co">#查看数据前6行</span></span></code></pre></div>
+<pre><code>##   id      low age lwt     race  smoke ptl       ht ui ftv  bwt
+## 1 85 正常体重  19 182   黑种人 不吸烟   0 无妊高症 有   0 2523
+## 2 86 正常体重  33 155 其他种族 不吸烟   0 无妊高症 无   3 2551
+## 3 87 正常体重  20 105   白种人   吸烟   0 无妊高症 无   1 2557
+## 4 88 正常体重  21 108   白种人   吸烟   0 无妊高症 有   2 2594
+## 5 89 正常体重  18 107   白种人   吸烟   0 无妊高症 有   0 2600
+## 6 91 正常体重  21 124 其他种族 不吸烟   0 无妊高症 无   0 2622</code></pre>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="logistic回归模型.html#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="co">#设置哑变量</span></span>
+<span id="cb370-2"><a href="logistic回归模型.html#cb370-2" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>low <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>low <span class="sc">==</span><span class="st">&quot;低出生体重&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb370-3"><a href="logistic回归模型.html#cb370-3" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race1 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>race <span class="sc">==</span><span class="st">&quot;白种人&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb370-4"><a href="logistic回归模型.html#cb370-4" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>race <span class="sc">==</span><span class="st">&quot;黑种人&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb370-5"><a href="logistic回归模型.html#cb370-5" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>race <span class="sc">==</span><span class="st">&quot;其他种族&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb370-6"><a href="logistic回归模型.html#cb370-6" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(mydata)</span>
+<span id="cb370-7"><a href="logistic回归模型.html#cb370-7" aria-hidden="true" tabindex="-1"></a>dd<span class="ot">&lt;-</span><span class="fu">datadist</span>(mydata) <span class="co">#打包数据集</span></span>
+<span id="cb370-8"><a href="logistic回归模型.html#cb370-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">datadist=</span><span class="st">&#39;dd&#39;</span>)</span>
+<span id="cb370-9"><a href="logistic回归模型.html#cb370-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 拟合回归模型，不含race3是由于将其作为参照</span></span>
+<span id="cb370-10"><a href="logistic回归模型.html#cb370-10" aria-hidden="true" tabindex="-1"></a>fit1<span class="ot">&lt;-</span><span class="fu">lrm</span>(low<span class="sc">~</span>age<span class="sc">+</span>ftv<span class="sc">+</span>ht<span class="sc">+</span>lwt<span class="sc">+</span>ptl<span class="sc">+</span>smoke<span class="sc">+</span>ui<span class="sc">+</span>race1<span class="sc">+</span>race2,</span>
+<span id="cb370-11"><a href="logistic回归模型.html#cb370-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">data=</span>mydata,<span class="at">x=</span>T,<span class="at">y=</span>T)</span>
+<span id="cb370-12"><a href="logistic回归模型.html#cb370-12" aria-hidden="true" tabindex="-1"></a>fit1</span></code></pre></div>
+<pre><code>## Logistic Regression Model
+##  
+##  lrm(formula = low ~ age + ftv + ht + lwt + ptl + smoke + ui + 
+##      race1 + race2, data = mydata, x = T, y = T)
+##  
+##                        Model Likelihood    Discrimination    Rank Discrim.    
+##                              Ratio Test           Indexes          Indexes    
+##  Obs           189    LR chi2     31.12    R2       0.213    C       0.738    
+##   0            130    d.f.            9    g        1.122    Dxy     0.476    
+##   1             59    Pr(&gt; chi2) 0.0003    gr       3.070    gamma   0.477    
+##  max |deriv| 7e-05                         gp       0.207    tau-a   0.206    
+##                                            Brier    0.181                     
+##  
+##             Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  Intercept   1.1427 1.0873  1.05  0.2933  
+##  age        -0.0255 0.0366 -0.69  0.4871  
+##  ftv         0.0321 0.1708  0.19  0.8509  
+##  ht=妊高症   1.7631 0.6894  2.56  0.0105  
+##  lwt        -0.0137 0.0068 -2.02  0.0431  
+##  ptl         0.5517 0.3446  1.60  0.1094  
+##  smoke=吸烟  0.9275 0.3986  2.33  0.0200  
+##  ui=有       0.6488 0.4676  1.39  0.1653  
+##  race1      -0.9082 0.4367 -2.08  0.0375  
+##  race2       0.3293 0.5339  0.62  0.5374  
+## </code></pre>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="logistic回归模型.html#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="co">#查看OR值</span></span>
+<span id="cb372-2"><a href="logistic回归模型.html#cb372-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span></code></pre></div>
+<pre><code>##              Effects              Response : low 
+## 
+##  Factor               Low High Diff. Effect    S.E.    Lower 0.95 Upper 0.95
+##  age                   19  26   7    -0.178250 0.25649 -0.68095    0.324460 
+##   Odds Ratio           19  26   7     0.836740      NA  0.50613    1.383300 
+##  ftv                    0   1   1     0.032104 0.17077 -0.30260    0.366810 
+##   Odds Ratio            0   1   1     1.032600      NA  0.73889    1.443100 
+##  lwt                  110 141  31    -0.424740 0.21002 -0.83637   -0.013113 
+##   Odds Ratio          110 141  31     0.653940      NA  0.43328    0.986970 
+##  ptl                    0   3   3     1.655000 1.03390 -0.37141    3.681400 
+##   Odds Ratio            0   3   3     5.233000      NA  0.68976   39.701000 
+##  race1                  0   1   1    -0.908230 0.43667 -1.76410   -0.052382 
+##   Odds Ratio            0   1   1     0.403240      NA  0.17134    0.948970 
+##  race2                  0   1   1     0.329270 0.53392 -0.71718    1.375700 
+##   Odds Ratio            0   1   1     1.390000      NA  0.48813    3.958000 
+##  ht - 妊高症:无妊高症   1   2  NA     1.763100 0.68941  0.41191    3.114400 
+##   Odds Ratio            1   2  NA     5.830700      NA  1.50970   22.519000 
+##  smoke - 吸烟:不吸烟    1   2  NA     0.927480 0.39859  0.14626    1.708700 
+##   Odds Ratio            1   2  NA     2.528100      NA  1.15750    5.521800 
+##  ui - 有:无             1   2  NA     0.648810 0.46760 -0.26767    1.565300 
+##   Odds Ratio            1   2  NA     1.913300      NA  0.76516    4.784100</code></pre>
+<p><strong><em>结果解读 1.1</em></strong></p>
+<ul>
+<li><p>从模型中可以筛选出有统计学意义(P＜0.05)的变量</p></li>
+<li><p>结果为：ht=妊高症(P=0.0105)、lwt(P=0.0431)、smoke=吸烟(P=0.02)、race1(P=0.0375)</p></li>
+<li><p>此处需要注意的是，为了设置哑变量而重新定义的变量race1在模型中是具有统计学意义的，即说明与其一起组成的哑变量——种族对于因变量的是有影响的。因为无论组成哑变量的哪一个变量有统计学意义，都可说明该哑变量是有统计学意义的。</p></li>
+</ul>
+</div>
+</div>
+<div id="列线图及校正曲线的绘制" class="section level2" number="10.4">
+<h2><span class="header-section-number">10.4</span> 列线图及校正曲线的绘制</h2>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="logistic回归模型.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="co">#绘制列线图</span></span>
+<span id="cb374-2"><a href="logistic回归模型.html#cb374-2" aria-hidden="true" tabindex="-1"></a>nom1 <span class="ot">&lt;-</span> <span class="fu">nomogram</span>(fit1, </span>
+<span id="cb374-3"><a href="logistic回归模型.html#cb374-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fun=</span>plogis,</span>
+<span id="cb374-4"><a href="logistic回归模型.html#cb374-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fun.at=</span><span class="fu">c</span>(.<span class="dv">001</span>, .<span class="dv">01</span>, .<span class="dv">05</span>, </span>
+<span id="cb374-5"><a href="logistic回归模型.html#cb374-5" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">seq</span>(.<span class="dv">1</span>,.<span class="dv">9</span>, <span class="at">by=</span>.<span class="dv">1</span>), </span>
+<span id="cb374-6"><a href="logistic回归模型.html#cb374-6" aria-hidden="true" tabindex="-1"></a>                          .<span class="dv">95</span>, .<span class="dv">99</span>, .<span class="dv">999</span>),</span>
+<span id="cb374-7"><a href="logistic回归模型.html#cb374-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lp=</span>F, </span>
+<span id="cb374-8"><a href="logistic回归模型.html#cb374-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">funlabel=</span><span class="st">&quot;Low weight rate&quot;</span></span>
+<span id="cb374-9"><a href="logistic回归模型.html#cb374-9" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb374-10"><a href="logistic回归模型.html#cb374-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nom1)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-95-1.png" width="672" /></p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="logistic回归模型.html#cb375-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fun：将线性的预测转换为具体的分值</span></span>
+<span id="cb375-2"><a href="logistic回归模型.html#cb375-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lp= F：不显示线性预测值，只显示最后的分值</span></span>
+<span id="cb375-3"><a href="logistic回归模型.html#cb375-3" aria-hidden="true" tabindex="-1"></a><span class="co"># funlabel：不同时间的标签</span></span>
+<span id="cb375-4"><a href="logistic回归模型.html#cb375-4" aria-hidden="true" tabindex="-1"></a><span class="co"># maxscale=100 刻度为0~100</span></span>
+<span id="cb375-5"><a href="logistic回归模型.html#cb375-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fun.at设置最后结果的范围</span></span></code></pre></div>
+<p><strong><em>结果解读 1.2</em></strong></p>
+<ul>
+<li>函数解释：<code>nomogram(fit1, fun=plogis,fun.at=c(.001, .01, .05, seq(.1,.9, by=.1), .95, .99, .999),lp=F, funlabel="Low weight rate")</code>
+<ul>
+<li><code>fit1</code> 对象</li>
+<li><code>fun=plogis</code> 转换刻度值，最后的分值如何转换</li>
+<li><code>fun.at=</code>设置刻度间隔
+-<code>funlabel=</code>最后一条的标签</li>
+</ul></li>
+<li>我们可以看到，此处绘制的列线图，将race1和race2作为两个变量单列出来，实际上这是不必要的。我们需要将种族变量转换为一个二分类变量，即“白种人”和“黑人及其他种族”</li>
+</ul>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="logistic回归模型.html#cb376-1" aria-hidden="true" tabindex="-1"></a><span class="co">#将种族变量二值化处理</span></span>
+<span id="cb376-2"><a href="logistic回归模型.html#cb376-2" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(mydata<span class="sc">$</span>race<span class="sc">==</span><span class="st">&quot;白种人&quot;</span>, <span class="st">&quot;白种人&quot;</span>,<span class="st">&quot;黑人及其他种族&quot;</span>))  </span>
+<span id="cb376-3"><a href="logistic回归模型.html#cb376-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb376-4"><a href="logistic回归模型.html#cb376-4" aria-hidden="true" tabindex="-1"></a><span class="co">#打包数据</span></span>
+<span id="cb376-5"><a href="logistic回归模型.html#cb376-5" aria-hidden="true" tabindex="-1"></a>dd<span class="ot">&lt;-</span><span class="fu">datadist</span>(mydata)</span>
+<span id="cb376-6"><a href="logistic回归模型.html#cb376-6" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">datadist=</span><span class="st">&#39;dd&#39;</span>)</span>
+<span id="cb376-7"><a href="logistic回归模型.html#cb376-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb376-8"><a href="logistic回归模型.html#cb376-8" aria-hidden="true" tabindex="-1"></a><span class="co">#拟合模型（全因素）</span></span>
+<span id="cb376-9"><a href="logistic回归模型.html#cb376-9" aria-hidden="true" tabindex="-1"></a>fit2<span class="ot">&lt;-</span><span class="fu">lrm</span>(low<span class="sc">~</span>age<span class="sc">+</span>ftv<span class="sc">+</span>ht<span class="sc">+</span>lwt<span class="sc">+</span>ptl<span class="sc">+</span>smoke<span class="sc">+</span>ui<span class="sc">+</span>race,<span class="at">data=</span>mydata,<span class="at">x=</span>T,<span class="at">y=</span>T)</span>
+<span id="cb376-10"><a href="logistic回归模型.html#cb376-10" aria-hidden="true" tabindex="-1"></a>fit2</span></code></pre></div>
+<pre><code>## Logistic Regression Model
+##  
+##  lrm(formula = low ~ age + ftv + ht + lwt + ptl + smoke + ui + 
+##      race, data = mydata, x = T, y = T)
+##  
+##                        Model Likelihood    Discrimination    Rank Discrim.    
+##                              Ratio Test           Indexes          Indexes    
+##  Obs           189    LR chi2     30.74    R2       0.211    C       0.735    
+##   0            130    d.f.            8    g        1.112    Dxy     0.469    
+##   1             59    Pr(&gt; chi2) 0.0002    gr       3.039    gamma   0.470    
+##  max |deriv| 7e-05                         gp       0.205    tau-a   0.203    
+##                                            Brier    0.182                     
+##  
+##                      Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  Intercept            0.0921 1.1475  0.08  0.9360  
+##  age                 -0.0272 0.0365 -0.74  0.4563  
+##  ftv                  0.0365 0.1692  0.22  0.8293  
+##  ht=妊高症            1.7516 0.6885  2.54  0.0110  
+##  lwt                 -0.0125 0.0065 -1.94  0.0528  
+##  ptl                  0.5479 0.3451  1.59  0.1124  
+##  smoke=吸烟           0.9737 0.3922  2.48  0.0130  
+##  ui=有                0.6372 0.4701  1.36  0.1753  
+##  race=黑人及其他种族  1.0239 0.3940  2.60  0.0094  
+## </code></pre>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="logistic回归模型.html#cb378-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit2)</span></code></pre></div>
+<pre><code>##              Effects              Response : low 
+## 
+##  Factor                       Low High Diff. Effect    S.E.    Lower 0.95
+##  age                           19  26   7    -0.190330 0.25550 -0.69110  
+##   Odds Ratio                   19  26   7     0.826690      NA  0.50103  
+##  ftv                            0   1   1     0.036487 0.16923 -0.29519  
+##   Odds Ratio                    0   1   1     1.037200      NA  0.74439  
+##  lwt                          110 141  31    -0.387840 0.20030 -0.78042  
+##   Odds Ratio                  110 141  31     0.678520      NA  0.45821  
+##  ptl                            0   3   3     1.643800 1.03540 -0.38543  
+##   Odds Ratio                    0   3   3     5.175000      NA  0.68016  
+##  ht - 妊高症:无妊高症           1   2  NA     1.751600 0.68854  0.40206  
+##   Odds Ratio                    1   2  NA     5.763700      NA  1.49490  
+##  smoke - 吸烟:不吸烟            1   2  NA     0.973710 0.39221  0.20499  
+##   Odds Ratio                    1   2  NA     2.647700      NA  1.22750  
+##  ui - 有:无                     1   2  NA     0.637190 0.47011 -0.28422  
+##   Odds Ratio                    1   2  NA     1.891200      NA  0.75260  
+##  race - 黑人及其他种族:白种人   1   2  NA     1.023900 0.39404  0.25154  
+##   Odds Ratio                    1   2  NA     2.783900      NA  1.28600  
+##  Upper 0.95
+##   0.310440 
+##   1.364000 
+##   0.368170 
+##   1.445100 
+##   0.004744 
+##   1.004800 
+##   3.673100 
+##  39.374000 
+##   3.101100 
+##  22.223000 
+##   1.742400 
+##   5.711100 
+##   1.558600 
+##   4.752100 
+##   1.796200 
+##   6.026500</code></pre>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="logistic回归模型.html#cb380-1" aria-hidden="true" tabindex="-1"></a><span class="co">#绘图</span></span>
+<span id="cb380-2"><a href="logistic回归模型.html#cb380-2" aria-hidden="true" tabindex="-1"></a>nom2 <span class="ot">&lt;-</span> <span class="fu">nomogram</span>(fit2, </span>
+<span id="cb380-3"><a href="logistic回归模型.html#cb380-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fun=</span>plogis,</span>
+<span id="cb380-4"><a href="logistic回归模型.html#cb380-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fun.at=</span><span class="fu">c</span>(.<span class="dv">001</span>, .<span class="dv">01</span>, .<span class="dv">05</span>, </span>
+<span id="cb380-5"><a href="logistic回归模型.html#cb380-5" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">seq</span>(.<span class="dv">1</span>,.<span class="dv">9</span>, <span class="at">by=</span>.<span class="dv">1</span>), </span>
+<span id="cb380-6"><a href="logistic回归模型.html#cb380-6" aria-hidden="true" tabindex="-1"></a>                          .<span class="dv">95</span>, .<span class="dv">99</span>, .<span class="dv">999</span>),</span>
+<span id="cb380-7"><a href="logistic回归模型.html#cb380-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lp=</span>F, </span>
+<span id="cb380-8"><a href="logistic回归模型.html#cb380-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">funlabel=</span><span class="st">&quot;Low weight rate&quot;</span></span>
+<span id="cb380-9"><a href="logistic回归模型.html#cb380-9" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb380-10"><a href="logistic回归模型.html#cb380-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nom2)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-96-1.png" width="672" /></p>
+<p><strong><em>结果解读 1.3</em></strong></p>
+<ul>
+<li><p>将种族变量二值化后，生成的列线图更加简洁。</p></li>
+<li><p>仔细观察后发现，在列线图中还存在一个无意义的变量ftv（贡献非常小），此时我们应选择将其去掉。</p></li>
+<li><p>现在，先绘制该模型的校正曲线</p></li>
+</ul>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="logistic回归模型.html#cb381-1" aria-hidden="true" tabindex="-1"></a><span class="co">#绘制校正曲线</span></span>
+<span id="cb381-2"><a href="logistic回归模型.html#cb381-2" aria-hidden="true" tabindex="-1"></a>cal2 <span class="ot">&lt;-</span> <span class="fu">calibrate</span>(fit2, <span class="at">method=</span><span class="st">&#39;boot&#39;</span>, <span class="at">B=</span><span class="dv">1000</span>)</span>
+<span id="cb381-3"><a href="logistic回归模型.html#cb381-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cal2,<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.0</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.0</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<pre><code>## 
+## n=189   Mean absolute error=0.033   Mean squared error=0.00155
+## 0.9 Quantile of absolute error=0.053</code></pre>
+<p><strong><em>结果解读 1.4</em></strong></p>
+<ul>
+<li><p><code>method='boot'</code>重抽样方法，</p></li>
+<li><p><code>B=1000</code>重抽样1000次。</p></li>
+<li><p><code>xlim=c(0,1.0)</code>、<code>ylim=c(0,1.0))</code>,x、y轴的取值都是0~1</p></li>
+</ul>
+<p><br />
+</p>
+<p><strong>经过以上步骤，我们确定了最后想要的模型和列线图，现在绘制最终的列线图及校正曲线</strong></p>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="logistic回归模型.html#cb383-1" aria-hidden="true" tabindex="-1"></a>fit3<span class="ot">&lt;-</span><span class="fu">lrm</span>(low<span class="sc">~</span>ht<span class="sc">+</span>lwt<span class="sc">+</span>ptl<span class="sc">+</span>smoke<span class="sc">+</span>race,<span class="at">data=</span>mydata,<span class="at">x=</span>T,<span class="at">y=</span>T)</span>
+<span id="cb383-2"><a href="logistic回归模型.html#cb383-2" aria-hidden="true" tabindex="-1"></a>nom3 <span class="ot">&lt;-</span> <span class="fu">nomogram</span>(fit3, <span class="at">fun=</span>plogis,<span class="at">fun.at=</span><span class="fu">c</span>(.<span class="dv">001</span>, .<span class="dv">01</span>, .<span class="dv">05</span>, <span class="fu">seq</span>(.<span class="dv">1</span>,.<span class="dv">9</span>, <span class="at">by=</span>.<span class="dv">1</span>), .<span class="dv">95</span>, .<span class="dv">99</span>, .<span class="dv">999</span>),<span class="at">lp=</span>F, <span class="at">funlabel=</span><span class="st">&quot;Low weight rate&quot;</span>)</span>
+<span id="cb383-3"><a href="logistic回归模型.html#cb383-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nom3)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="logistic回归模型.html#cb384-1" aria-hidden="true" tabindex="-1"></a>cal3 <span class="ot">&lt;-</span> <span class="fu">calibrate</span>(fit3, <span class="at">method=</span><span class="st">&#39;boot&#39;</span>, <span class="at">B=</span><span class="dv">1000</span>)</span>
+<span id="cb384-2"><a href="logistic回归模型.html#cb384-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cal3,<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.0</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.0</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-98-2.png" width="672" /></p>
+<pre><code>## 
+## n=189   Mean absolute error=0.019   Mean squared error=0.00065
+## 0.9 Quantile of absolute error=0.032</code></pre>
+</div>
+<div id="c-statistics-计算" class="section level2" number="10.5">
+<h2><span class="header-section-number">10.5</span> C-Statistics 计算</h2>
+<p>➢ R中如何计算C-Statistics</p>
+<ol style="list-style-type: decimal">
+<li>rms包中lrm函数拟合logistic回归模型，模型参数可直接读取C，Dxy</li>
+</ol>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="logistic回归模型.html#cb386-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
+<span id="cb386-2"><a href="logistic回归模型.html#cb386-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rms)</span>
+<span id="cb386-3"><a href="logistic回归模型.html#cb386-3" aria-hidden="true" tabindex="-1"></a>mydata<span class="ot">&lt;-</span><span class="fu">read.spss</span>(<span class="st">&quot;data/lweight.sav&quot;</span>)</span>
+<span id="cb386-4"><a href="logistic回归模型.html#cb386-4" aria-hidden="true" tabindex="-1"></a>mydata<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(mydata)</span>
+<span id="cb386-5"><a href="logistic回归模型.html#cb386-5" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>low <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>low <span class="sc">==</span><span class="st">&quot;低出生体重&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb386-6"><a href="logistic回归模型.html#cb386-6" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race1 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>race <span class="sc">==</span><span class="st">&quot;白种人&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb386-7"><a href="logistic回归模型.html#cb386-7" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>race <span class="sc">==</span><span class="st">&quot;黑种人&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb386-8"><a href="logistic回归模型.html#cb386-8" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>race3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mydata<span class="sc">$</span>race <span class="sc">==</span><span class="st">&quot;其他种族&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb386-9"><a href="logistic回归模型.html#cb386-9" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(mydata)</span></code></pre></div>
+<pre><code>## The following objects are masked from mydata (pos = 3):
+## 
+##     age, bwt, ftv, ht, id, low, lwt, ptl, race, race1, race2, race3,
+##     smoke, ui</code></pre>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="logistic回归模型.html#cb388-1" aria-hidden="true" tabindex="-1"></a>dd<span class="ot">&lt;-</span><span class="fu">datadist</span>(mydata)</span>
+<span id="cb388-2"><a href="logistic回归模型.html#cb388-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">datadist=</span><span class="st">&#39;dd&#39;</span>)</span>
+<span id="cb388-3"><a href="logistic回归模型.html#cb388-3" aria-hidden="true" tabindex="-1"></a>fit1<span class="ot">&lt;-</span><span class="fu">lrm</span>(low<span class="sc">~</span>age<span class="sc">+</span>ftv<span class="sc">+</span>ht<span class="sc">+</span>lwt<span class="sc">+</span>ptl<span class="sc">+</span>smoke<span class="sc">+</span>ui<span class="sc">+</span>race1<span class="sc">+</span>race2,<span class="at">data=</span>mydata,<span class="at">x=</span>T,<span class="at">y=</span>T)</span>
+<span id="cb388-4"><a href="logistic回归模型.html#cb388-4" aria-hidden="true" tabindex="-1"></a>fit1 <span class="co">#直接读取模型中Rank Discrim.参数 C</span></span></code></pre></div>
+<pre><code>## Logistic Regression Model
+##  
+##  lrm(formula = low ~ age + ftv + ht + lwt + ptl + smoke + ui + 
+##      race1 + race2, data = mydata, x = T, y = T)
+##  
+##                        Model Likelihood    Discrimination    Rank Discrim.    
+##                              Ratio Test           Indexes          Indexes    
+##  Obs           189    LR chi2     31.12    R2       0.213    C       0.738    
+##   0            130    d.f.            9    g        1.122    Dxy     0.476    
+##   1             59    Pr(&gt; chi2) 0.0003    gr       3.070    gamma   0.477    
+##  max |deriv| 7e-05                         gp       0.207    tau-a   0.206    
+##                                            Brier    0.181                     
+##  
+##             Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  Intercept   1.1427 1.0873  1.05  0.2933  
+##  age        -0.0255 0.0366 -0.69  0.4871  
+##  ftv         0.0321 0.1708  0.19  0.8509  
+##  ht=妊高症   1.7631 0.6894  2.56  0.0105  
+##  lwt        -0.0137 0.0068 -2.02  0.0431  
+##  ptl         0.5517 0.3446  1.60  0.1094  
+##  smoke=吸烟  0.9275 0.3986  2.33  0.0200  
+##  ui=有       0.6488 0.4676  1.39  0.1653  
+##  race1      -0.9082 0.4367 -2.08  0.0375  
+##  race2       0.3293 0.5339  0.62  0.5374  
+## </code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>ROCR包中performance函数计算AUC</li>
+</ol>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb390-1"><a href="logistic回归模型.html#cb390-1" aria-hidden="true" tabindex="-1"></a>mydata<span class="sc">$</span>predvalue<span class="ot">&lt;-</span><span class="fu">predict</span>(fit2)</span>
+<span id="cb390-2"><a href="logistic回归模型.html#cb390-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb390-3"><a href="logistic回归模型.html#cb390-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">prediction</span>(mydata<span class="sc">$</span>predvalue, mydata<span class="sc">$</span>low)</span>
+<span id="cb390-4"><a href="logistic回归模型.html#cb390-4" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred,<span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb390-5"><a href="logistic回归模型.html#cb390-5" aria-hidden="true" tabindex="-1"></a>auc <span class="co">#auc即是C-statistics</span></span></code></pre></div>
+<pre><code>## A performance instance
+##   &#39;Area under the ROC curve&#39;</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Hmisc包中的somers2函数直接计算C, Dxy</li>
+</ol>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="logistic回归模型.html#cb392-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Hmisc)</span>
+<span id="cb392-2"><a href="logistic回归模型.html#cb392-2" aria-hidden="true" tabindex="-1"></a><span class="fu">somers2</span>(mydata<span class="sc">$</span>predvalue, mydata<span class="sc">$</span>low) <span class="co">#somers2 {Hmisc}</span></span></code></pre></div>
+<pre><code>##           C         Dxy           n     Missing 
+##   0.7344198   0.4688396 189.0000000   0.0000000</code></pre>
+</div>
+<div id="亚组分析森林图的绘制" class="section level2" number="10.6">
+<h2><span class="header-section-number">10.6</span> 亚组分析森林图的绘制</h2>
+<div id="数据录入" class="section level3" number="10.6.1">
+<h3><span class="header-section-number">10.6.1</span> 数据录入</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Response</th>
+<th align="right">No.of.patients</th>
+<th align="left">OR.95..CI.</th>
+<th align="right">X</th>
+<th align="right">X.1</th>
+<th align="right">X.2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Overall</td>
+<td align="right">1472</td>
+<td align="left">1.66(1.28,2.15)</td>
+<td align="right">1.66</td>
+<td align="right">1.28</td>
+<td align="right">2.15</td>
+</tr>
+<tr class="even">
+<td align="left">Clinical stage</td>
+<td align="right">NA</td>
+<td align="left"></td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Advanced</td>
+<td align="right">951</td>
+<td align="left">1.67(1.23,2.26)</td>
+<td align="right">1.67</td>
+<td align="right">1.23</td>
+<td align="right">2.26</td>
+</tr>
+<tr class="even">
+<td align="left">non-advanced</td>
+<td align="right">521</td>
+<td align="left">1.67(1.05,2.66)</td>
+<td align="right">1.67</td>
+<td align="right">1.05</td>
+<td align="right">2.66</td>
+</tr>
+<tr class="odd">
+<td align="left">ctDNA assays</td>
+<td align="right">NA</td>
+<td align="left"></td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">qPCR</td>
+<td align="right">1280</td>
+<td align="left">1.73(1.30,2.29)</td>
+<td align="right">1.73</td>
+<td align="right">1.30</td>
+<td align="right">2.29</td>
+</tr>
+<tr class="odd">
+<td align="left">ARMS</td>
+<td align="right">192</td>
+<td align="left">1.58(0.50,5.04)</td>
+<td align="right">1.58</td>
+<td align="right">0.50</td>
+<td align="right">5.04</td>
+</tr>
+<tr class="even">
+<td align="left">Ethnicity</td>
+<td align="right">NA</td>
+<td align="left"></td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Asian</td>
+<td align="right">326</td>
+<td align="left">1.93(0.84,4.43)</td>
+<td align="right">1.93</td>
+<td align="right">0.84</td>
+<td align="right">4.43</td>
+</tr>
+<tr class="even">
+<td align="left">Caucasian</td>
+<td align="right">1146</td>
+<td align="left">1.57(1.20,2.06)</td>
+<td align="right">1.57</td>
+<td align="right">1.20</td>
+<td align="right">2.06</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="绘制图形" class="section level3" number="10.6.2">
+<h3><span class="header-section-number">10.6.2</span> 绘制图形</h3>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="logistic回归模型.html#cb394-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forestplot)</span>
+<span id="cb394-2"><a href="logistic回归模型.html#cb394-2" aria-hidden="true" tabindex="-1"></a>rs_forest <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;data/rs_forest.csv&#39;</span>,<span class="at">header =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb394-3"><a href="logistic回归模型.html#cb394-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-4"><a href="logistic回归模型.html#cb394-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 读入数据的时候大家一定要把header设置成FALSE，保证第一行不被当作列名称。</span></span>
+<span id="cb394-5"><a href="logistic回归模型.html#cb394-5" aria-hidden="true" tabindex="-1"></a><span class="co"># tiff(&#39;Figure 1.tiff&#39;,height = 1600,width = 2400,res= 300)</span></span>
+<span id="cb394-6"><a href="logistic回归模型.html#cb394-6" aria-hidden="true" tabindex="-1"></a><span class="fu">forestplot</span>(<span class="at">labeltext =</span> <span class="fu">as.matrix</span>(rs_forest[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb394-7"><a href="logistic回归模型.html#cb394-7" aria-hidden="true" tabindex="-1"></a>           <span class="co">#设置用于文本展示的列，此处我们用数据的前三列作为文本，在图中展示</span></span>
+<span id="cb394-8"><a href="logistic回归模型.html#cb394-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">mean =</span> rs_forest<span class="sc">$</span>V4, <span class="co">#设置均值</span></span>
+<span id="cb394-9"><a href="logistic回归模型.html#cb394-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">lower =</span> rs_forest<span class="sc">$</span>V5, <span class="co">#设置均值的lowlimits限</span></span>
+<span id="cb394-10"><a href="logistic回归模型.html#cb394-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">upper =</span> rs_forest<span class="sc">$</span>V6, <span class="co">#设置均值的uplimits限</span></span>
+<span id="cb394-11"><a href="logistic回归模型.html#cb394-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">is.summary =</span> <span class="fu">c</span>(T,T,T,F,F,T,F,F,T,F,F),</span>
+<span id="cb394-12"><a href="logistic回归模型.html#cb394-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">#该参数接受一个逻辑向量，用于定义数据中的每一行是否是汇总值，</span></span>
+<span id="cb394-13"><a href="logistic回归模型.html#cb394-13" aria-hidden="true" tabindex="-1"></a>           <span class="co">#若是，则在对应位置设置为TRUE，</span></span>
+<span id="cb394-14"><a href="logistic回归模型.html#cb394-14" aria-hidden="true" tabindex="-1"></a>           <span class="co">#若否，则设置为FALSE；设置为TRUE的行则以粗体出现</span></span>
+<span id="cb394-15"><a href="logistic回归模型.html#cb394-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero =</span> <span class="dv">1</span>, </span>
+<span id="cb394-16"><a href="logistic回归模型.html#cb394-16" aria-hidden="true" tabindex="-1"></a>           <span class="co">#设置参照值，此处我们展示的是OR值，故参照值是1，而不是0</span></span>
+<span id="cb394-17"><a href="logistic回归模型.html#cb394-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">boxsize =</span> <span class="fl">0.4</span>, <span class="co">#设置点估计的方形大小</span></span>
+<span id="cb394-18"><a href="logistic回归模型.html#cb394-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">lineheight =</span> <span class="fu">unit</span>(<span class="dv">10</span>,<span class="st">&#39;mm&#39;</span>),<span class="co">#设置图形中的行距</span></span>
+<span id="cb394-19"><a href="logistic回归模型.html#cb394-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">colgap =</span> <span class="fu">unit</span>(<span class="dv">3</span>,<span class="st">&#39;mm&#39;</span>),<span class="co">#设置图形中的列间距</span></span>
+<span id="cb394-20"><a href="logistic回归模型.html#cb394-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.zero =</span> <span class="dv">2</span>,<span class="co">#设置参考线的粗细</span></span>
+<span id="cb394-21"><a href="logistic回归模型.html#cb394-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.ci =</span> <span class="fl">1.5</span>,<span class="co">#设置区间估计线的粗细</span></span>
+<span id="cb394-22"><a href="logistic回归模型.html#cb394-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">col=</span><span class="fu">fpColors</span>(<span class="at">box=</span><span class="st">&#39;#458B00&#39;</span>, <span class="at">summary=</span> <span class="st">&quot;#8B008B&quot;</span>,<span class="at">lines =</span> <span class="st">&#39;black&#39;</span>,<span class="at">zero =</span> <span class="st">&#39;#7AC5CD&#39;</span>),</span>
+<span id="cb394-23"><a href="logistic回归模型.html#cb394-23" aria-hidden="true" tabindex="-1"></a>           <span class="co">#使用fpColors()函数定义图形元素的颜色，</span></span>
+<span id="cb394-24"><a href="logistic回归模型.html#cb394-24" aria-hidden="true" tabindex="-1"></a>           <span class="co">#从左至右分别对应点估计方形，汇总值，区间估计线，参考线</span></span>
+<span id="cb394-25"><a href="logistic回归模型.html#cb394-25" aria-hidden="true" tabindex="-1"></a>           <span class="at">xlab=</span><span class="st">&quot;The estimates&quot;</span>,<span class="co">#设置x轴标签</span></span>
+<span id="cb394-26"><a href="logistic回归模型.html#cb394-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">graph.pos =</span> <span class="dv">3</span>)<span class="co">#设置森林图的位置，此处设置为3，则出现在第三列</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/forestplot-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="logistic回归.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="泊松回归模型.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/008-Nomogram.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
